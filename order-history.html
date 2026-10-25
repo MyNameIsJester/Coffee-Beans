@@ -1,0 +1,216 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lịch sử đơn hàng - Cà Phê Đậm Đà</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/user.css" />
+        <link rel="stylesheet" href="styles/header.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            .orders-container {
+                max-width: 900px;
+                margin: 40px auto;
+            }
+            .order-card {
+                background: #fff;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                margin-bottom: 20px;
+                border-left: 4px solid var(--coffee);
+            }
+            .order-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #eee;
+            }
+            .order-card-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--coffee-900);
+            }
+            .order-id {
+                font-size: 14px;
+                color: var(--coffee);
+                font-weight: 600;
+                font-family: monospace;
+            }
+            .status-badge {
+                display: inline-block;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            .status-delivered {
+                background: #d4edda;
+                color: #155724;
+            }
+            .status-pending {
+                background: #fff3cd;
+                color: #856404;
+            }
+            .status-processing {
+                background: #cce5ff;
+                color: #004085;
+            }
+            .order-card-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                gap: 16px;
+                margin-bottom: 16px;
+                font-size: 14px;
+            }
+            .info-item {
+                padding: 12px;
+                background: #f7fafc;
+                border-radius: 8px;
+            }
+            .info-label {
+                font-size: 12px;
+                color: #666;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+            }
+            .info-value {
+                font-weight: 600;
+                color: #2d3748;
+            }
+            .order-items-preview {
+                margin: 12px 0;
+                padding: 12px;
+                background: #f7fafc;
+                border-radius: 8px;
+                font-size: 13px;
+                color: #555;
+            }
+            .order-total {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 12px 0;
+                margin-top: 12px;
+                font-weight: 600;
+            }
+            .total-amount {
+                font-size: 18px;
+                color: var(--coffee);
+            }
+            .order-actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 16px;
+            }
+            .btn-small {
+                padding: 10px 16px;
+                border: none;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 13px;
+                text-align: center;
+            }
+            .btn-view {
+                background: var(--coffee);
+                color: white;
+                flex: 1;
+            }
+            .btn-view:hover {
+                background: var(--coffee-900);
+            }
+            .btn-cancel {
+                background: #f0f0f0;
+                color: #666;
+                flex: 1;
+            }
+            .btn-cancel:hover {
+                background: #e0e0e0;
+            }
+            .empty-state {
+                text-align: center;
+                padding: 60px 20px;
+            }
+            .empty-icon {
+                font-size: 64px;
+                color: #ddd;
+                margin-bottom: 20px;
+            }
+            .empty-text {
+                font-size: 18px;
+                color: #999;
+                margin-bottom: 20px;
+            }
+            @media (max-width: 768px) {
+                .order-card-info {
+                    grid-template-columns: 1fr 1fr;
+                }
+                .order-card-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .status-badge {
+                    margin-top: 8px;
+                }
+                .order-actions {
+                    flex-direction: column;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <div id="siteHeader"></div>
+
+        <main class="container orders-container" id="ordersRoot"></main>
+
+        <div id="pagination" class="container"></div>
+
+        <footer id="lien-he">
+            <div class="container foot">
+                <div>
+                    <h4>Cà Phê Đậm Đà</h4>
+                    <p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p>
+                </div>
+                <div>
+                    <h4>Liên hệ</h4>
+                    <p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn</p>
+                </div>
+                <div>
+                    <h4>Địa chỉ</h4>
+                    <p>123 Phin Street, Quận Caffeine, TP.HCM</p>
+                </div>
+            </div>
+            <div class="container copyright">
+                © 2025 Cà Phê Đậm Đà. All rights reserved.
+            </div>
+        </footer>
+
+        <script src="js/db.js"></script>
+        <script src="js/catalog.js"></script>
+        <script src="js/inventory.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/shop.js"></script>
+        <script src="js/seed.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/page-order-history.js"></script>
+    </body>
+</html>
+
+
+

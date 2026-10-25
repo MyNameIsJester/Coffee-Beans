@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Cà Phê Đậm Đà</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 60px 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+        }
+
+        .container h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .container p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(210, 105, 30, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☕ Cà Phê Đậm Đà</h1>
+        <p>Hệ thống quản trị</p>
+        <a href="admin-login.html" class="btn">Vào trang quản trị</a>
+    </div>
+
+    <script>
+        // Redirect to login page
+        window.location.href = 'admin-login.html';
+    </script>
+</body>
+</html>
+
+

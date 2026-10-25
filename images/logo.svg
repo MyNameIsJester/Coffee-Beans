@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#f5f0e6"/>
+  
+  <!-- Coffee bean shape -->
+  <g transform="translate(100, 70)">
+    <ellipse cx="0" cy="0" rx="35" ry="50" fill="#5c3d2e" opacity="0.9"/>
+    
+    <!-- S-curve inside bean -->
+    <path d="M -8,-40 Q -15,-20 -8,0 Q 0,20 8,40" stroke="#f5f0e6" stroke-width="4" fill="none" stroke-linecap="round"/>
+    
+    <!-- Mountain peaks -->
+    <g fill="#f5f0e6">
+      <polygon points="0,-40 -8,-25 -12,-35 -5,-28 -10,-20"/>
+      <polygon points="8,-38 0,-22 4,-32 10,-25"/>
+    </g>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="160" font-family="serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#5c3d2e">
+    COFFEE
+  </text>
+  <text x="100" y="185" font-family="serif" font-size="14" text-anchor="middle" fill="#8b6f47" letter-spacing="2">
+    SHOP
+  </text>
+</svg>

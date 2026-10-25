@@ -1,0 +1,9 @@
+{
+  "name": "coffeebeans-ui-tests",
+  "private": true,
+  "description": "Kiểm thử giao diện bằng jsdom (không cần trình duyệt). Chạy: npm install && npm test",
+  "scripts": {
+    "test": "node t_products.js && node t_register.js && node t_detail.js && node t_cart.js && node t_orders.js && node t_profile.js && node t_index.js && node t_redirect.js"
+  },
+  "devDependencies": { "jsdom": "^30.0.0" }
+}

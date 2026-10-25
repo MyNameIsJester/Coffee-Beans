@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hướng dẫn sử dụng - Cà Phê Đậm Đà</title>
+    <style>
+        :root { --coffee: #4b3429; --gold: #d1a06f; --cream: #f6efe9; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: var(--cream); color: #2a1c16; line-height: 1.6; }
+        header { background: #2a1c16; color: #fff; padding: 18px 20px; }
+        header h1 { margin: 0; font-size: 1.3rem; }
+        main { max-width: 900px; margin: 0 auto; padding: 24px 20px 60px; }
+        h2 { margin-top: 36px; color: var(--coffee); border-bottom: 2px solid var(--gold); padding-bottom: 6px; }
+        table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; margin: 12px 0; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; vertical-align: top; }
+        th { background: #f3e9df; }
+        .note { background: #fff8e1; border-left: 4px solid var(--gold); padding: 10px 14px; border-radius: 4px; margin: 14px 0; }
+        a { color: var(--coffee); font-weight: 600; }
+        .links a { display: inline-block; margin: 4px 8px 4px 0; padding: 8px 14px; background: var(--coffee); color: #fff; border-radius: 6px; text-decoration: none; }
+        code { background: #efe3d6; padding: 1px 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <header><h1>☕ Cà Phê Đậm Đà - Hướng dẫn sử dụng</h1></header>
+    <main>
+        <p class="links">
+            <a href="index.html">Trang chủ khách hàng</a>
+            <a href="portal.html">Cổng chọn Khách hàng / Admin</a>
+            <a href="admin-login.html">Đăng nhập admin</a>
+        </p>
+
+        <div class="note">Website chạy hoàn toàn trên trình duyệt và lưu dữ liệu bằng <code>localStorage</code>. Dữ liệu chỉ có trong trình duyệt đang dùng, không có máy chủ. Mật khẩu chỉ được băm đơn giản để minh họa, không phải xác thực an toàn.</div>
+
+        <h2>Tài khoản mẫu</h2>
+        <table>
+            <tr><th>Vai trò</th><th>Tên đăng nhập</th><th>Mật khẩu</th><th>Trang đăng nhập</th></tr>
+            <tr><td>Admin</td><td><code>admin</code></td><td><code>admin123</code></td><td><a href="admin-login.html">admin-login.html</a></td></tr>
+            <tr><td>Khách hàng</td><td><code>guest1</code></td><td><code>guest1123</code></td><td rowspan="3"><a href="register.html">register.html</a></td></tr>
+            <tr><td>Khách hàng</td><td><code>guest2</code></td><td><code>guest2123</code></td></tr>
+            <tr><td>Khách hàng</td><td><code>guest3</code></td><td><code>guest3123</code></td></tr>
+        </table>
+
+        <h2>Khách hàng</h2>
+        <table>
+            <tr><th>Việc cần làm</th><th>Cách thực hiện</th></tr>
+            <tr><td>Đăng ký, đăng nhập</td><td>Trang <a href="register.html">đăng nhập/đăng ký</a>. Đăng nhập bằng tên đăng nhập hoặc email.</td></tr>
+            <tr><td>Hồ sơ, địa chỉ, đổi mật khẩu</td><td>Menu tài khoản → <a href="profile.html">Hồ sơ cá nhân</a>.</td></tr>
+            <tr><td>Xem sản phẩm theo loại</td><td>Menu Sản phẩm → Arabica / Robusta / Blend, hoặc <a href="products.html">tất cả sản phẩm</a> (có phân trang).</td></tr>
+            <tr><td>Tìm kiếm</td><td>Tìm cơ bản bằng ô tìm trên header; tìm nâng cao (tên, loại, khoảng giá) ở <a href="products.html">trang sản phẩm</a>.</td></tr>
+            <tr><td>Mua hàng</td><td>Thêm vào giỏ (cần đăng nhập) → <a href="cart.html">giỏ hàng</a> → <a href="checkout.html">thanh toán</a> (địa chỉ tài khoản hoặc địa chỉ mới; tiền mặt, chuyển khoản, trực tuyến mô phỏng).</td></tr>
+            <tr><td>Xem lại đơn</td><td><a href="order-history.html">Lịch sử đơn hàng</a>, bấm Xem chi tiết.</td></tr>
+        </table>
+
+        <h2>Admin</h2>
+        <table>
+            <tr><th>Chức năng</th><th>Nội dung</th></tr>
+            <tr><td>Tổng quan</td><td>Số liệu thật: khách hàng, sản phẩm, đơn, doanh thu đơn đã giao, sản phẩm sắp hết.</td></tr>
+            <tr><td>Khách hàng</td><td>Danh sách, tìm kiếm, đặt lại mật khẩu về <code>123456</code>, khóa/mở khóa.</td></tr>
+            <tr><td>Loại sản phẩm</td><td>Thêm, sửa, ẩn, xóa (loại còn sản phẩm không xóa được).</td></tr>
+            <tr><td>Sản phẩm</td><td>Thêm (loại, mã, tên, mô tả, hình), sửa, ẩn, xóa (đã có phiếu/đơn thì chỉ ẩn).</td></tr>
+            <tr><td>Nhập hàng</td><td>Phiếu nhập nhiều sản phẩm; sửa khi chưa hoàn thành; hoàn thành thì cộng tồn một lần.</td></tr>
+            <tr><td>Giá bán</td><td>% lợi nhuận theo loại và theo sản phẩm; giá bán = giá vốn × (1 + %).</td></tr>
+            <tr><td>Đơn hàng</td><td>Lọc theo ngày và tình trạng; xem chi tiết; Mới đặt → Đã xử lý → Đã giao hoặc Hủy.</td></tr>
+            <tr><td>Tồn kho</td><td>Cảnh báo sắp hết, tồn tại một thời điểm, báo cáo nhập - xuất - tồn.</td></tr>
+        </table>
+
+        <h2>Đặt lại dữ liệu mẫu</h2>
+        <p>Mở Console của trình duyệt (F12), gõ <code>CB.seed.reset()</code> rồi tải lại trang.</p>
+        <p>Chi tiết xem thêm <code>README.md</code>, <code>HUONG_DAN_SU_DUNG.md</code> và <code>HUONG_DAN_GITHUB_PAGES.md</code> trong repository.</p>
+    </main>
+</body>
+</html>

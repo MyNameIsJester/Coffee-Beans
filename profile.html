@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin cá nhân - Cà Phê Đậm Đà</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/user.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <style>
+        :root {
+            --coffee: #8B4513;
+            --coffee-900: #2c1810;
+            --gold: #d4af37;
+            --cream: #f5f0e6;
+            --white: #ffffff;
+            --light-bg: #f8f9fa;
+            --border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--cream);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container.profile-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-top: 80px;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--coffee-900);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-btn:hover {
+            background: var(--gold);
+            color: var(--coffee-900);
+            transform: translateY(-2px);
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--light-bg);
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--coffee);
+            border: 2px solid var(--coffee);
+        }
+
+        .profile-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: var(--coffee-900);
+            margin-bottom: 5px;
+        }
+
+        .profile-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-box {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--coffee);
+        }
+
+        .info-box h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--coffee);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .info-box strong {
+            color: var(--coffee-900);
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--coffee-900);
+        }
+
+        .btn-primary:hover {
+            background: #e6c05a;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #bb2d3b;
+            transform: translateY(-2px);
+        }
+
+        .edit-form {
+            display: none;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .edit-form.show {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--coffee-900);
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container.profile-container {
+                padding: 15px;
+                padding-top: 70px;
+            }
+
+            .profile-card,
+            .edit-form {
+                padding: 20px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+    <body>
+        <div id="siteHeader"></div>
+        <div class="container profile-container" id="profileRoot"></div>
+        <script src="js/db.js"></script>
+        <script src="js/catalog.js"></script>
+        <script src="js/inventory.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/shop.js"></script>
+        <script src="js/seed.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/page-profile.js"></script>
+    </body>
+</html>

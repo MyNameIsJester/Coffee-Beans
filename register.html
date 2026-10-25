@@ -1,0 +1,330 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Nhập / Đăng Ký - Cà Phê Đậm Đà</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/header.css" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('images/thiet-ke-quan-cafe-van-phong-13.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 420px;
+            width: 100%;
+            padding: 45px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2em;
+            color: #8B4513;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-header p {
+            color: #888;
+            font-size: 0.95em;
+            font-weight: 500;
+        }
+
+        .form-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95em;
+            font-weight: 600;
+            color: #999;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn:hover {
+            color: #8B4513;
+        }
+
+        .tab-btn.active {
+            color: white;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8B4513;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.08);
+        }
+
+        .form-group input::placeholder {
+            color: #bbb;
+        }
+
+        .form-content {
+            display: none;
+        }
+
+        .form-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(139, 69, 19, 0.35);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #e8e8e8;
+        }
+
+        .back-link a {
+            color: #8B4513;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: #A0522D;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+                border-radius: 12px;
+            }
+
+            .login-header h1 {
+                font-size: 1.8em;
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+
+            .form-group input {
+                padding: 12px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>☕ Cà Phê Đậm Đà</h1>
+            <p>Đăng nhập để tiếp tục mua sắm</p>
+        </div>
+
+        <!-- Đã đăng nhập sẵn -->
+        <div id="alreadyLoggedIn" hidden>
+            <p style="text-align:center;margin-bottom:20px;color:#333;">
+                Bạn đang đăng nhập với tài khoản <strong id="alreadyName"></strong>.
+            </p>
+            <a id="continueLink" href="index.html" class="submit-btn" style="display:block;text-align:center;text-decoration:none;">Tiếp tục mua sắm</a>
+            <button type="button" id="logoutBtn" class="submit-btn" style="background:#888;">Đăng xuất để dùng tài khoản khác</button>
+        </div>
+
+        <div id="authForms">
+            <p id="redirectNote" class="cb-alert cb-alert-info" hidden></p>
+
+            <!-- Form Tabs -->
+            <div class="form-tabs" role="tablist">
+                <button type="button" class="tab-btn active" id="tabLogin" role="tab" aria-selected="true">Đăng Nhập</button>
+                <button type="button" class="tab-btn" id="tabRegister" role="tab" aria-selected="false">Đăng Ký</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login" class="form-content active">
+                <form id="loginForm" novalidate>
+                    <p class="cb-alert" role="alert" hidden></p>
+                    <div class="form-group">
+                        <label for="login-identifier">Tên đăng nhập hoặc email</label>
+                        <input type="text" id="login-identifier" name="identifier" autocomplete="username" placeholder="Ví dụ: guest1" />
+                        <p class="cb-field-error" data-error-for="identifier"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Mật khẩu</label>
+                        <input type="password" id="login-password" name="password" autocomplete="current-password" placeholder="Nhập mật khẩu" />
+                        <p class="cb-field-error" data-error-for="password"></p>
+                    </div>
+                    <button type="submit" class="submit-btn">Đăng Nhập</button>
+                    <p style="margin-top:14px;font-size:0.82em;color:#888;text-align:center;">
+                        Tài khoản mẫu: <strong>guest1</strong> / <strong>guest1123</strong>
+                    </p>
+                </form>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register" class="form-content">
+                <form id="registerForm" novalidate>
+                    <div class="form-group">
+                        <label for="reg-name">Họ và tên</label>
+                        <input type="text" id="reg-name" name="fullName" autocomplete="name" placeholder="Nhập họ và tên" />
+                        <p class="cb-field-error" data-error-for="fullName"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-username">Tên đăng nhập</label>
+                        <input type="text" id="reg-username" name="username" autocomplete="username" placeholder="Chữ không dấu, số, . hoặc _" />
+                        <p class="cb-field-error" data-error-for="username"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" name="email" autocomplete="email" placeholder="Nhập email" />
+                        <p class="cb-field-error" data-error-for="email"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-phone">Số điện thoại</label>
+                        <input type="tel" id="reg-phone" name="phone" autocomplete="tel" placeholder="Ví dụ: 0901234567" />
+                        <p class="cb-field-error" data-error-for="phone"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Mật khẩu</label>
+                        <input type="password" id="reg-password" name="password" autocomplete="new-password" placeholder="Ít nhất 6 ký tự" />
+                        <p class="cb-field-error" data-error-for="password"></p>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password-confirm">Xác nhận mật khẩu</label>
+                        <input type="password" id="reg-password-confirm" name="confirm" autocomplete="new-password" placeholder="Nhập lại mật khẩu" />
+                        <p class="cb-field-error" data-error-for="confirm"></p>
+                    </div>
+                    <button type="submit" class="submit-btn">Đăng Ký</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Quay lại trang chủ</a>
+        </div>
+    </div>
+
+    <script src="js/db.js"></script>
+    <script src="js/catalog.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/seed.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/page-register.js"></script>
+</body>
+</html>

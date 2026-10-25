@@ -1,0 +1,78 @@
+=== TÀI LIỆU CŨ, KHÔNG CÒN ĐÚNG ===
+Tệp này viết khi website còn là giao diện tĩnh; các mô tả như "dữ liệu không lưu", "nút không hoạt động", "dữ liệu giả" nay đã lạc hậu.
+Xem README.md và HUONG_DAN_SU_DUNG.md ở thư mục gốc. Giữ lại chỉ để tham khảo lịch sử.
+=====================================
+
+═══════════════════════════════════════════════════════════════════════════════
+                    HƯỚNG DẪN TẢI ẢNH CÀ PHÊ TỪ GOOGLE/BING
+═══════════════════════════════════════════════════════════════════════════════
+
+DANH SÁCH SẢN PHẨM & TỪ KHÓA TÌM KIẾM:
+
+1. arabica-premium.jpg         → Tìm: "arabica coffee beans"
+2. robusta-bold.jpg            → Tìm: "robusta coffee dark roast"
+3. signature-blend.jpg         → Tìm: "coffee blend premium"
+4. ethiopia.jpg                → Tìm: "ethiopia yirgacheffe coffee"
+5. colombian.jpg               → Tìm: "colombian coffee beans"
+6. brazilian.jpg               → Tìm: "brazilian arabica coffee"
+7. vietnam.jpg                 → Tìm: "vietnam robusta coffee"
+8. indonesia.jpg               → Tìm: "indonesian sumatra coffee"
+9. espresso.jpg                → Tìm: "espresso coffee dark blend"
+10. dark-roast.jpg             → Tìm: "dark roast coffee premium"
+11. kenyan.jpg                 → Tìm: "kenyan AA coffee beans"
+12. costarica.jpg              → Tìm: "costa rica tarazu coffee"
+13. mocha-java.jpg             → Tìm: "mocha java coffee blend"
+
+═══════════════════════════════════════════════════════════════════════════════
+CÁCH TẢI ẢNH (VỀ DESKTOP, RỒI MỤC VÀO THƯMỤC):
+═══════════════════════════════════════════════════════════════════════════════
+
+CÁCH 1: BING IMAGES (NHANH & AN TOÀN)
+───────────────────────────────────────────────────────────────────────────────
+1. Mở: https://www.bing.com/images
+2. Tìm kiếm sản phẩm (ví dụ: "arabica coffee beans")
+3. Chọn ảnh đẹp (kích thước ~500x500px trở lên)
+4. Click chuột phải trên ảnh → "Save image as"
+5. Chọn thư mục: CoffeBeans\images\
+6. Đặt tên: [product-name].jpg (ví dụ: arabica-premium.jpg)
+7. Repeat cho 13 sản phẩm
+
+CÁCH 2: GOOGLE IMAGES (DỄ NHẤT)
+───────────────────────────────────────────────────────────────────────────────
+1. Mở: https://www.google.com/images
+2. Tìm kiếm sản phẩm
+3. Click ảnh → Click link ảnh → Right-click → Save as
+4. Lưu vào: CoffeBeans\images\
+5. Đặt tên: [product-name].jpg
+
+CÁCH 3: PINTEREST (ẢNH ĐẸP)
+───────────────────────────────────────────────────────────────────────────────
+1. Mở: https://www.pinterest.com
+2. Tìm kiếm: "coffee beans" + loại cà phê
+3. Chọn ảnh → Right-click → Save image as
+4. Lưu vào: CoffeBeans\images\
+
+═══════════════════════════════════════════════════════════════════════════════
+YÊU CẦU CHẤT LƯỢNG ẢNH:
+═══════════════════════════════════════════════════════════════════════════════
+✓ Định dạng: .jpg hoặc .png
+✓ Kích thước: Tối thiểu 200x200px (nên 400x400px trở lên)
+✓ Chất lượng: HD/HQ (không mờ, không bị nén quá)
+✓ Nội dung: Hạt cà phê, bao cà phê, hoặc tách cà phê
+✓ Tên file: Chính xác theo tên sản phẩm (không có khoảng trắng)
+
+═══════════════════════════════════════════════════════════════════════════════
+HOÀN THÀNH:
+═══════════════════════════════════════════════════════════════════════════════
+1. Tải 13 ảnh vào thư mục: c:\Users\AORUS\OneDrive - 5swf15\Desktop\CoffeBeans\images\
+2. Kiểm tra tên file đúng (ví dụ: arabica-premium.jpg, robusta-bold.jpg, ...)
+3. Quay lại thông báo cho tôi khi xong
+4. Tôi sẽ cập nhật products.html để hiển thị ảnh thực tế
+
+═══════════════════════════════════════════════════════════════════════════════
+LƯỚI ỠN:
+- Không sao chép ảnh từ các trang web khác (vi phạm bản quyền)
+- Dùng ảnh từ Bing, Google, Pinterest, Pexels, Unsplash là OK
+- Nên chọn ảnh có chất lượng cao để website đẹp hơn
+
+═══════════════════════════════════════════════════════════════════════════════

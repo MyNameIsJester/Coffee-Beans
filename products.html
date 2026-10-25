@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sản phẩm - Cà Phê Đậm Đà</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/user.css" />
+        <link rel="stylesheet" href="styles/header.css" />
+        <!-- Font Awesome -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            /* Enhanced Filter Panel */
+            .filter-panel {
+                background: linear-gradient(135deg, #fff 0%, #f9f7f4 100%);
+                padding: 28px;
+                border-radius: 16px;
+                margin-bottom: 30px;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+                border: 1px solid #f0ede8;
+                transition: all 0.3s ease;
+            }
+
+            .filter-panel:hover {
+                box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            }
+
+            /* Search Box */
+            .search-box {
+                margin-bottom: 24px;
+            }
+
+            .search-box input {
+                width: 100%;
+                padding: 14px 18px;
+                border: 2px solid #e2d9ce;
+                border-radius: 10px;
+                font-size: 1em;
+                background: white;
+                transition: all 0.3s ease;
+                font-family: 'Inter', sans-serif;
+            }
+
+            .search-box input:focus {
+                outline: none;
+                border-color: var(--coffee);
+                box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.1);
+            }
+
+            .search-box input::placeholder {
+                color: #b8a699;
+            }
+
+            /* Filter Groups */
+            .filter-group {
+                margin-bottom: 18px;
+            }
+
+            .filter-group label {
+                display: block;
+                margin-bottom: 10px;
+                font-weight: 600;
+                color: var(--coffee);
+                font-size: 0.95em;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .filter-group select,
+            .filter-group input {
+                width: 100%;
+                padding: 11px 14px;
+                border: 2px solid #e2d9ce;
+                border-radius: 8px;
+                font-size: 0.95em;
+                background: white;
+                transition: all 0.3s ease;
+                font-family: 'Inter', sans-serif;
+                cursor: pointer;
+            }
+
+            .filter-group select:hover,
+            .filter-group input:hover {
+                border-color: var(--coffee-400);
+            }
+
+            .filter-group select:focus,
+            .filter-group input:focus {
+                outline: none;
+                border-color: var(--coffee);
+                box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.08);
+            }
+
+            .price-range {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+
+            .filter-buttons {
+                display: flex;
+                gap: 12px;
+                margin-top: 20px;
+            }
+
+            .filter-buttons button {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 0.95em;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .apply-filter {
+                background: linear-gradient(135deg, var(--coffee) 0%, #A0522D 100%);
+                color: white;
+                flex: 1;
+                box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            }
+
+            .apply-filter:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(139, 69, 19, 0.3);
+            }
+
+            .reset-filter {
+                background: #f0e8e0;
+                color: var(--coffee);
+                flex: 1;
+                border: 2px solid #e2d9ce;
+            }
+
+            .reset-filter:hover {
+                background: #e8dfd6;
+                border-color: var(--coffee);
+            }
+
+            .product-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 24px;
+            }
+
+            @media (max-width: 960px) {
+                .product-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .filter-panel {
+                    padding: 20px;
+                }
+            }
+
+            @media (max-width: 640px) {
+                .product-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+
+                .price-range {
+                    grid-template-columns: 1fr;
+                }
+
+                .filter-buttons {
+                    flex-direction: column;
+                }
+
+                .filter-buttons button {
+                    width: 100%;
+                }
+
+                .filter-panel {
+                    padding: 16px;
+                }
+            }
+
+            .no-results {
+                text-align: center;
+                padding: 60px 20px;
+                color: #999;
+                font-size: 1.1em;
+            }
+        
+            .stock-note { display: block; margin-top: 4px; font-size: 12px; }
+            .stock-note.low { color: #e65100; }
+            .stock-note.out { color: #c62828; }
+            .add:disabled { opacity: 0.5; cursor: not-allowed; }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <div id="siteHeader"></div>
+
+        <main class="container" style="padding-top: 40px">
+            <div style="margin-bottom: 30px;">
+                <h1 class="section-title" style="margin-bottom: 8px; font-size: 2.2em;">
+                    <i class="fas fa-cube" style="margin-right: 12px; color: var(--coffee);"></i>
+                    <span id="pageTitle">Cà Phê Chất Lượng Cao</span>
+                </h1>
+                <p id="pageDesc" style="color: #888; font-size: 1.05em; margin: 0;"></p>
+            </div>
+
+            <!-- Tìm kiếm nâng cao: tên + loại + khoảng giá (kết hợp trong một lần tìm) -->
+            <section class="filter-panel">
+                <form id="filterForm" novalidate>
+                    <div class="search-box">
+                        <input type="text" id="productSearch" placeholder="🔍 Tìm theo tên sản phẩm" aria-label="Tên sản phẩm" />
+                    </div>
+
+                    <div class="grid grid-3">
+                        <div class="filter-group">
+                            <label for="category">Phân loại</label>
+                            <select id="category" name="category">
+                                <option value="">Tất cả</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="priceMin">Khoảng giá (đồng)</label>
+                            <div class="price-range">
+                                <input type="number" id="priceMin" min="0" step="1000" placeholder="Từ" aria-label="Giá tối thiểu" />
+                                <input type="number" id="priceMax" min="0" step="1000" placeholder="Đến" aria-label="Giá tối đa" />
+                            </div>
+                        </div>
+                        <div class="filter-group">
+                            <label for="sort">Sắp xếp</label>
+                            <select id="sort" name="sort">
+                                <option value="default">Mặc định</option>
+                                <option value="price-asc">Giá tăng dần</option>
+                                <option value="price-desc">Giá giảm dần</option>
+                                <option value="name-asc">Tên A-Z</option>
+                                <option value="name-desc">Tên Z-A</option>
+                            </select>
+                        </div>
+                    </div>
+                    <p id="filterError" class="cb-field-error" role="alert" hidden></p>
+                    <div class="filter-buttons">
+                        <button type="submit" class="apply-filter">✓ Tìm kiếm</button>
+                        <button type="button" class="reset-filter" id="resetFilter">Xóa bộ lọc</button>
+                    </div>
+                </form>
+            </section>
+
+            <p id="resultInfo" style="color:#666;margin:0 0 16px;"></p>
+
+            <!-- Danh sách sản phẩm (sinh từ dữ liệu, có phân trang) -->
+            <section class="product-grid" id="productGrid"></section>
+            <div id="pagination"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer id="lien-he">
+            <div class="container foot">
+                <div>
+                    <h4>Cà Phê Đậm Đà</h4>
+                    <p>
+                        Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà
+                        phê ngon mỗi ngày.
+                    </p>
+                </div>
+                <div>
+                    <h4>Liên hệ</h4>
+                    <p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn</p>
+                </div>
+                <div>
+                    <h4>Địa chỉ</h4>
+                    <p>123 Phin Street, Quận Caffeine, TP.HCM</p>
+                </div>
+            </div>
+            <div class="container copyright">
+                © 2025 Cà Phê Đậm Đà. All rights reserved.
+            </div>
+        </footer>
+
+        <script src="js/db.js"></script>
+        <script src="js/catalog.js"></script>
+        <script src="js/inventory.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/shop.js"></script>
+        <script src="js/seed.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/page-products.js"></script>
+
+        <!-- Back to Top Button -->
+        <button id="backToTop" class="back-to-top" onclick="scrollToTop()">↑</button>
+        
+        <style>
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #8B4513, #D2691E);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .back-to-top:hover {
+            background: linear-gradient(135deg, #D2691E, #8B4513);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 69, 19, 0.4);
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        </style>
+        
+        <script>
+        window.addEventListener('scroll', function() {
+            const backToTopButton = document.getElementById('backToTop');
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        </script>
+    </body>
+</html>
+
+
+

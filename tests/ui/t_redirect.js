@@ -1,0 +1,20 @@
+const H = require('./harness');
+const fs = require('fs'), path = require('path');
+(async () => {
+    await H.start();
+    console.log('\n[trang chuyển hướng và phần đã gỡ]');
+    const root = path.resolve(__dirname, '..', '..');
+    const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
+    H.ok(/url=products\.html\?cat=arabica/.test(read('arabica.html')), 'arabica.html chuyển sang products.html?cat=arabica');
+    H.ok(/url=index\.html/.test(read('index2.html')), 'index2.html chuyển sang index.html');
+    H.ok(!fs.existsSync(path.join(root, 'lucky-spin.html')), 'đã xóa lucky-spin.html');
+    H.ok(!/lucky-spin|floating-spin/.test(read('products.html')), 'products.html không còn nút vòng quay');
+    H.ok(!/COFFEE20|promoPopup/.test(read('index.html')), 'index.html không còn popup COFFEE20');
+    let pg = await H.visit('index.html');
+    H.eq(pg.errors, [], 'trang chủ không lỗi JS sau khi gỡ popup');
+    pg = await H.visit('products.html');
+    H.eq(pg.errors, [], 'products không lỗi JS sau khi gỡ nút vòng quay');
+    H.eq(pg.d.querySelectorAll('.card').length, 9, 'products vẫn hiển thị 9 sản phẩm');
+    H.stop();
+    process.exit(H.summary() ? 1 : 0);
+})();

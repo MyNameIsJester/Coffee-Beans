@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Giỏ hàng - Cà Phê Đậm Đà</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/user.css" />
+        <link rel="stylesheet" href="styles/header.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            .cart-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            .cart-table th { text-align: left; padding: 12px 0; border-bottom: 2px solid #ddd; font-weight: 600; color: var(--coffee-900); }
+            .cart-table td { padding: 16px 0; border-bottom: 1px solid #eee; vertical-align: middle; }
+            .cart-table tr:last-child td { border-bottom: none; }
+            .product-cell { display: flex; gap: 12px; align-items: center; }
+            .product-img { width: 64px; height: 64px; border-radius: 6px; object-fit: cover; }
+        </style>
+    </head>
+    <body>
+        <div id="siteHeader"></div>
+
+        <main class="container" id="cartRoot" style="padding: 24px 20px"></main>
+
+        <footer id="lien-he">
+            <div class="container foot">
+                <div>
+                    <h4>Cà Phê Đậm Đà</h4>
+                    <p>
+                        Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà
+                        phê ngon mỗi ngày.
+                    </p>
+                </div>
+                <div>
+                    <h4>Liên hệ</h4>
+                    <p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn</p>
+                </div>
+                <div>
+                    <h4>Địa chỉ</h4>
+                    <p>123 Phin Street, Quận Caffeine, TP.HCM</p>
+                </div>
+            </div>
+            <div class="container copyright">
+                © 2025 Cà Phê Đậm Đà. All rights reserved.
+            </div>
+        </footer>
+
+        <script src="js/db.js"></script>
+        <script src="js/catalog.js"></script>
+        <script src="js/inventory.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/shop.js"></script>
+        <script src="js/seed.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/page-cart.js"></script>
+    </body>
+</html>
+
+
+

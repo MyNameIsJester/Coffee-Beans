@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cà Phê Đậm Đà</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            color: white;
+        }
+
+        .logo {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .card-features {
+            text-align: left;
+            background: #F8F7F4;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .card-features ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .card-features li {
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .card-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #D2691E;
+            font-weight: 700;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(210, 105, 30, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.9;
+        }
+
+        .footer p {
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        /* Admin Badge */
+        .admin-badge {
+            background: #FFF0E6;
+            color: #D2691E;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 36px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            .card-icon {
+                font-size: 60px;
+            }
+
+            .card h2 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">☕</div>
+            <h1>Cà Phê Đậm Đà</h1>
+            <p>Hệ thống quản lý bán hàng trực tuyến</p>
+        </div>
+
+        <div class="cards-grid">
+            <!-- Customer Card -->
+            <div class="card" onclick="goToCustomer()">
+                <div class="card-icon">👥</div>
+                <h2>Khách hàng</h2>
+                <p>Mua sắm cà phê chất lượng cao</p>
+                <div class="card-features">
+                    <ul>
+                        <li>Duyệt danh mục sản phẩm</li>
+                        <li>Đặt hàng trực tuyến</li>
+                        <li>Quản lý tài khoản</li>
+                        <li>Xem lịch sử mua hàng</li>
+                    </ul>
+                </div>
+                <button class="btn">Vào trang khách hàng →</button>
+            </div>
+
+            <!-- Admin Card -->
+            <div class="card" onclick="goToAdmin()">
+                <div class="admin-badge">🔐 Riêng biệt</div>
+                <div class="card-icon">⚙️</div>
+                <h2>Quản trị viên</h2>
+                <p>Quản lý toàn bộ hệ thống</p>
+                <div class="card-features">
+                    <ul>
+                        <li>Quản lý người dùng & sản phẩm</li>
+                        <li>Quản lý đơn hàng & tồn kho</li>
+                        <li>Quản lý giá bán & lợi nhuận</li>
+                        <li>Tổng quan hệ thống</li>
+                    </ul>
+                </div>
+                <button class="btn">Vào trang quản trị →</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Cà Phê Đậm Đà. Tất cả quyền được bảo lưu.</p>
+            <p style="font-size: 12px; margin-top: 16px;">
+                💡 Ghi chú: Bản trình diễn chạy trên trình duyệt, dữ liệu lưu bằng localStorage. Phiên đăng nhập của khách hàng và admin tách biệt nhưng dùng chung một bộ dữ liệu.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function goToCustomer() {
+            window.location.href = 'index.html';
+        }
+
+        function goToAdmin() {
+            window.location.href = 'admin-login.html';
+        }
+    </script>
+</body>
+</html>

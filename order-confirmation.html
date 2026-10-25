@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Xác nhận đơn hàng - Cà Phê Đậm Đà</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="styles/user.css" />
+        <link rel="stylesheet" href="styles/header.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
+        <style>
+            .confirmation-container {
+                max-width: 700px;
+                margin: 40px auto;
+            }
+            .success-header {
+                text-align: center;
+                margin-bottom: 40px;
+            }
+            .success-icon {
+                font-size: 64px;
+                color: #4caf50;
+                margin-bottom: 16px;
+            }
+            .success-title {
+                font-size: 28px;
+                color: var(--coffee-900);
+                margin-bottom: 12px;
+                font-weight: 700;
+            }
+            .success-subtitle {
+                font-size: 16px;
+                color: #666;
+                margin-bottom: 20px;
+            }
+            .order-id-box {
+                background: #f7fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 16px;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+            .order-id-label {
+                font-size: 12px;
+                color: #666;
+                text-transform: uppercase;
+                margin-bottom: 4px;
+            }
+            .order-id {
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--coffee);
+                font-family: monospace;
+            }
+            .info-section {
+                background: #fff;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                margin-bottom: 20px;
+            }
+            .info-title {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--coffee-900);
+                margin-bottom: 16px;
+                padding-bottom: 12px;
+                border-bottom: 1px solid #eee;
+            }
+            .info-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid #f0f0f0;
+                font-size: 14px;
+            }
+            .info-row:last-child {
+                border-bottom: none;
+            }
+            .info-label {
+                color: #666;
+            }
+            .info-value {
+                font-weight: 500;
+                color: #2d3748;
+                text-align: right;
+            }
+            .items-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 12px 0;
+            }
+            .items-table th {
+                background: #f7fafc;
+                padding: 12px;
+                text-align: left;
+                font-weight: 600;
+                color: var(--coffee-900);
+                border-bottom: 2px solid #e2e8f0;
+                font-size: 13px;
+            }
+            .items-table td {
+                padding: 12px;
+                border-bottom: 1px solid #eee;
+                font-size: 14px;
+            }
+            .items-table tr:last-child td {
+                border-bottom: none;
+            }
+            .item-name {
+                font-weight: 500;
+                color: #2d3748;
+            }
+            .item-price {
+                color: var(--coffee);
+                font-weight: 600;
+            }
+            .total-section {
+                background: #f7fafc;
+                border-radius: 8px;
+                padding: 16px;
+                margin: 16px 0;
+            }
+            .total-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                font-size: 14px;
+            }
+            .total-row.grand-total {
+                font-size: 18px;
+                font-weight: 700;
+                color: var(--coffee);
+                border-top: 2px solid #e2e8f0;
+                padding-top: 12px;
+                margin-top: 12px;
+            }
+            .action-buttons {
+                display: flex;
+                gap: 12px;
+                margin-top: 30px;
+            }
+            .btn-primary {
+                flex: 1;
+                padding: 14px 20px;
+                background: var(--coffee);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+            .btn-secondary {
+                flex: 1;
+                padding: 14px 20px;
+                background: #f0f0f0;
+                color: var(--coffee);
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+            }
+            .btn-primary:hover {
+                background: var(--coffee-900);
+            }
+            .btn-secondary:hover {
+                background: #e8e8e8;
+            }
+            .status-badge {
+                display: inline-block;
+                padding: 6px 12px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+            .status-processing {
+                background: #cce5ff;
+                color: #004085;
+            }
+            @media (max-width: 640px) {
+                .confirmation-container {
+                    margin: 20px auto;
+                    padding: 0 16px;
+                }
+                .success-title {
+                    font-size: 24px;
+                }
+                .items-table th,
+                .items-table td {
+                    padding: 8px;
+                    font-size: 12px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <div id="siteHeader"></div>
+
+        <main class="container confirmation-container" id="confirmRoot"></main>
+
+        <footer id="lien-he">
+            <div class="container foot">
+                <div>
+                    <h4>Cà Phê Đậm Đà</h4>
+                    <p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p>
+                </div>
+                <div>
+                    <h4>Liên hệ</h4>
+                    <p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn</p>
+                </div>
+                <div>
+                    <h4>Địa chỉ</h4>
+                    <p>123 Phin Street, Quận Caffeine, TP.HCM</p>
+                </div>
+            </div>
+            <div class="container copyright">
+                © 2025 Cà Phê Đậm Đà. All rights reserved.
+            </div>
+        </footer>
+
+        <script src="js/db.js"></script>
+        <script src="js/catalog.js"></script>
+        <script src="js/inventory.js"></script>
+        <script src="js/auth.js"></script>
+        <script src="js/shop.js"></script>
+        <script src="js/seed.js"></script>
+        <script src="js/ui.js"></script>
+        <script src="js/page-order-confirmation.js"></script>
+    </body>
+</html>
+
+
+
