@@ -1,4 +1,4 @@
-/* Trang chi tiết sản phẩm: product-detail.html?id=<mã định danh>  (vẫn nhận ?product= của liên kết cũ) */
+/* Trang chi tiết sản phẩm */
 (function () {
     'use strict';
     var U = CB.util;

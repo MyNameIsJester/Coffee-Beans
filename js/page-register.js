@@ -1,4 +1,4 @@
-/* Trang đăng nhập / đăng ký khách hàng. ?tab=login|register&redirect=<trang nội bộ> */
+/* Trang đăng nhập / đăng ký khách hàng. */
 (function () {
     'use strict';
     var $ = function (id) { return document.getElementById(id); };
@@ -35,7 +35,7 @@
     $('tabLogin').addEventListener('click', function () { showTab('login'); });
     $('tabRegister').addEventListener('click', function () { showTab('register'); });
 
-    /* Đã đăng nhập sẵn: không cho thấy biểu mẫu, đưa ra lựa chọn rõ ràng */
+    /* Đã đăng nhập sẵn */
     var current = CB.auth.current();
     if (current) {
         $('authForms').hidden = true;

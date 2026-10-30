@@ -34,8 +34,8 @@
         { id: 'costa-rica-tarazu', code: 'CF012', name: 'Costa Rica Tarazu 400g', cat: 'cat-arabica', image: 'images/costarica-new.jpg', origin: 'Tarrazú, Costa Rica', roast: 'Rang vừa', weight: '400g', notes: ['Vị chua tươi, sạch', 'Hương cam, mật ong', 'Hậu vị ngọt'], description: 'Arabica vùng Tarrazú vị sạch và sáng, hương cam và mật ong, hậu ngọt kéo dài.', cost: 126400 }
     ];
 
-    /* Phiếu nhập mẫu. PN001 và PN002 đã hoàn thành, PN003 để ở trạng thái chưa hoàn thành. */
-    var KENYAN_STOCK = 12; // nhỏ để minh họa cảnh báo sắp hết hàng
+    /* Phiếu nhập mẫu */
+    var KENYAN_STOCK = 12; // cảnh báo sắp hết hàng
     var QTY = { 'arabica-premium': 80, 'robusta-bold': 100, 'signature-blend': 40, 'ethiopia-yirgacheffe': 60, 'colombian-supremo': 60, 'brazilian-arabica': 70, 'vietnam-robusta': 120, 'indonesian-sumatra': 50, 'premium-espresso-blend': 30, 'dark-roast-supreme': 60, 'kenyan-aa-grade': KENYAN_STOCK, 'costa-rica-tarazu': 45 };
 
     function seedUsers() {
@@ -51,7 +51,7 @@
 
     function seedAdmins() {
         var u = CB.auth.makeUser({ id: 'admin-1', username: 'admin', email: 'admin@caphedamda.vn', fullName: 'Quản trị viên', phone: '0901234567', password: 'admin123' });
-        db.write(K.admins, [{ id: u.id, username: u.username, fullName: u.fullName, salt: u.salt, passwordHash: u.passwordHash }]);
+        db.write(K.admins, [{ id: u.id, username: u.username, fullName: u.fullName, password: u.password }]);
     }
 
     function seedReceipts() {

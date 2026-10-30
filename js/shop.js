@@ -1,5 +1,5 @@
 /* CoffeeBeans - Giỏ hàng và đơn hàng.
-   - Giỏ hàng lưu riêng theo từng tài khoản, chỉ dùng được khi đã đăng nhập.
+   - Giỏ hàng lưu riêng theo từng tài khoản, dùng được khi đã đăng nhập.
    - Đơn hàng lưu "ảnh chụp" tên/giá tại thời điểm đặt, nên đổi giá sau này không làm đổi đơn cũ.
    - Tồn kho chỉ bị trừ khi đơn chuyển sang "Đã giao" (đúng một lần). */
 (function (g) {
@@ -178,7 +178,7 @@
                 return s;
             }, 0);
         },
-        /* Tra cứu cho admin: from/to (ngày đặt, yyyy-mm-dd), status, q (mã đơn / tên khách / tên đăng nhập) */
+        /* Tra cứu admin: from/to (ngày đặt, yyyy-mm-dd), status, q (mã đơn / tên khách / tên đăng nhập) */
         search: function (opts) {
             opts = opts || {};
             var q = U.norm(opts.q || '');
@@ -198,9 +198,7 @@
                 });
         },
 
-        /* Đặt hàng từ giỏ hàng của tài khoản đang đăng nhập.
-           d: {token, paymentMethod, note, shipping:{source:'account'|'new', fullName, phone, province, district, ward, detail}}
-           token chống đặt trùng khi bấm nhiều lần hoặc tải lại trang. */
+        /* Đặt hàng từ giỏ hàng của tài khoản đang đăng nhập. Chống đặt trùng khi bấm nhiều lần hoặc tải lại trang. */
         place: function (d) {
             var user = CB.auth.current();
             if (!user) return fail('Vui lòng đăng nhập để đặt hàng.', { code: 'LOGIN_REQUIRED' });
@@ -305,8 +303,7 @@
             return { ok: true, order: order };
         },
 
-        /* Cập nhật trạng thái (admin). Chỉ cho phép chuyển hợp lệ, và tồn kho chỉ đổi đúng một lần.
-           opts.at: thời điểm ISO (dùng khi tạo dữ liệu mẫu). */
+        /* Cập nhật trạng thái (admin). Chỉ cho phép chuyển hợp lệ, và tồn kho chỉ đổi đúng một lần. */
         setStatus: function (orderId, newStatus, opts) {
             var all = allOrders();
             var o = all.filter(function (x) {

@@ -1,4 +1,4 @@
-/* Trang chủ: danh mục sản phẩm nổi bật (mỗi loại một sản phẩm đại diện), slider hero. */
+/* Trang chủ: danh mục sản phẩm nổi bật */
 (function () {
     'use strict';
     var U = CB.util;

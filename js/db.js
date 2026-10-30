@@ -60,7 +60,7 @@
                 rawSet(key, JSON.stringify(value));
                 return true;
             } catch (e) {
-                // thường do vượt dung lượng localStorage (ví dụ ảnh quá lớn)
+                // thường do vượt dung lượng localStorage
                 return false;
             }
         },
@@ -68,7 +68,7 @@
             if (LS) LS.removeItem(key);
             else delete memory[key];
         },
-        /* Bộ đếm tăng dần, dùng cho mã phiếu nhập, mã đơn hàng... */
+        /* Bộ đếm tăng dần, dùng cho mã phiếu nhập, mã đơn hàng,... */
         nextCounter: function (name) {
             var counters = db.read(KEYS.counters, {});
             counters[name] = (counters[name] || 0) + 1;
@@ -89,7 +89,6 @@
 
     var util = {
         pad: pad,
-        /* yyyy-mm-dd theo giờ địa phương */
         dateStr: function (d) {
             d = d || new Date();
             return d.getFullYear() + '-' + pad(d.getMonth() + 1, 2) + '-' + pad(d.getDate(), 2);
@@ -112,7 +111,7 @@
             if (n === null || n === undefined || isNaN(n)) return '—';
             return Math.round(n).toLocaleString('vi-VN') + 'đ';
         },
-        /* Nhận 'yyyy-mm-dd' hoặc ISO -> dd/mm/yyyy */
+        /* Chuẩn hóa ngày tháng */
         fmtDate: function (s) {
             if (!s) return '';
             var d = String(s).slice(0, 10).split('-');
@@ -145,7 +144,7 @@
                 .toLowerCase()
                 .trim();
         },
-        /* Băm mật khẩu CHỈ để trình diễn (cyrb53). Không phải cơ chế bảo mật thực tế. */
+        /* Băm mật khẩu */
         hashPassword: function (password, salt) {
             var str = salt + ':' + password;
             var h1 = 0xdeadbeef,

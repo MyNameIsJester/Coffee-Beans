@@ -80,7 +80,12 @@ console.log('\n[4] Tài khoản khách hàng và admin');
 ok(!CB.auth.login('guest1', 'sai').ok, 'sai mật khẩu bị từ chối');
 ok(CB.auth.login('guest1', 'guest1123').ok, 'đăng nhập guest1 / guest1123');
 eq(CB.auth.current().username, 'guest1', 'current() trả đúng user');
-ok(!('passwordHash' in CB.auth.current()), 'không lộ băm mật khẩu');
+ok(
+    !('password' in CB.auth.current()) &&
+    !('passwordHash' in CB.auth.current()) &&
+    !('salt' in CB.auth.current()),
+    'không trả mật khẩu ra thông tin người dùng'
+);
 CB.auth.logout();
 eq(CB.auth.current(), null, 'đăng xuất');
 ok(CB.auth.login('GUEST2@example.com', 'guest2123').ok, 'đăng nhập bằng email (không phân biệt hoa thường)');
@@ -268,8 +273,8 @@ const oldRec = CB.db.read(CB.db.KEYS.users, []).filter((u) => u.id === uid1)[0];
 cp = CB.auth.changePassword(uid1, 'guest1123', 'newpass1', 'newpass1');
 ok(cp.ok && !cp.errors, 'đổi mật khẩu hợp lệ thành công');
 const newRec = CB.db.read(CB.db.KEYS.users, []).filter((u) => u.id === uid1)[0];
-ok(newRec.salt !== oldRec.salt && newRec.passwordHash !== oldRec.passwordHash, 'cập nhật cả salt và hash');
-ok(JSON.stringify(newRec).indexOf('newpass1') === -1, 'mật khẩu mới không được lưu dạng văn bản thường');
+ok( newRec.password === 'newpass1' && !('salt' in newRec) && !('passwordHash' in newRec), 'mật khẩu mới được lưu trực tiếp');
+ok( JSON.stringify(newRec).indexOf('newpass1') !== -1, 'mật khẩu mới tồn tại trong dữ liệu demo');
 ok(!CB.auth.login('guest1', 'guest1123').ok, 'mật khẩu cũ không còn đăng nhập được');
 ok(CB.auth.login('guest1', 'newpass1').ok, 'đăng nhập lại bằng mật khẩu mới');
 CB.auth.logout();

@@ -60,7 +60,7 @@
         $('priceMin').classList.toggle('cb-input-error', !!msg);
         $('priceMax').classList.toggle('cb-input-error', !!msg);
     }
-    /* Trả về bộ lọc hợp lệ hoặc null (đã hiện lỗi) */
+    /* Trả về bộ lọc hợp lệ hoặc null */
     function collectForm() {
         var min = $('priceMin').value.trim(),
             max = $('priceMax').value.trim();

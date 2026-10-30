@@ -1,5 +1,3 @@
-/* CoffeeBeans - Tài khoản khách hàng và admin (phiên làm việc tách biệt).
-   Lưu ý: băm mật khẩu phía trình duyệt chỉ để trình diễn, không phải bảo mật thực tế. */
 (function (g) {
     'use strict';
     var CB = (g.CB = g.CB || {});
@@ -16,27 +14,34 @@
         return db.read(K.users, []);
     }
     function publicUser(u) {
-        if (!u) return null;
-        var c = Object.assign({}, u);
-        delete c.passwordHash;
-        delete c.salt;
-        return c;
-    }
+    if (!u) return null;
+
+    var c = Object.assign({}, u);
+    delete c.password;
+    delete c.passwordHash;
+    delete c.salt;
+
+    return c;
+}
     function makeUser(d) {
-        var salt = U.uid('s');
-        return {
-            id: d.id || U.uid('u'),
-            username: d.username,
-            email: d.email,
-            fullName: d.fullName,
-            phone: d.phone,
-            address: d.address || { province: '', district: '', ward: '', detail: '' },
-            salt: salt,
-            passwordHash: U.hashPassword(d.password, salt),
-            status: 'active',
-            createdAt: d.createdAt || U.nowISO()
-        };
-    }
+    return {
+        id: d.id || U.uid('u'),
+        username: d.username,
+        email: d.email,
+        fullName: d.fullName,
+        phone: d.phone,
+        address: d.address || {
+            province: '',
+            district: '',
+            ward: '',
+            detail: ''
+        },
+        password: String(d.password || ''),
+
+        status: 'active',
+        createdAt: d.createdAt || U.nowISO()
+    };
+}
     function findByIdentifier(list, ident) {
         var key = U.norm(ident);
         for (var i = 0; i < list.length; i++) {
@@ -82,7 +87,7 @@
             ident = String(ident || '').trim();
             if (!ident || !password) return fail('Vui lòng nhập tên đăng nhập/email và mật khẩu.');
             var u = findByIdentifier(users(), ident);
-            if (!u || U.hashPassword(password, u.salt) !== u.passwordHash)
+            if (!u || String(u.password || '') !== String(password || ''))
                 return fail('Tên đăng nhập/email hoặc mật khẩu không đúng.');
             if (u.status === 'locked')
                 return fail('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ cửa hàng để được hỗ trợ.');
@@ -150,8 +155,7 @@
             db.write(K.users, list);
             return { ok: true, user: publicUser(u) };
         },
-        /* Khách hàng tự đổi mật khẩu. Trả về {ok:true} hoặc {ok:false, errors:{currentPassword|newPassword|confirmPassword: thông báo}}.
-           Chỉ phục vụ trình diễn: mật khẩu băm phía trình duyệt và lưu trong localStorage, không phải xác thực an toàn. */
+        /* Khách hàng tự đổi mật khẩu. Trả về true hoặc false, errors */
         changePassword: function (userId, currentPassword, newPassword, confirmPassword) {
             var list = users();
             var u = list.filter(function (x) { return x.id === userId; })[0];
@@ -161,13 +165,15 @@
             newPassword = String(newPassword || '');
             confirmPassword = String(confirmPassword || '');
             if (!currentPassword) errors.currentPassword = 'Vui lòng nhập mật khẩu hiện tại.';
-            else if (U.hashPassword(currentPassword, u.salt) !== u.passwordHash) errors.currentPassword = 'Mật khẩu hiện tại không đúng.';
+            else if (String(u.password || '') !== currentPassword)
+                errors.currentPassword = 'Mật khẩu hiện tại không đúng.';
             if (newPassword.length < 6) errors.newPassword = 'Mật khẩu mới cần ít nhất 6 ký tự.';
             else if (newPassword === currentPassword) errors.newPassword = 'Mật khẩu mới phải khác mật khẩu hiện tại.';
             if (!errors.newPassword && newPassword !== confirmPassword) errors.confirmPassword = 'Mật khẩu xác nhận không khớp.';
             if (Object.keys(errors).length) return { ok: false, errors: errors };
-            u.salt = U.uid('s');
-            u.passwordHash = U.hashPassword(newPassword, u.salt);
+            u.password = newPassword;
+            delete u.salt;
+            delete u.passwordHash;
             db.write(K.users, list);
             return { ok: true };
         },
@@ -184,14 +190,28 @@
         customers: function () {
             return users().map(publicUser);
         },
+
         resetPassword: function (userId) {
             var list = users();
-            var u = list.filter(function (x) { return x.id === userId; })[0];
+            var u = list.filter(function (x) {
+                return x.id === userId;
+            })[0];
+
             if (!u) return fail('Không tìm thấy tài khoản.');
-            u.passwordHash = U.hashPassword(DEFAULT_RESET_PASSWORD, u.salt);
+
+            u.password = DEFAULT_RESET_PASSWORD;
+
+            delete u.salt;
+            delete u.passwordHash;
+
             db.write(K.users, list);
-            return { ok: true, newPassword: DEFAULT_RESET_PASSWORD };
+
+            return {
+                ok: true,
+                newPassword: DEFAULT_RESET_PASSWORD
+            };
         },
+
         setLocked: function (userId, locked) {
             var list = users();
             var u = list.filter(function (x) { return x.id === userId; })[0];

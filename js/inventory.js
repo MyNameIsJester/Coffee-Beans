@@ -1,7 +1,7 @@
 /* CoffeeBeans - Phiếu nhập và tồn kho.
-   Tồn kho KHÔNG lưu trực tiếp. Tồn = tổng nhập - tổng xuất, tính từ sổ giao dịch kho (stockTx).
-   - Nhập: sinh ra đúng 1 lần khi phiếu nhập chuyển sang "Đã hoàn thành".
-   - Xuất: sinh ra khi đơn hàng chuyển sang "Đã giao" (xem shop.js). */
+   Tồn kho KHÔNG lưu trực tiếp. Tồn = tổng nhập - tổng xuất, tính từ sổ giao dịch kho
+   - Nhập: sinh ra đúng 1 lần khi phiếu nhập chuyển sang "Đã hoàn thành"
+   - Xuất: sinh ra khi đơn hàng chuyển sang "Đã giao" */
 (function (g) {
     'use strict';
     var CB = (g.CB = g.CB || {});
@@ -34,7 +34,7 @@
         statusLabel: function (status) {
             return status === 'completed' ? 'Đã hoàn thành' : 'Chưa hoàn thành';
         },
-        /* opts: {q (mã phiếu hoặc tên sản phẩm), from, to (yyyy-mm-dd), status} */
+        /* opts */
         searchReceipts: function (opts) {
             opts = opts || {};
             var q = U.norm(opts.q || '');
@@ -60,8 +60,7 @@
                     return a.date < b.date ? 1 : a.date > b.date ? -1 : b.code.localeCompare(a.code);
                 });
         },
-        /* data: {id?, date, note?, lines: [{productId, qty, unitCost}]}
-           Chỉ tạo mới hoặc sửa phiếu đang ở trạng thái chưa hoàn thành. */
+        /* data: Chỉ tạo mới hoặc sửa phiếu đang ở trạng thái chưa hoàn thành. */
         saveReceipt: function (data) {
             if (!U.isDate(data.date)) return fail('Vui lòng chọn ngày nhập hợp lệ.', 'date');
             if (!data.lines || !data.lines.length)
@@ -112,7 +111,7 @@
             db.write(K.receipts, all);
             return { ok: true, receipt: r };
         },
-        /* Hoàn thành phiếu: cộng tồn đúng một lần. Gọi lại sẽ không cộng thêm. */
+        /* Hoàn thành phiếu */
         completeReceipt: function (id) {
             var all = inventory.receipts();
             var r = all.filter(function (x) {
@@ -160,7 +159,6 @@
         },
 
         /* ================= Tồn kho ================= */
-        /* Tồn thực tế tại cuối ngày asOf (yyyy-mm-dd). Bỏ trống asOf = hiện tại. */
         stock: function (productId, asOf) {
             return txList().reduce(function (s, t) {
                 if (t.productId !== productId) return s;
@@ -200,7 +198,7 @@
                     return x.stock <= t;
                 });
         },
-        /* Nhập - xuất - tồn của một sản phẩm trong khoảng [from, to] (yyyy-mm-dd, gồm cả hai đầu). */
+        /* Nhập - xuất - tồn của một sản phẩm trong khoảng thời gian */
         movement: function (productId, from, to) {
             var opening = 0,
                 imports = 0,

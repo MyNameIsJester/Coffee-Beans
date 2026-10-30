@@ -1,4 +1,4 @@
-/* Xem lại đơn hàng vừa đặt: order-confirmation.html?order=<id> */
+/* Xem lại đơn hàng vừa đặt */
 (function () {
     'use strict';
     var U = CB.util;
