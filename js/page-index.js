@@ -7,7 +7,7 @@
     function card(cat, v, idx) {
         var detail = 'product-detail.html?id=' + encodeURIComponent(v.id);
         var canBuy = v.price !== null && v.available > 0;
-        return '<article class="card fade-in-left stagger-' + (idx + 1) + '">' +
+        return '<article class="card">' +
             '<a href="products.html?cat=' + encodeURIComponent(cat.slug) + '" aria-label="Xem tất cả ' + U.esc(cat.name) + '"><img src="' + U.esc(v.image) + '" alt="Hạt ' + U.esc(cat.name) + '" /></a>' +
             '<div class="card-body"><span class="chip">' + U.esc(cat.name) + '</span><div class="spacer"></div>' +
             '<div class="prod"><img src="' + U.esc(v.image) + '" alt="' + U.esc(v.name) + '" />' +
