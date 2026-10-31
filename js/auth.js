@@ -30,14 +30,8 @@
         email: d.email,
         fullName: d.fullName,
         phone: d.phone,
-        address: d.address || {
-            province: '',
-            district: '',
-            ward: '',
-            detail: ''
-        },
+        address: d.address || { province: '', district: '', ward: '', detail: '' },
         password: String(d.password || ''),
-
         status: 'active',
         createdAt: d.createdAt || U.nowISO()
     };
@@ -198,7 +192,6 @@
             })[0];
 
             if (!u) return fail('Không tìm thấy tài khoản.');
-
             u.password = DEFAULT_RESET_PASSWORD;
 
             delete u.salt;
@@ -221,11 +214,11 @@
             return { ok: true, user: publicUser(u) };
         },
 
-        /* ================= Admin (phiên riêng, không dùng chung với khách) ================= */
+        /* ================= Admin riêng, không dùng chung với khách ================= */
         adminLogin: function (username, password) {
             var list = db.read(K.admins, []);
             var a = findByIdentifier(list, username);
-            if (!a || U.hashPassword(String(password || ''), a.salt) !== a.passwordHash)
+            if (!a || String(a.password || '') !== String(password || ''))
                 return fail('Tên đăng nhập hoặc mật khẩu admin không đúng.');
             db.write(K.adminSession, { adminId: a.id, at: U.nowISO() });
             return { ok: true, admin: { id: a.id, username: a.username, fullName: a.fullName } };
