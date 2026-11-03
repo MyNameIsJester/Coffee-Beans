@@ -1,181 +1,194 @@
-/* Thanh toán: chọn địa chỉ (tài khoản / địa chỉ mới), phương thức thanh toán, đặt hàng từ giỏ hàng thật. */
-(function () {
+/* CoffeeBeans - View: Checkout (Thanh toán)
+   File: js/page-checkout.js
+*/
+(function (g) {
     'use strict';
+    var CB = (g.CB = g.CB || {});
     var U = CB.util;
-    var user = CB.auth.requireLogin();
-    if (!user) return;
-    var root = document.getElementById('checkoutRoot');
-    var TOKEN_KEY = 'cb_checkout_token';
+    CB.views = CB.views || {};
 
-    function token() {
+    var TOKEN_KEY = 'cb_checkout_token';
+    function getToken() {
         var t = null;
-        try { t = sessionStorage.getItem(TOKEN_KEY); } catch (e) {}
+        try { t = g.sessionStorage.getItem(TOKEN_KEY); } catch (e) {}
         if (!t) {
             t = U.uid('co');
-            try { sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {}
+            try { g.sessionStorage.setItem(TOKEN_KEY, t); } catch (e) {}
         }
         return t;
     }
-    function clearToken() { try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {} }
 
-    var lines = CB.cart.detailed();
-    var heading = '<h1 style="margin:0 0 1.5rem;font-size:1.75rem;color:#2d3748;font-weight:700;"><i class="fas fa-shopping-bag" style="margin-right:0.5rem;color:var(--coffee-500)"></i>Thanh toán đơn hàng</h1>';
+    CB.views.checkout = {
+        mount: function (root, params) {
+            var user = CB.auth.requireLogin();
+            if (!user) return;
 
-    if (!lines.length) {
-        root.innerHTML = heading + '<div class="cb-empty"><p style="font-size:1.1em;margin-bottom:12px;">Giỏ hàng đang trống nên chưa thể thanh toán.</p><a href="products.html">← Tiếp tục mua sắm</a></div>';
-        return;
-    }
-    var problem = lines.some(function (l) { return l.problem; });
-    if (problem) {
-        root.innerHTML = heading + '<div class="cb-alert cb-alert-error" role="alert">Một số sản phẩm trong giỏ hàng không còn đủ điều kiện đặt hàng (hết hàng, vượt tồn kho hoặc ngừng bán).</div>' +
-            '<a href="cart.html" style="color:var(--coffee);font-weight:600;">← Quay lại giỏ hàng để chỉnh sửa</a>';
-        return;
-    }
+            var lines = CB.cart.detailed();
+            if (!lines.length) {
+                root.innerHTML =
+                    '<div class="container" style="padding:60px 20px;">' +
+                    '<div class="cb-empty">' +
+                    '  <h1 style="font-size:24px;color:var(--coffee-900);margin-bottom:12px;">Thanh toán đơn hàng</h1>' +
+                    '  <p style="color:var(--muted);margin-bottom:20px;">Giỏ hàng của bạn đang trống.</p>' +
+                    '  <a href="index.html#/products" class="btn btn-primary">← Mua sắm ngay</a>' +
+                    '</div></div>';
+                return;
+            }
 
-    var hasAddr = CB.auth.hasAddress(user);
-    var subtotal = CB.cart.subtotal();
-    var fee = CB.orders.shippingFee();
-    var provinces = ['TP. Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ', 'Hải Phòng', 'Đồng Nai', 'Bình Dương', 'Khánh Hòa', 'Lâm Đồng', 'Đắk Lắk', 'Thừa Thiên Huế', 'Quảng Ninh'];
-    var STYLE_RO = 'padding:12px;background:#f7fafc;border-radius:6px;border:1px solid #e2e8f0;font-weight:500;color:#2d3748;';
+            var subtotal = lines.reduce(function (s, l) { return s + l.lineTotal; }, 0);
+            var fee = CB.orders.shippingFee();
+            var total = subtotal + fee;
+            var prof = user.address || {};
+            var hasProfileAddress = !!(prof.province && prof.detail);
 
-    function field(id, label, value, placeholder, extra) {
-        return '<div class="form-group" style="margin-bottom:1rem;"><label for="' + id + '">' + label + ' <span style="color:#e53e3e">*</span></label>' +
-            '<input type="text" id="' + id + '" name="' + id + '" class="form-control" style="min-height:0;" value="' + U.esc(value || '') + '" placeholder="' + U.esc(placeholder || '') + '" ' + (extra || '') + ' />' +
-            '<p class="cb-field-error" data-error-for="' + id + '"></p></div>';
-    }
-    function payOption(value, icon, title, desc, checked) {
-        return '<div class="payment-option' + (checked ? ' selected' : '') + '" data-payment="' + value + '">' +
-            '<input type="radio" name="paymentMethod" id="pay-' + value + '" value="' + value + '"' + (checked ? ' checked' : '') + ' />' +
-            '<i class="fas ' + icon + ' icon"></i><div><div>' + title + '</div><small>' + desc + '</small></div></div>';
-    }
+            var itemsHtml = lines.map(function (l) {
+                return '<div style="display:flex;justify-content:space-between;margin-bottom:10px;font-size:14px;">' +
+                    '<span>' + U.esc(l.product.name) + ' <strong style="color:#777;">× ' + l.qty + '</strong></span>' +
+                    '<span>' + U.fmtVND(l.lineTotal) + '</span>' +
+                    '</div>';
+            }).join('');
 
-    var itemsHtml = lines.map(function (l) {
-        return '<div class="order-summary-item"><span>' + U.esc(l.product.name) + ' × ' + l.qty + '</span><span>' + U.fmtVND(l.lineTotal) + '</span></div>';
-    }).join('');
+            root.innerHTML =
+                '<div class="container" style="padding:40px 20px;">' +
+                '  <h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:24px;font-family:\'Playfair Display\', serif;">Thanh toán đơn hàng</h1>' +
+                '  <div id="checkoutAlert" style="display:none;margin-bottom:20px;" class="alert alert-danger"></div>' +
 
-    root.innerHTML = heading +
-        '<div class="checkout-container">' +
-        '<div class="checkout-section"><h2 class="section-title"><i class="fas fa-user-circle" style="margin-right:0.5rem"></i>Thông tin khách hàng</h2>' +
-        '<form id="checkoutForm" novalidate>' +
-        '<div class="form-group"><label>Họ và tên</label><div style="' + STYLE_RO + '">' + U.esc(user.fullName) + '</div></div>' +
-        '<div class="form-group"><label>Số điện thoại</label><div style="' + STYLE_RO + '">' + U.esc(user.phone) + '</div></div>' +
-        '<div class="form-group"><label>Email</label><div style="' + STYLE_RO + '">' + U.esc(user.email) + '</div></div>' +
+                '  <form id="checkoutForm" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:30px;align-items:flex-start;">' +
+                '    <!-- Left: Info & Shipping -->' +
+                '    <div style="background:#fff;padding:28px;border-radius:12px;box-shadow:var(--shadow);">' +
+                '      <h3 style="font-size:18px;color:var(--coffee-900);margin-bottom:16px;">1. Địa chỉ nhận hàng</h3>' +
+                '      <div style="margin-bottom:16px;">' +
+                '        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin-bottom:8px;">' +
+                '          <input type="radio" name="addrMode" value="profile"' + (hasProfileAddress ? ' checked' : '') + ' />' +
+                '          Sử dụng địa chỉ từ hồ sơ cá nhân' +
+                '        </label>' +
+                '        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">' +
+                '          <input type="radio" name="addrMode" value="custom"' + (!hasProfileAddress ? ' checked' : '') + ' />' +
+                '          Nhập địa chỉ nhận hàng mới' +
+                '        </label>' +
+                '      </div>' +
 
-        '<h2 class="section-title"><i class="fas fa-map-marker-alt" style="margin-right:0.5rem"></i>Địa chỉ nhận hàng</h2>' +
-        '<div class="form-group">' +
-        '<div style="margin-bottom:12px;"><div style="display:flex;align-items:center;margin-bottom:10px;">' +
-        '<input type="radio" id="addrAccount" name="addressOption" value="account"' + (hasAddr ? ' checked' : ' disabled') + ' style="margin-right:8px;" />' +
-        '<label for="addrAccount" style="margin:0;cursor:pointer;">Dùng địa chỉ trong tài khoản</label></div>' +
-        (hasAddr
-            ? '<div id="accountAddrBox" style="margin-left:24px;padding:12px;background:#f7fafc;border-radius:6px;border-left:3px solid var(--coffee-500);">' +
-              '<div style="margin-bottom:4px;"><strong>' + U.esc(user.fullName) + '</strong></div><div>📞 ' + U.esc(user.phone) + '</div><div>📍 ' + U.esc(CB.auth.formatAddress(user.address)) + '</div></div>'
-            : '<div style="margin-left:24px;padding:12px;background:#fff8e1;border-radius:6px;font-size:14px;">Tài khoản chưa có địa chỉ đầy đủ. <a href="profile.html" style="color:var(--coffee);font-weight:600;">Cập nhật hồ sơ</a> hoặc nhập địa chỉ giao hàng mới bên dưới.</div>') +
-        '</div>' +
-        '<div style="margin-bottom:12px;"><div style="display:flex;align-items:center;margin-bottom:10px;">' +
-        '<input type="radio" id="addrNew" name="addressOption" value="new"' + (hasAddr ? '' : ' checked') + ' style="margin-right:8px;" />' +
-        '<label for="addrNew" style="margin:0;cursor:pointer;">Dùng địa chỉ giao hàng khác</label></div></div>' +
-        '<div id="newAddrFields" style="margin-left:24px;"' + (hasAddr ? ' hidden' : '') + '>' +
-        field('fullName', 'Tên người nhận', user.fullName, 'Họ và tên người nhận') +
-        field('phone', 'Số điện thoại người nhận', user.phone, 'Ví dụ: 0901234567', 'inputmode="tel"') +
-        field('province', 'Tỉnh / Thành phố', '', 'Chọn hoặc nhập tỉnh/thành phố', 'list="provinceList"') +
-        '<datalist id="provinceList">' + provinces.map(function (p) { return '<option value="' + U.esc(p) + '">'; }).join('') + '</datalist>' +
-        field('district', 'Quận / Huyện', '', 'Ví dụ: Quận 1') +
-        field('ward', 'Phường / Xã', '', 'Ví dụ: Phường Bến Nghé') +
-        field('detail', 'Số nhà, tên đường', '', 'Ví dụ: 12 Nguyễn Huệ') +
-        '</div></div>' +
+                '      <div id="profileAddressBox" style="background:#fdfbf9;padding:16px;border-radius:8px;border:1px solid #eee;margin-bottom:20px;' + (hasProfileAddress ? '' : 'display:none;') + '">' +
+                '        <div style="font-size:14px;line-height:1.6;"><strong>Người nhận:</strong> ' + U.esc(user.fullName) + '<br>' +
+                '        <strong>Số điện thoại:</strong> ' + U.esc(user.phone || 'Chưa có') + '<br>' +
+                '        <strong>Địa chỉ:</strong> ' + U.esc(CB.auth.formatAddress(prof) || 'Chưa cập nhật') + '</div>' +
+                '        <div style="margin-top:10px;"><a href="account.html#/profile" style="font-size:13px;color:var(--coffee);text-decoration:underline;">Chỉnh sửa hồ sơ</a></div>' +
+                '      </div>' +
 
-        '<h2 class="section-title"><i class="fas fa-credit-card" style="margin-right:0.5rem"></i>Phương thức thanh toán</h2>' +
-        '<div class="payment-method">' +
-        payOption('cod', 'fa-money-bill-wave', 'Thanh toán tiền mặt khi nhận hàng (COD)', 'Nhận hàng mới thanh toán tiền mặt', true) +
-        payOption('bank', 'fa-university', 'Chuyển khoản ngân hàng', 'Thông tin chuyển khoản hiển thị sau khi đặt hàng', false) +
-        payOption('online', 'fa-credit-card', 'Thanh toán trực tuyến (mô phỏng)', 'Chức năng minh họa, không có giao dịch thật', false) +
-        '</div>' +
-        '<div class="form-group"><label for="note">Ghi chú đơn hàng</label>' +
-        '<textarea id="note" class="form-control" rows="3" maxlength="300" placeholder="Ghi chú về đơn hàng, thời gian nhận hàng..."></textarea></div>' +
-        '</form></div>' +
+                '      <div id="customAddressBox" style="margin-bottom:20px;' + (!hasProfileAddress ? '' : 'display:none;') + '">' +
+                '        <div class="form-group"><label for="coFullName">Họ và tên người nhận</label><input type="text" id="coFullName" value="' + U.esc(user.fullName) + '" /></div>' +
+                '        <div class="form-group"><label for="coPhone">Số điện thoại</label><input type="tel" id="coPhone" value="' + U.esc(user.phone || '') + '" /></div>' +
+                '        <div class="form-group"><label for="coProvince">Tỉnh / Thành phố</label><input type="text" id="coProvince" placeholder="VD: TP. Hồ Chí Minh" /></div>' +
+                '        <div class="form-group"><label for="coDistrict">Quận / Huyện</label><input type="text" id="coDistrict" placeholder="VD: Quận 1" /></div>' +
+                '        <div class="form-group"><label for="coWard">Phường / Xã</label><input type="text" id="coWard" placeholder="VD: Phường Bến Nghé" /></div>' +
+                '        <div class="form-group"><label for="coDetail">Số nhà, tên đường</label><input type="text" id="coDetail" placeholder="VD: 123 Lê Lợi" /></div>' +
+                '      </div>' +
 
-        '<div class="checkout-section" style="position:sticky;top:1.5rem;"><h2 class="section-title"><i class="fas fa-shopping-basket" style="margin-right:0.5rem"></i>Đơn hàng của bạn</h2>' +
-        '<div class="order-summary">' + itemsHtml +
-        '<div style="border-top:1px solid #e2e8f0;margin:12px 0;"></div>' +
-        '<div class="order-summary-item"><span>Tạm tính:</span><span>' + U.fmtVND(subtotal) + '</span></div>' +
-        '<div class="order-summary-item"><span>Phí vận chuyển:</span><span>' + U.fmtVND(fee) + '</span></div>' +
-        '<div class="order-total"><span>Tổng cộng:</span><span>' + U.fmtVND(subtotal + fee) + '</span></div></div>' +
-        '<p id="formAlert" class="cb-alert cb-alert-error" role="alert" hidden style="margin-top:16px;"></p>' +
-        '<button type="button" id="placeOrder" class="btn-checkout" style="margin-top:16px;background-color:var(--coffee);">Đặt hàng</button>' +
-        '<p style="margin-top:12px;font-size:13px;text-align:center;"><a href="cart.html" style="color:var(--coffee);">← Quay lại giỏ hàng</a></p>' +
-        '</div></div>';
+                '      <div class="form-group"><label for="coNote">Ghi chú đơn hàng (tùy chọn)</label><textarea id="coNote" placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea></div>' +
 
-    var form = document.getElementById('checkoutForm');
-    var alertBox = document.getElementById('formAlert');
+                '      <h3 style="font-size:18px;color:var(--coffee-900);margin:24px 0 16px;">2. Phương thức thanh toán</h3>' +
+                '      <div style="display:flex;flex-direction:column;gap:12px;">' +
+                '        <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer;">' +
+                '          <input type="radio" name="paymentMethod" value="cod" checked />' +
+                '          <span><strong>Thanh toán khi nhận hàng (COD)</strong><br><small style="color:#777;">Thanh toán tiền mặt cho nhân viên giao hàng</small></span>' +
+                '        </label>' +
+                '        <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer;">' +
+                '          <input type="radio" name="paymentMethod" value="bank" />' +
+                '          <span><strong>Chuyển khoản ngân hàng</strong><br><small style="color:#777;">Chuyển khoản qua số tài khoản sau khi tạo đơn</small></span>' +
+                '        </label>' +
+                '        <label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer;">' +
+                '          <input type="radio" name="paymentMethod" value="online" />' +
+                '          <span><strong>Thanh toán trực tuyến (Mô phỏng)</strong><br><small style="color:#777;">Cổng thanh toán thẻ ATM / Visa / MoMo</small></span>' +
+                '        </label>' +
+                '      </div>' +
+                '    </div>' +
 
-    function syncAddress() {
-        var useNew = form.elements.addressOption.value === 'new';
-        document.getElementById('newAddrFields').hidden = !useNew;
-        document.getElementById('addrAccount').closest('div').parentNode.classList.toggle('muted', useNew);
-    }
-    function syncPayment() {
-        document.querySelectorAll('.payment-option').forEach(function (el) {
-            var r = el.querySelector('input');
-            el.classList.toggle('selected', r.checked);
-        });
-    }
-    form.addEventListener('change', function () { syncAddress(); syncPayment(); });
-    document.querySelectorAll('.payment-option').forEach(function (el) {
-        el.addEventListener('click', function () {
-            el.querySelector('input').checked = true;
-            syncPayment();
-        });
-    });
-    syncAddress();
+                '    <!-- Right: Summary -->' +
+                '    <div style="background:#fff;padding:28px;border-radius:12px;box-shadow:var(--shadow);">' +
+                '      <h3 style="font-size:18px;color:var(--coffee-900);margin-bottom:16px;">Tóm tắt đơn hàng</h3>' +
+                '      <div style="border-bottom:1px solid #eee;padding-bottom:16px;margin-bottom:16px;">' + itemsHtml + '</div>' +
+                '      <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#666;"><span>Tạm tính:</span><span>' + U.fmtVND(subtotal) + '</span></div>' +
+                '      <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;color:#666;"><span>Phí vận chuyển:</span><span>' + U.fmtVND(fee) + '</span></div>' +
+                '      <div style="display:flex;justify-content:space-between;margin-bottom:24px;padding-top:16px;border-top:1px solid #eee;font-size:20px;font-weight:700;color:var(--coffee);">' +
+                '        <span>Tổng cộng:</span><span>' + U.fmtVND(total) + '</span>' +
+                '      </div>' +
+                '      <button type="submit" id="placeOrderBtn" class="btn btn-primary" style="width:100%;padding:14px;font-size:16px;">Đặt hàng ngay</button>' +
+                '      <p style="text-align:center;margin-top:14px;font-size:13px;"><a href="checkout.html#/cart" style="color:var(--coffee);">← Quay lại giỏ hàng</a></p>' +
+                '    </div>' +
+                '  </form>' +
+                '</div>';
 
-    function clearErrors() {
-        form.querySelectorAll('.cb-field-error').forEach(function (e) { e.textContent = ''; });
-        form.querySelectorAll('.cb-input-error').forEach(function (e) { e.classList.remove('cb-input-error'); });
-        alertBox.hidden = true;
-    }
+            var form = root.querySelector('#checkoutForm');
+            var alertBox = root.querySelector('#checkoutAlert');
+            var profileBox = root.querySelector('#profileAddressBox');
+            var customBox = root.querySelector('#customAddressBox');
 
-    var submitting = false;
-    var btn = document.getElementById('placeOrder');
-    btn.addEventListener('click', function () {
-        if (submitting) return;
-        clearErrors();
-        var useNew = form.elements.addressOption.value === 'new';
-        var data = {
-            token: token(),
-            paymentMethod: form.elements.paymentMethod.value,
-            note: document.getElementById('note').value,
-            shipping: { source: useNew ? 'new' : 'account' }
-        };
-        if (useNew) {
-            ['fullName', 'phone', 'province', 'district', 'ward', 'detail'].forEach(function (k) {
-                data.shipping[k] = document.getElementById(k).value;
+            root.querySelectorAll('input[name="addrMode"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    var useProf = radio.value === 'profile';
+                    if (profileBox) profileBox.style.display = useProf ? 'block' : 'none';
+                    if (customBox) customBox.style.display = useProf ? 'none' : 'block';
+                });
             });
-        }
-        submitting = true;
-        btn.disabled = true;
-        btn.textContent = 'Đang xử lý...';
-        var r = CB.orders.place(data);
-        if (r.ok) {
-            clearToken();
-            location.href = 'order-confirmation.html?new=1&order=' + encodeURIComponent(r.order.id);
-            return;
-        }
-        submitting = false;
-        btn.disabled = false;
-        btn.textContent = 'Đặt hàng';
-        if (r.errors) {
-            Object.keys(r.errors).forEach(function (k) {
-                var el = form.querySelector('[data-error-for="' + k + '"]');
-                if (el) el.textContent = r.errors[k];
-                var input = document.getElementById(k);
-                if (input) input.classList.add('cb-input-error');
+
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alertBox.style.display = 'none';
+
+                var mode = (root.querySelector('input[name="addrMode"]:checked') || {}).value || 'custom';
+                var shipping = {};
+
+                if (mode === 'profile') {
+                    if (!prof.province || !prof.detail) {
+                        alertBox.textContent = 'Địa chỉ trong hồ sơ chưa đầy đủ. Vui lòng nhập địa chỉ mới.';
+                        alertBox.style.display = 'block';
+                        return;
+                    }
+                    shipping = {
+                        fullName: user.fullName,
+                        phone: user.phone,
+                        province: prof.province,
+                        district: prof.district,
+                        ward: prof.ward,
+                        detail: prof.detail
+                    };
+                } else {
+                    var fn = root.querySelector('#coFullName').value.trim();
+                    var ph = root.querySelector('#coPhone').value.trim();
+                    var pv = root.querySelector('#coProvince').value.trim();
+                    var dt = root.querySelector('#coDistrict').value.trim();
+                    var wd = root.querySelector('#coWard').value.trim();
+                    var de = root.querySelector('#coDetail').value.trim();
+                    if (!fn || !ph || !pv || !de) {
+                        alertBox.textContent = 'Vui lòng điền đầy đủ họ tên, số điện thoại, tỉnh/thành và địa chỉ chi tiết.';
+                        alertBox.style.display = 'block';
+                        return;
+                    }
+                    shipping = { fullName: fn, phone: ph, province: pv, district: dt, ward: wd, detail: de };
+                }
+
+                var payMethod = (root.querySelector('input[name="paymentMethod"]:checked') || {}).value || 'cod';
+                var note = (root.querySelector('#coNote') || {}).value || '';
+
+                var res = CB.orders.create({
+                    userId: user.id,
+                    customer: { fullName: shipping.fullName, phone: shipping.phone, email: user.email },
+                    shipping: shipping,
+                    paymentMethod: payMethod,
+                    note: note,
+                    token: getToken()
+                });
+
+                if (!res.ok) {
+                    alertBox.textContent = res.error || 'Có lỗi xảy ra khi tạo đơn hàng.';
+                    alertBox.style.display = 'block';
+                } else {
+                    try { g.sessionStorage.removeItem(TOKEN_KEY); } catch (err) {}
+                    CB.ui.refreshBadge();
+                    g.location.href = 'checkout.html#/confirmation?order=' + encodeURIComponent(res.order.id) + '&new=1';
+                }
             });
-        }
-        var msg = r.error + (r.problems ? ' ' + r.problems.join(' ') : '');
-        alertBox.textContent = msg;
-        alertBox.hidden = false;
-        if (r.code === 'CART_INVALID' || r.code === 'EMPTY_CART') {
-            alertBox.innerHTML = U.esc(msg) + ' <a href="cart.html" style="color:inherit;font-weight:600;">Quay lại giỏ hàng</a>';
-        }
-    });
-})();
+        },
+        unmount: function () {}
+    };
+})(typeof window !== 'undefined' ? window : globalThis);

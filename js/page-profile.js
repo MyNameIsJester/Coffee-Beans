@@ -1,113 +1,136 @@
-/* Hồ sơ cá nhân: xem và sửa thông tin của tài khoản đang đăng nhập. */
-(function () {
+/* CoffeeBeans - View: Profile (Thông tin cá nhân)
+   File: js/page-profile.js
+*/
+(function (g) {
     'use strict';
+    var CB = (g.CB = g.CB || {});
     var U = CB.util;
-    var user = CB.auth.requireLogin();
-    if (!user) return;
-    var root = document.getElementById('profileRoot');
+    CB.views = CB.views || {};
 
-    function input(id, label, value, opts) {
-        opts = opts || {};
-        return '<div class="form-group"><label for="' + id + '">' + label + '</label>' +
-            '<input id="' + id + '" name="' + id + '" type="text" value="' + U.esc(value || '') + '"' +
-            (opts.placeholder ? ' placeholder="' + U.esc(opts.placeholder) + '"' : '') + (opts.list ? ' list="' + opts.list + '"' : '') + ' />' +
-            '<p class="cb-field-error" data-error-for="' + id + '"></p></div>';
-    }
+    CB.views.profile = {
+        mount: function (root, params) {
+            var user = CB.auth.requireLogin();
+            if (!user) return;
 
-    function pwInput(id, label, autocomplete, hint) {
-        return '<div class="form-group"><label for="' + id + '">' + label + '</label>' +
-            '<input id="' + id + '" name="' + id + '" type="password" autocomplete="' + autocomplete + '" />' +
-            (hint ? '<small style="color:#777;">' + hint + '</small>' : '') +
-            '<p class="cb-field-error" data-error-for="' + id + '"></p></div>';
-    }
+            var a = user.address || {};
 
-    function render(u, savedMsg) {
-        var addr = CB.auth.formatAddress(u.address);
-        root.innerHTML =
-            '<div class="profile-card"><div class="profile-header"><div class="user-avatar"><i class="fas fa-user"></i></div>' +
-            '<h1>Hồ sơ cá nhân</h1><p>@' + U.esc(u.username) + '</p></div>' +
-            (savedMsg ? '<div class="cb-alert cb-alert-info" role="status">' + U.esc(savedMsg) + '</div>' : '') +
-            '<div class="info-box"><h3><i class="fas fa-id-card"></i> Thông tin cá nhân</h3>' +
-            '<p><strong>Họ và tên:</strong> <span id="displayName">' + U.esc(u.fullName) + '</span></p>' +
-            '<p><strong>Tên đăng nhập:</strong> ' + U.esc(u.username) + '</p>' +
-            '<p><strong>Email:</strong> <span id="displayEmail">' + U.esc(u.email) + '</span></p></div>' +
-            '<div class="info-box"><h3><i class="fas fa-phone"></i> Liên hệ</h3>' +
-            '<p><strong>Số điện thoại:</strong> <span id="displayPhone">' + U.esc(u.phone) + '</span></p>' +
-            '<p><strong>Địa chỉ:</strong> <span id="displayAddress">' + (addr ? U.esc(addr) : '<em>Chưa cập nhật</em>') + '</span></p></div>' +
-            '<div class="action-buttons"><button id="editProfileBtn" class="btn btn-primary"><i class="fas fa-edit"></i> Chỉnh sửa</button>' +
-            '<button id="changePwBtn" class="btn"><i class="fas fa-key"></i> Đổi mật khẩu</button>' +
-            '<button id="logoutBtn" class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button></div></div>' +
+            root.innerHTML =
+                '<div class="container" style="padding:40px 20px;max-width:800px;">' +
+                '  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">' +
+                '    <h1 style="font-size:28px;color:var(--coffee-900);margin:0;font-family:\'Playfair Display\', serif;">Hồ sơ cá nhân</h1>' +
+                '    <button type="button" id="profLogoutBtn" class="btn" style="background:#b30000;color:#fff;padding:8px 16px;font-size:13px;border-radius:6px;cursor:pointer;"><i class="fa fa-sign-out"></i> Đăng xuất</button>' +
+                '  </div>' +
+                '  <div id="profAlert" style="display:none;margin-bottom:20px;" class="alert"></div>' +
 
-            '<div id="pwSection" class="profile-card edit-form"><h2>Đổi mật khẩu</h2>' +
-            '<form id="pwForm" novalidate autocomplete="off">' +
-            pwInput('currentPassword', 'Mật khẩu hiện tại', 'current-password') +
-            pwInput('newPassword', 'Mật khẩu mới', 'new-password', 'Ít nhất 6 ký tự, khác mật khẩu hiện tại.') +
-            pwInput('confirmPassword', 'Xác nhận mật khẩu mới', 'new-password') +
-            '<p class="cb-field-error" style="color:#666;">Chức năng minh họa: mật khẩu được lưu trong localStorage của trình duyệt, không phải cơ chế xác thực an toàn cho website thương mại điện tử thực tế.</p>' +
-            '<div class="form-buttons"><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Đổi mật khẩu</button>' +
-            '<button type="button" id="cancelPw" class="btn"><i class="fas fa-times"></i> Hủy</button></div></form></div>' +
+                '  <div style="background:#fff;padding:32px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:30px;">' +
+                '    <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid #eee;">' +
+                '      <div style="width:64px;height:64px;border-radius:50%;background:var(--coffee);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;">' +
+                '        ' + (user.fullName || user.username).charAt(0).toUpperCase() +
+                '      </div>' +
+                '      <div>' +
+                '        <h2 style="font-size:20px;color:var(--coffee-900);margin-bottom:4px;">' + U.esc(user.fullName) + '</h2>' +
+                '        <p style="color:#777;font-size:14px;">@' + U.esc(user.username) + ' • Khách hàng thân thiết</p>' +
+                '      </div>' +
+                '    </div>' +
 
-            '<div id="editSection" class="profile-card edit-form"><h2>Chỉnh sửa thông tin</h2>' +
-            '<form id="editForm" novalidate>' +
-            input('fullName', 'Họ và tên', u.fullName, { placeholder: 'Nhập họ và tên' }) +
-            input('email', 'Email', u.email, { placeholder: 'Nhập email' }) +
-            input('phone', 'Số điện thoại', u.phone, { placeholder: 'Ví dụ: 0901234567' }) +
-            input('province', 'Tỉnh / Thành phố', u.address.province, { placeholder: 'Ví dụ: TP. Hồ Chí Minh', list: 'provinceList' }) +
-            '<datalist id="provinceList"><option value="TP. Hồ Chí Minh"><option value="Hà Nội"><option value="Đà Nẵng"><option value="Cần Thơ"><option value="Hải Phòng"></datalist>' +
-            input('district', 'Quận / Huyện', u.address.district, { placeholder: 'Ví dụ: Quận 1' }) +
-            input('ward', 'Phường / Xã', u.address.ward, { placeholder: 'Ví dụ: Phường Bến Nghé' }) +
-            input('detail', 'Số nhà, tên đường', u.address.detail, { placeholder: 'Ví dụ: 12 Nguyễn Huệ' }) +
-            '<p class="cb-field-error" id="addrHint" style="color:#666;">Địa chỉ này dùng làm địa chỉ giao hàng mặc định. Hãy điền đủ cả 4 ô hoặc để trống cả 4 ô.</p>' +
-            '<div class="form-buttons"><button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>' +
-            '<button type="button" id="cancelEdit" class="btn"><i class="fas fa-times"></i> Hủy</button></div></form></div>';
+                '    <form id="profileForm">' +
+                '      <h3 style="font-size:16px;color:var(--coffee-900);margin-bottom:16px;">Thông tin liên hệ & địa chỉ mặc định</h3>' +
+                '      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+                '        <div class="form-group"><label for="profFullName">Họ và tên</label><input type="text" id="profFullName" value="' + U.esc(user.fullName) + '" required /></div>' +
+                '        <div class="form-group"><label for="profPhone">Số điện thoại</label><input type="tel" id="profPhone" value="' + U.esc(user.phone || '') + '" required /></div>' +
+                '      </div>' +
+                '      <div class="form-group"><label for="profEmail">Email</label><input type="email" id="profEmail" value="' + U.esc(user.email) + '" required /></div>' +
+                '      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">' +
+                '        <div class="form-group"><label for="profProvince">Tỉnh / Thành phố</label><input type="text" id="profProvince" value="' + U.esc(a.province || '') + '" /></div>' +
+                '        <div class="form-group"><label for="profDistrict">Quận / Huyện</label><input type="text" id="profDistrict" value="' + U.esc(a.district || '') + '" /></div>' +
+                '        <div class="form-group"><label for="profWard">Phường / Xã</label><input type="text" id="profWard" value="' + U.esc(a.ward || '') + '" /></div>' +
+                '      </div>' +
+                '      <div class="form-group"><label for="profDetail">Địa chỉ chi tiết (Số nhà, đường)</label><input type="text" id="profDetail" value="' + U.esc(a.detail || '') + '" /></div>' +
+                '      <button type="submit" class="btn btn-primary" style="padding:12px 24px;">Lưu thông tin</button>' +
+                '    </form>' +
+                '  </div>' +
 
-        var section = document.getElementById('editSection');
-        document.getElementById('editProfileBtn').addEventListener('click', function () { section.classList.toggle('show'); });
-        var pwSection = document.getElementById('pwSection');
-        document.getElementById('changePwBtn').addEventListener('click', function () { pwSection.classList.toggle('show'); });
-        document.getElementById('cancelPw').addEventListener('click', function () { render(user); });
-        document.getElementById('pwForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var f = e.target;
-            f.querySelectorAll('.cb-field-error[data-error-for]').forEach(function (x) { x.textContent = ''; });
-            var r = CB.auth.changePassword(user.id, f.elements.currentPassword.value, f.elements.newPassword.value, f.elements.confirmPassword.value);
-            if (!r.ok) {
-                Object.keys(r.errors).forEach(function (k) { f.querySelector('[data-error-for="' + k + '"]').textContent = r.errors[k]; });
-                return;
-            }
-            render(user, 'Đã đổi mật khẩu thành công. Hãy dùng mật khẩu mới cho lần đăng nhập sau.');
-        });
-        document.getElementById('cancelEdit').addEventListener('click', function () { section.classList.remove('show'); render(user); });
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) CB.ui.logout();
-        });
-        document.getElementById('editForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-            var f = e.target;
-            f.querySelectorAll('.cb-field-error[data-error-for]').forEach(function (x) { x.textContent = ''; });
-            var addr = {
-                province: f.elements.province.value, district: f.elements.district.value,
-                ward: f.elements.ward.value, detail: f.elements.detail.value
-            };
-            var filled = Object.keys(addr).filter(function (k) { return addr[k].trim(); }).length;
-            if (filled > 0 && filled < 4) {
-                Object.keys(addr).forEach(function (k) {
-                    if (!addr[k].trim()) f.querySelector('[data-error-for="' + k + '"]').textContent = 'Vui lòng điền đủ địa chỉ hoặc để trống cả 4 ô.';
+                '  <div style="background:#fff;padding:32px;border-radius:12px;box-shadow:var(--shadow);">' +
+                '    <h3 style="font-size:18px;color:var(--coffee-900);margin-bottom:16px;">Đổi mật khẩu</h3>' +
+                '    <form id="pwForm">' +
+                '      <div class="form-group"><label for="oldPw">Mật khẩu hiện tại</label><input type="password" id="oldPw" required /></div>' +
+                '      <div class="form-group"><label for="newPw">Mật khẩu mới (tối thiểu 6 ký tự)</label><input type="password" id="newPw" required /></div>' +
+                '      <div class="form-group"><label for="confirmNewPw">Xác nhận mật khẩu mới</label><input type="password" id="confirmNewPw" required /></div>' +
+                '      <button type="submit" class="btn btn-secondary" style="padding:12px 24px;">Đổi mật khẩu</button>' +
+                '    </form>' +
+                '  </div>' +
+                '</div>';
+
+            var profForm = root.querySelector('#profileForm');
+            var pwForm = root.querySelector('#pwForm');
+            var alertBox = root.querySelector('#profAlert');
+
+            profForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alertBox.style.display = 'none';
+
+                var fn = root.querySelector('#profFullName').value.trim();
+                var ph = root.querySelector('#profPhone').value.trim();
+                var em = root.querySelector('#profEmail').value.trim();
+                var pv = root.querySelector('#profProvince').value.trim();
+                var dt = root.querySelector('#profDistrict').value.trim();
+                var wd = root.querySelector('#profWard').value.trim();
+                var de = root.querySelector('#profDetail').value.trim();
+
+                var res = CB.auth.updateProfile(user.id, {
+                    fullName: fn,
+                    phone: ph,
+                    email: em,
+                    address: { province: pv, district: dt, ward: wd, detail: de }
                 });
-                return;
-            }
-            var r = CB.auth.updateProfile(user.id, {
-                fullName: f.elements.fullName.value, email: f.elements.email.value, phone: f.elements.phone.value, address: addr
+
+                if (!res.ok) {
+                    alertBox.className = 'alert alert-danger';
+                    alertBox.textContent = res.error || 'Cập nhật thất bại.';
+                    alertBox.style.display = 'block';
+                } else {
+                    alertBox.className = 'alert alert-success';
+                    alertBox.textContent = 'Đã cập nhật thông tin thành công!';
+                    alertBox.style.display = 'block';
+                    CB.ui.refreshBadge();
+                }
             });
-            if (!r.ok) {
-                if (r.errors) Object.keys(r.errors).forEach(function (k) { f.querySelector('[data-error-for="' + k + '"]').textContent = r.errors[k]; });
-                else CB.ui.toast(r.error, 'error');
-                return;
+
+            var profLogout = root.querySelector('#profLogoutBtn');
+            if (profLogout) {
+                profLogout.addEventListener('click', function () {
+                    CB.ui.logout();
+                });
             }
-            user = r.user;
-            render(user, 'Đã lưu thông tin cá nhân.');
-            CB.ui.mountHeader();
-        });
-    }
-    render(user);
-})();
+
+            pwForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alertBox.style.display = 'none';
+
+                var oldP = root.querySelector('#oldPw').value;
+                var newP = root.querySelector('#newPw').value;
+                var confP = root.querySelector('#confirmNewPw').value;
+
+                if (newP !== confP) {
+                    alertBox.className = 'alert alert-danger';
+                    alertBox.textContent = 'Mật khẩu mới và xác nhận mật khẩu không khớp.';
+                    alertBox.style.display = 'block';
+                    return;
+                }
+
+                var res = CB.auth.changePassword(user.id, oldP, newP);
+                if (!res.ok) {
+                    alertBox.className = 'alert alert-danger';
+                    alertBox.textContent = res.error || 'Đổi mật khẩu thất bại.';
+                    alertBox.style.display = 'block';
+                } else {
+                    alertBox.className = 'alert alert-success';
+                    alertBox.textContent = 'Đổi mật khẩu thành công!';
+                    alertBox.style.display = 'block';
+                    pwForm.reset();
+                }
+            });
+        },
+        unmount: function () {}
+    };
+})(typeof window !== 'undefined' ? window : globalThis);

@@ -1,6 +1,6 @@
 import sys; sys.path.insert(0, '/tmp/e2e')
 from common import *
-CUSTOMER = [('index','index.html'),('products','products.html'),('products_cat','products.html?cat=robusta'),('detail','product-detail.html?id=kenyan-aa-grade'),('register','register.html'),('cart','cart.html'),('checkout','checkout.html'),('confirm','order-confirmation.html?order=%ORDER%'),('history','order-history.html'),('profile','profile.html')]
+CUSTOMER = [('index','index.html'),('products','index.html#/products'),('products_cat','index.html#/products?cat=robusta'),('detail','index.html#/product?id=kenyan-aa-grade'),('register','account.html#/auth'),('cart','checkout.html#/cart'),('checkout','checkout.html'),('confirm','checkout.html#/confirmation?order=%ORDER%'),('history','account.html#/orders'),('profile','account.html#/profile')]
 ADMIN = ['dashboard','users','categories','products','receipts','pricing','orders','stock']
 JS_OFF = """[...document.querySelectorAll('a,button,input,select')].filter(e=>{const r=e.getBoundingClientRect(); if(!(r.width>0 && (r.right>window.innerWidth+1 || r.left<-1))) return false; let p=e.parentElement; while(p && p!==document.body){ const o=getComputedStyle(p).overflowX; if(o!=='visible') return false; p=p.parentElement } return true}).map(e=>e.tagName+'.'+e.className).slice(0,5)"""
 with sync_playwright() as p:
@@ -9,7 +9,7 @@ with sync_playwright() as p:
         print('\n[Viewport %s %dx%d]' % (label, w, h))
         ctx, logs = setup_context(browser, w, h, mobile)
         page = ctx.new_page(); watch(page, logs); page.set_default_timeout(8000)
-        page.goto(BASE + 'register.html'); page.wait_for_load_state('networkidle')
+        page.goto(BASE + 'account.html#/auth'); page.wait_for_load_state('networkidle')
         page.evaluate("CB.auth.login('guest1','guest1123'); CB.cart.clear(); CB.cart.add('arabica-premium',2); CB.cart.add('kenyan-aa-grade',1);")
         order_id = page.evaluate("CB.orders.byUser(CB.auth.current().id)[0].id")
         for name, url in CUSTOMER:
@@ -29,7 +29,7 @@ with sync_playwright() as p:
         # admin
         page.evaluate("CB.auth.adminLogin('admin','admin123')")
         for v in ADMIN:
-            page.goto(BASE + 'admin-dashboard.html#' + v); page.wait_for_load_state('networkidle'); page.wait_for_timeout(500)
+            page.goto(BASE + 'admin.html#' + v); page.wait_for_load_state('networkidle'); page.wait_for_timeout(500)
             page.screenshot(path=SHOTS + '%s_admin_%s.png' % (label, v), full_page=True)
             page.evaluate("window.scrollTo(80, 0)"); sx = page.evaluate("window.scrollX"); page.evaluate("window.scrollTo(0,0)")
             tw = page.evaluate("document.documentElement.scrollWidth"); 

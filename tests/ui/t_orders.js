@@ -2,12 +2,12 @@ const H = require('./harness');
 (async () => {
     await H.start();
     console.log('\n[checkout -> confirmation -> history]');
-    let pg = await H.visit('register.html');
+    let pg = await H.visit('account.html#/auth');
     pg.w.CB.auth.login('guest2', 'guest2123');
     pg.w.CB.cart.add('arabica-premium', 2);
     pg.w.CB.cart.add('robusta-bold', 1);
     let st = pg.snap();
-    pg = await H.visit('checkout.html', st);
+    pg = await H.visit('checkout.html#/checkout', st);
     H.eq(pg.errors, [], 'checkout: không lỗi JS');
     const $ = (id) => pg.d.getElementById(id);
     H.ok(!$('addrAccount').disabled && $('addrAccount').checked, 'tài khoản có địa chỉ: mặc định chọn địa chỉ tài khoản');
@@ -52,23 +52,23 @@ const H = require('./harness');
     pg = await H.visit('order-confirmation.html?order=' + other.id, st);
     H.ok(/Không tìm thấy đơn hàng/.test(pg.d.getElementById('confirmRoot').textContent), 'không xem được đơn của tài khoản khác');
     // lịch sử guest2
-    pg = await H.visit('order-history.html', st);
+    pg = await H.visit('account.html#/orders', st);
     H.eq(pg.errors, [], 'history: không lỗi JS');
     H.eq(pg.d.querySelectorAll('.order-card').length, 2, 'guest2 thấy đúng 2 đơn (1 mẫu đã giao + 1 mới)');
     H.ok(/Đã giao/.test(pg.d.getElementById('ordersRoot').textContent) && /Ngày giao/.test(pg.d.getElementById('ordersRoot').textContent), 'đơn đã giao hiển thị kèm Ngày giao');
     H.ok(![...pg.d.querySelectorAll('.order-card')].some(c => /guest1|Khách hàng 1/.test(c.textContent)), 'không lẫn đơn của guest1');
     H.ok([...pg.d.querySelectorAll('.btn-view')].every(a => /order-confirmation\.html\?order=dh-/.test(a.getAttribute('href'))), 'nút Xem chi tiết trỏ đúng đơn');
     // guest3: chưa có đơn, không có địa chỉ tài khoản
-    let g3 = await H.visit('register.html');
+    let g3 = await H.visit('account.html#/auth');
     g3.w.CB.auth.login('guest3', 'guest3123');
     g3.w.CB.cart.add('vietnam-robusta', 1);
-    pg = await H.visit('order-history.html', g3.snap());
+    pg = await H.visit('account.html#/orders', g3.snap());
     H.ok(/chưa có đơn hàng/.test(pg.d.getElementById('ordersRoot').textContent), 'guest3: lịch sử trống có thông báo');
-    pg = await H.visit('checkout.html', g3.snap());
+    pg = await H.visit('checkout.html#/checkout', g3.snap());
     H.ok(pg.d.getElementById('addrAccount').disabled && pg.d.getElementById('addrNew').checked && !pg.d.getElementById('newAddrFields').hidden, 'tài khoản không có địa chỉ: tự chọn địa chỉ mới');
     // giỏ trống
-    pg = await H.visit('register.html'); pg.w.CB.auth.login('guest3', 'guest3123');
-    pg = await H.visit('checkout.html', pg.snap());
+    pg = await H.visit('account.html#/auth'); pg.w.CB.auth.login('guest3', 'guest3123');
+    pg = await H.visit('checkout.html#/checkout', pg.snap());
     H.ok(/Giỏ hàng đang trống/.test(pg.d.getElementById('checkoutRoot').textContent), 'giỏ trống: không cho thanh toán');
     H.eq(pg.errors, [], 'không lỗi JS');
     H.stop();

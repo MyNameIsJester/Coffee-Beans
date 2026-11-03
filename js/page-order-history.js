@@ -1,48 +1,80 @@
-/* Lịch sử đơn hàng của khách hàng đang đăng nhập. */
-(function () {
+/* CoffeeBeans - View: Order History (Lịch sử đơn hàng)
+   File: js/page-order-history.js
+*/
+(function (g) {
     'use strict';
+    var CB = (g.CB = g.CB || {});
     var U = CB.util,
         PAGE_SIZE = 5;
-    var user = CB.auth.requireLogin();
-    if (!user) return;
-    var root = document.getElementById('ordersRoot');
-    var pager = document.getElementById('pagination');
-    var all = CB.orders.byUser(user.id);
+    CB.views = CB.views || {};
 
-    function deliveredDate(o) {
-        var h = o.statusHistory.filter(function (x) { return x.status === CB.orders.STATUS.DELIVERED; })[0];
-        return h ? U.fmtDate(U.dateStr(new Date(h.at))) : '';
-    }
-    function card(o) {
-        var count = o.items.reduce(function (s, i) { return s + i.qty; }, 0);
-        var preview = o.items.map(function (i) { return U.esc(i.name) + ' (x' + i.qty + ')'; }).join(', ');
-        var extra = o.status === CB.orders.STATUS.DELIVERED
-            ? '<div class="info-item"><div class="info-label">Ngày giao</div><div class="info-value">' + deliveredDate(o) + '</div></div>'
-            : '';
-        return '<div class="order-card"><div class="order-card-header"><div>' +
-            '<div class="order-card-title">Đơn hàng</div><div class="order-id">' + U.esc(o.code) + '</div></div>' +
-            CB.ui.statusBadge(o.status) + '</div>' +
-            '<div class="order-card-info"><div class="info-item"><div class="info-label">Ngày đặt</div><div class="info-value">' + U.fmtDate(o.date) + '</div></div>' + extra +
-            '<div class="info-item"><div class="info-label">Số sản phẩm</div><div class="info-value">' + count + ' sản phẩm</div></div>' +
-            '<div class="info-item"><div class="info-label">Tổng tiền</div><div class="info-value" style="color:var(--coffee);">' + U.fmtVND(o.total) + '</div></div></div>' +
-            '<div class="order-items-preview">📦 ' + preview + '</div>' +
-            '<div class="order-actions"><a href="order-confirmation.html?order=' + encodeURIComponent(o.id) + '" class="btn-small btn-view">' +
-            '<i class="fas fa-eye" style="margin-right:6px;"></i>Xem chi tiết</a></div></div>';
-    }
+    CB.views.orders = {
+        mount: function (root, params) {
+            var user = CB.auth.requireLogin();
+            if (!user) return;
 
-    function render(page) {
-        var head = '<h1 class="section-title" style="margin-bottom:30px;"><i class="fas fa-history" style="margin-right:10px;color:var(--coffee);"></i>Lịch sử đơn hàng</h1>';
-        if (!all.length) {
-            root.innerHTML = head + '<div class="cb-empty"><p style="font-size:1.1em;margin-bottom:12px;">Bạn chưa có đơn hàng nào.</p><a href="products.html">Bắt đầu mua sắm →</a></div>';
-            pager.innerHTML = '';
-            return;
-        }
-        var pg = U.paginate(all, page, PAGE_SIZE);
-        root.innerHTML = head + pg.items.map(card).join('');
-        CB.ui.renderPagination(pager, pg, function (p) {
-            render(p);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-    render(1);
-})();
+            var all = CB.orders.byUser(user.id);
+
+            root.innerHTML =
+                '<div class="container" style="padding:40px 20px;max-width:900px;">' +
+                '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">' +
+                '    <h1 style="font-size:28px;color:var(--coffee-900);margin:0;font-family:\'Playfair Display\', serif;">Đơn hàng của tôi</h1>' +
+                '    <a href="index.html#/products" class="btn btn-outline">Mua thêm sản phẩm</a>' +
+                '  </div>' +
+                '  <div id="ordersList"></div>' +
+                '  <div id="ordersPagination" style="margin-top:30px;"></div>' +
+                '</div>';
+
+            var list = root.querySelector('#ordersList');
+            var pagerBox = root.querySelector('#ordersPagination');
+
+            function renderPage(page) {
+                if (!all.length) {
+                    list.innerHTML =
+                        '<div class="cb-empty">' +
+                        '  <p style="color:var(--muted);margin-bottom:16px;">Bạn chưa có đơn hàng nào.</p>' +
+                        '  <a href="index.html#/products" class="btn btn-primary">Bắt đầu mua sắm ngay</a>' +
+                        '</div>';
+                    return;
+                }
+
+                var totalPages = Math.ceil(all.length / PAGE_SIZE) || 1;
+                if (page < 1) page = 1;
+                if (page > totalPages) page = totalPages;
+
+                var start = (page - 1) * PAGE_SIZE;
+                var pageItems = all.slice(start, start + PAGE_SIZE);
+
+                list.innerHTML = pageItems.map(function (o) {
+                    var itemsText = o.items.map(function (i) {
+                        return U.esc(i.name) + ' (×' + i.qty + ')';
+                    }).join(', ');
+
+                    return '<div style="background:#fff;padding:24px;border-radius:12px;box-shadow:var(--shadow);margin-bottom:20px;border-left:4px solid var(--coffee);">' +
+                        '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px;border-bottom:1px solid #eee;padding-bottom:12px;">' +
+                        '  <div>' +
+                        '    <span style="font-size:12px;color:#777;">Mã đơn:</span> <strong style="font-size:16px;color:var(--coffee-900);">' + U.esc(o.code) + '</strong>' +
+                        '    <span style="font-size:12px;color:#999;margin-left:12px;">' + U.fmtDateTime(o.createdAt) + '</span>' +
+                        '  </div>' +
+                        '  <div>' + CB.ui.statusBadge(o.status) + '</div>' +
+                        '</div>' +
+                        '<div style="margin-bottom:16px;font-size:14px;color:#555;line-height:1.6;">' +
+                        '  <strong>Sản phẩm:</strong> ' + itemsText + '<br>' +
+                        '  <strong>Địa chỉ nhận:</strong> ' + U.esc(CB.auth.formatAddress(o.shipping)) +
+                        '</div>' +
+                        '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid #eee;">' +
+                        '  <div style="font-size:16px;">Tổng tiền: <strong style="color:var(--coffee);font-size:18px;">' + U.fmtVND(o.total) + '</strong></div>' +
+                        '  <a href="checkout.html#/confirmation?order=' + encodeURIComponent(o.id) + '" class="btn btn-sm btn-outline">Xem chi tiết đơn</a>' +
+                        '</div></div>';
+                }).join('');
+
+                CB.ui.renderPagination(pagerBox, { page: page, pages: totalPages }, function (newPage) {
+                    renderPage(newPage);
+                });
+            }
+
+            renderPage(1);
+        },
+        unmount: function () {}
+    };
+})(typeof window !== 'undefined' ? window : globalThis);

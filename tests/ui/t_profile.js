@@ -2,10 +2,10 @@ const H = require('./harness');
 (async () => {
     await H.start();
     console.log('\n[profile.html]');
-    let pg = await H.visit('register.html');
+    let pg = await H.visit('account.html#/auth');
     pg.w.CB.auth.login('guest1', 'guest1123');
     let st = pg.snap();
-    pg = await H.visit('profile.html', st);
+    pg = await H.visit('account.html#/profile', st);
     H.eq(pg.errors, [], 'không lỗi JS');
     const $ = (id) => pg.d.getElementById(id);
     H.eq($('displayName').textContent, 'Khách hàng 1', 'hiển thị họ tên tài khoản');
@@ -33,7 +33,7 @@ const H = require('./harness');
     H.eq($('displayName').textContent, 'Tên Mới', 'giao diện cập nhật ngay');
     H.eq(pg.d.getElementById('accountText').textContent, 'Chào Tên Mới', 'header cập nhật tên');
     // tải lại: dữ liệu còn
-    pg = await H.visit('profile.html', pg.snap());
+    pg = await H.visit('account.html#/profile', pg.snap());
     H.eq(pg.d.getElementById('displayEmail').textContent, 'moi@example.com', 'tải lại trang vẫn còn dữ liệu đã sửa');
     // xóa địa chỉ (để trống cả 4)
     pg.d.getElementById('editProfileBtn').click();
@@ -43,7 +43,7 @@ const H = require('./harness');
     H.eq(pg.w.CB.auth.hasAddress(pg.w.CB.auth.current()), false, 'để trống cả 4 ô: xóa địa chỉ');
     H.ok(/Chưa cập nhật/.test(pg.d.getElementById('displayAddress').textContent), 'hiển thị "Chưa cập nhật"');
     // đổi mật khẩu
-    pg = await H.visit('profile.html', pg.snap());
+    pg = await H.visit('account.html#/profile', pg.snap());
     const $$ = (id) => pg.d.getElementById(id);
     H.eq($$('pwSection').classList.contains('show'), false, 'form đổi mật khẩu ẩn mặc định');
     $$('changePwBtn').click();

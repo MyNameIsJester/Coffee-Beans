@@ -9,8 +9,8 @@ const H = require('./harness');
     H.eq(cards.map(c => c.querySelector('.price').textContent), ['135.000đ', '129.000đ', '265.000đ'], 'giá khớp giá cũ (135.000đ, 129.000đ, 265.000đ)');
     H.ok(!pg.d.querySelector('.strike'), 'đã bỏ giá gạch ngang bịa');
     H.eq(cards.map(c => c.querySelector('h4 a').getAttribute('href')), ['product-detail.html?id=arabica-premium', 'product-detail.html?id=robusta-bold', 'product-detail.html?id=signature-blend'], 'liên kết chi tiết có id');
-    H.eq(cards.map(c => c.querySelector('a').getAttribute('href')), ['products.html?cat=arabica', 'products.html?cat=robusta', 'products.html?cat=blend'], 'ảnh dẫn tới trang loại');
-    H.ok(pg.d.querySelector('a[href="register.html?tab=login&redirect=index.html"]') || pg.d.querySelector('.account-link'), 'chưa đăng nhập: hiện link đăng nhập');
+    H.eq(cards.map(c => c.querySelector('a').getAttribute('href')), ['index.html#/products?cat=arabica', 'index.html#/products?cat=robusta', 'index.html#/products?cat=blend'], 'ảnh dẫn tới trang loại');
+    H.ok(pg.d.querySelector('a[href="account.html#/auth?tab=login&redirect=index.html"]') || pg.d.querySelector('.account-link'), 'chưa đăng nhập: hiện link đăng nhập');
     H.ok(pg.d.querySelector('a[href="#ve-chung-toi"]'), 'liên kết Giới thiệu trỏ neo trong trang chủ');
     // slider
     pg.d.querySelectorAll('.hero-dot')[2].click();

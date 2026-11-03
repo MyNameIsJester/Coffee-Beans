@@ -119,6 +119,13 @@
     }
 
     function ensure() {
+        try {
+            var rawProds = typeof localStorage !== 'undefined' ? (localStorage.getItem('cb_products') || '') : '';
+            if (rawProds && (rawProds.indexOf('\uFFFD') !== -1 || rawProds.indexOf('?-m') !== -1 || rawProds.indexOf('dY') !== -1 || rawProds.indexOf('Ã') !== -1 || rawProds.indexOf('Â') !== -1)) {
+                reset();
+                return;
+            }
+        } catch (e) {}
         if (!db.has(K.settings)) db.write(K.settings, { lowStockThreshold: 10, shippingFee: 30000 });
         if (!db.has(K.categories))
             db.write(K.categories, CATEGORIES.map(function (c) { return Object.assign({ hidden: false, createdAt: '2026-08-01T00:00:00.000Z' }, c); }));
@@ -131,7 +138,8 @@
             PRODUCTS.forEach(function (p) { if (p.margin !== undefined) pm[p.id] = p.margin; });
             db.write(K.pricing, { categoryMargins: { 'cat-arabica': 25, 'cat-robusta': 25, 'cat-blend': 25 }, productMargins: pm });
         }
-        if (!db.has(K.users)) seedUsers();
+        var uList = db.read(K.users, []);
+        if (!uList.length || uList.some(function (u) { return !u.password; })) seedUsers();
         if (!db.has(K.admins)) seedAdmins();
         if (!db.has(K.carts)) db.write(K.carts, {});
         if (!db.has(K.stockTx)) db.write(K.stockTx, []);

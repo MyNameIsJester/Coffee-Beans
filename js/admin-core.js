@@ -158,21 +158,124 @@
     CBA.refresh = function () { CBA.go(CBA.current); };
 
     CBA.init = function () {
-        var admin = CB.auth.requireAdmin();
-        if (!admin) return;
-        document.getElementById('adminName').textContent = admin.fullName || admin.username;
-        document.getElementById('userAvatar').textContent = (admin.fullName || admin.username).charAt(0).toUpperCase();
-        document.getElementById('logoutBtn').addEventListener('click', function () {
-            CB.auth.adminLogout();
-            g.location.href = 'admin-login.html';
-        });
+        var admin = CB.auth.adminCurrent();
+        var app = document.getElementById('adminApp') || document.body;
+
+        if (!admin) {
+            // Hiển thị cổng đăng nhập Admin sang trọng
+            document.title = 'Đăng nhập Quản trị - Cà Phê Đậm Đà';
+            app.innerHTML =
+                '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1c16 0%,#4b3429 100%);padding:20px;">' +
+                '  <div class="login-container" style="background:#fff;padding:40px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-width:400px;width:100%;">' +
+                '    <div class="login-header" style="text-align:center;margin-bottom:28px;">' +
+                '      <div style="font-size:36px;margin-bottom:8px;">☕</div>' +
+                '      <h1 style="font-size:24px;color:var(--coffee-900);margin:0 0 6px;font-family:\'Playfair Display\', serif;">Cà Phê Đậm Đà</h1>' +
+                '      <p style="color:#777;font-size:14px;margin:0;">Cổng Quản trị viên</p>' +
+                '    </div>' +
+                '    <div id="adminLoginError" style="display:none;background:#fdecea;color:#b71c1c;padding:12px;border-radius:8px;font-size:13px;margin-bottom:16px;border:1px solid #f5c2c0;"></div>' +
+                '    <form id="adminLoginForm">' +
+                '      <div class="form-group" style="margin-bottom:18px;">' +
+                '        <label for="adminUsername" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333;">Tên đăng nhập</label>' +
+                '        <input type="text" id="adminUsername" name="username" placeholder="admin" autocomplete="username" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;" />' +
+                '      </div>' +
+                '      <div class="form-group" style="margin-bottom:24px;">' +
+                '        <label for="adminPassword" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333;">Mật khẩu</label>' +
+                '        <input type="password" id="adminPassword" name="password" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;" />' +
+                '      </div>' +
+                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;background:var(--coffee);color:#fff;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer;">Đăng nhập Quản trị</button>' +
+                '      <div style="margin-top:20px;text-align:center;">' +
+                '        <a href="index.html#/home" style="color:var(--coffee);font-size:13px;text-decoration:none;">← Quay về trang chủ</a>' +
+                '      </div>' +
+                '      <div style="margin-top:16px;padding:10px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;text-align:center;">' +
+                '        Tài khoản mẫu: <strong>admin</strong> / Mật khẩu: <strong>admin123</strong>' +
+                '      </div>' +
+                '    </form>' +
+                '  </div>' +
+                '</div>';
+
+            var loginForm = document.getElementById('adminLoginForm');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    var errBox = document.getElementById('adminLoginError');
+                    if (errBox) errBox.style.display = 'none';
+                    var u = document.getElementById('adminUsername').value.trim();
+                    var pw = document.getElementById('adminPassword').value;
+                    if (!u || !pw) {
+                        if (errBox) {
+                            errBox.textContent = 'Vui lòng nhập tên đăng nhập và mật khẩu.';
+                            errBox.style.display = 'block';
+                        }
+                        return;
+                    }
+                    var r = CB.auth.adminLogin(u, pw);
+                    if (!r.ok) {
+                        if (errBox) {
+                            errBox.textContent = r.error;
+                            errBox.style.display = 'block';
+                        }
+                        return;
+                    }
+                    CB.ui.toast('Đăng nhập quản trị thành công!');
+                    CBA.init();
+                });
+            }
+            return;
+        }
+
+        // Đã đăng nhập: Hiển thị đầy đủ bảng điều khiển Admin Dashboard
+        document.title = 'Quản trị hệ thống - Cà Phê Đậm Đà';
+        app.innerHTML =
+            '<header class="admin-header">' +
+            '  <div class="header-content">' +
+            '    <div class="header-left">' +
+            '      <span style="font-size: 24px;">☕</span>' +
+            '      <span class="logo-text">Cà Phê Đậm Đà - Admin</span>' +
+            '    </div>' +
+            '    <div class="header-right">' +
+            '      <div class="user-info">' +
+            '        <div class="user-avatar" id="userAvatar">' + (admin.fullName || admin.username).charAt(0).toUpperCase() + '</div>' +
+            '        <div id="adminName">' + esc(admin.fullName || admin.username) + '</div>' +
+            '      </div>' +
+            '      <a class="logout-btn" href="index.html#/home">← Quay về</a>' +
+            '      <button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button>' +
+            '    </div>' +
+            '  </div>' +
+            '</header>' +
+            '<div class="admin-layout">' +
+            '  <aside class="sidebar">' +
+            '    <div class="sidebar-title">Quản trị</div>' +
+            '    <button data-view="dashboard" class="nav-btn active" type="button">📊 Tổng quan</button>' +
+            '    <button data-view="users" class="nav-btn" type="button">👥 Khách hàng</button>' +
+            '    <button data-view="categories" class="nav-btn" type="button">📂 Loại sản phẩm</button>' +
+            '    <button data-view="products" class="nav-btn" type="button">☕ Sản phẩm</button>' +
+            '    <button data-view="receipts" class="nav-btn" type="button">📥 Nhập hàng</button>' +
+            '    <button data-view="pricing" class="nav-btn" type="button">💰 Giá bán</button>' +
+            '    <button data-view="orders" class="nav-btn" type="button">📦 Đơn hàng</button>' +
+            '    <button data-view="stock" class="nav-btn" type="button">📈 Tồn kho</button>' +
+            '  </aside>' +
+            '  <main class="main-content" id="adminMain"></main>' +
+            '</div>' +
+            '<div id="modalRoot"></div>';
+
+        var logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', function () {
+                CB.auth.adminLogout();
+                CB.ui.toast('Đã đăng xuất quản trị.');
+                CBA.init();
+            });
+        }
+
         CBA.$$('.nav-btn').forEach(function (b) {
             b.addEventListener('click', function () { CBA.go(b.getAttribute('data-view')); });
         });
+
         g.addEventListener('hashchange', function () {
             var n = g.location.hash.slice(1);
             if (n && n !== CBA.current) CBA.go(n);
         });
+
         CBA.go(g.location.hash.slice(1) || 'dashboard');
     };
 })(window);

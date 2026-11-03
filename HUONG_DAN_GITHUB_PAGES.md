@@ -35,10 +35,10 @@ Lưu ý: repo riêng tư (private) chỉ dùng được Pages với một số g
 Mở địa chỉ Pages (nên dùng cửa sổ ẩn danh để có dữ liệu mẫu sạch), rồi kiểm tra:
 
 - [ ] Trang chủ hiện đủ ảnh slider, logo, ảnh 3 danh mục; slider tự chuyển slide.
-- [ ] `products.html`: 9 sản phẩm ở trang 1, 3 ở trang 2; tìm nâng cao hoạt động.
+- [ ] `index.html#/products`: 9 sản phẩm ở trang 1, 3 ở trang 2; tìm nâng cao hoạt động.
 - [ ] Đăng nhập `guest1 / guest1123`; thêm sản phẩm vào giỏ, thanh toán bằng địa chỉ tài khoản, xem xác nhận và lịch sử đơn.
 - [ ] Hồ sơ cá nhân: sửa thông tin, đổi mật khẩu rồi đăng nhập lại bằng mật khẩu mới.
-- [ ] `admin-login.html`: đăng nhập `admin / admin123`; đơn vừa đặt xuất hiện ở **Đơn hàng**; chuyển trạng thái thành **Đã giao** và kiểm tra tồn kho giảm.
+- [ ] `admin.html`: đăng nhập `admin / admin123`; đơn vừa đặt xuất hiện ở **Đơn hàng**; chuyển trạng thái thành **Đã giao** và kiểm tra tồn kho giảm.
 - [ ] Mở Console (F12): không có dòng lỗi màu đỏ; tab Network không có tài nguyên 404.
 - [ ] Mở thử trên điện thoại: menu "Menu", giỏ hàng và thanh toán hiển thị gọn.
 - [ ] Gõ một đường dẫn sai (ví dụ `/khong-ton-tai`): hiện trang 404 của website.

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Không tìm thấy trang - Cà Phê Đậm Đà</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f6efe9; color: #2a1c16; display: flex; min-height: 100vh; align-items: center; justify-content: center; margin: 0; text-align: center; }
-        h1 { font-size: 3rem; margin: 0 0 8px; }
-        a { color: #4b3429; font-weight: 700; }
-    </style>
+    <title>404 - Không tìm thấy trang</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/shop.css" />
 </head>
 <body>
-    <div>
-        <h1>404</h1>
-        <p>Trang bạn tìm không tồn tại hoặc đã được chuyển đi.</p>
-        <p><a href="./index.html">← Về trang chủ</a> &nbsp;|&nbsp; <a href="./products.html">Xem sản phẩm</a></p>
+    <div class="container" style="display:flex;min-height:100vh;align-items:center;justify-content:center;text-align:center;padding:20px;">
+        <div class="cb-empty" style="max-width:500px;padding:48px 32px;">
+            <div style="font-size:72px;line-height:1;margin-bottom:16px;">☕</div>
+            <h1 style="font-size:32px;color:var(--coffee-900);margin-bottom:12px;">404 - Trang không tồn tại</h1>
+            <p style="color:var(--muted);margin-bottom:24px;">Đường dẫn bạn truy cập có thể đã thay đổi hoặc không còn khả dụng.</p>
+            <a href="index.html#/home" class="btn btn-primary" style="padding:12px 28px;">Về trang chủ</a>
+        </div>
     </div>
 </body>
 </html>

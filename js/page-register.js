@@ -1,98 +1,163 @@
-/* Trang đăng nhập / đăng ký khách hàng. */
-(function () {
+/* CoffeeBeans - View: Auth (Đăng nhập / Đăng ký)
+   File: js/page-register.js
+*/
+(function (g) {
     'use strict';
-    var $ = function (id) { return document.getElementById(id); };
-    var redirect = CB.auth.safeRedirect(CB.ui.param('redirect'));
+    var CB = (g.CB = g.CB || {});
+    var U = CB.util;
+    CB.views = CB.views || {};
 
-    function showTab(name) {
-        var isLogin = name !== 'register';
-        $('login').classList.toggle('active', isLogin);
-        $('register').classList.toggle('active', !isLogin);
-        $('tabLogin').classList.toggle('active', isLogin);
-        $('tabRegister').classList.toggle('active', !isLogin);
-        $('tabLogin').setAttribute('aria-selected', String(isLogin));
-        $('tabRegister').setAttribute('aria-selected', String(!isLogin));
-    }
-    function clearErrors(form) {
-        form.querySelectorAll('.cb-field-error').forEach(function (e) { e.textContent = ''; });
-        form.querySelectorAll('input').forEach(function (i) { i.classList.remove('cb-input-error'); });
-        var box = form.querySelector('.cb-alert');
-        if (box) box.hidden = true;
-    }
-    function fieldError(form, name, msg) {
-        var el = form.querySelector('[data-error-for="' + name + '"]');
-        if (el) el.textContent = msg;
-        var input = form.elements[name];
-        if (input) input.classList.add('cb-input-error');
-    }
-    function formAlert(form, msg, kind) {
-        var box = form.querySelector('.cb-alert');
-        box.className = 'cb-alert cb-alert-' + (kind || 'error');
-        box.textContent = msg;
-        box.hidden = false;
-    }
+    CB.views.auth = {
+        mount: function (root, params) {
+            var redirect = CB.auth.safeRedirect((params && params.redirect) || CB.ui.param('redirect'));
+            var initialTab = (params && params.tab) || CB.ui.param('tab') || 'login';
 
-    $('tabLogin').addEventListener('click', function () { showTab('login'); });
-    $('tabRegister').addEventListener('click', function () { showTab('register'); });
+            root.innerHTML =
+                '<div class="auth-wrapper" style="min-height:calc(100vh - 200px);display:flex;align-items:center;justify-content:center;background-image:url(\'images/thiet-ke-quan-cafe-van-phong-13.jpg\');background-size:cover;background-position:center;padding:40px 20px;">' +
+                '  <div class="auth-card" style="background:#fff;padding:36px;border-radius:12px;box-shadow:var(--shadow);max-width:480px;width:100%;">' +
+                '    <div style="display:flex;border-bottom:2px solid #eee;margin-bottom:28px;">' +
+                '      <button type="button" id="tabBtnLogin" style="flex:1;padding:12px;text-align:center;font-weight:700;font-size:16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;">Đăng Nhập</button>' +
+                '      <button type="button" id="tabBtnRegister" style="flex:1;padding:12px;text-align:center;font-weight:700;font-size:16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;">Đăng Ký</button>' +
+                '    </div>' +
 
-    /* Đã đăng nhập sẵn */
-    var current = CB.auth.current();
-    if (current) {
-        $('authForms').hidden = true;
-        $('alreadyLoggedIn').hidden = false;
-        $('alreadyName').textContent = current.fullName + ' (' + current.username + ')';
-        $('continueLink').href = redirect;
-        $('logoutBtn').addEventListener('click', function () {
-            CB.auth.logout();
-            location.reload();
-        });
-        return;
-    }
+                '    <div id="authAlert" style="display:none;margin-bottom:20px;" class="alert alert-danger"></div>' +
 
-    showTab(CB.ui.param('tab') === 'register' ? 'register' : 'login');
-    if (redirect !== 'index.html') {
-        var note = $('redirectNote');
-        note.textContent = 'Vui lòng đăng nhập để tiếp tục.';
-        note.hidden = false;
-    }
+                '    <!-- LOGIN FORM -->' +
+                '    <form id="loginForm">' +
+                '      <div class="form-group">' +
+                '        <label for="loginIdent">Tên đăng nhập hoặc Email</label>' +
+                '        <input type="text" id="loginIdent" placeholder="VD: guest1 hoặc guest1@example.com" required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="loginPassword">Mật khẩu</label>' +
+                '        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." required />' +
+                '      </div>' +
+                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;margin-top:10px;">Đăng nhập</button>' +
+                '      <div style="margin-top:20px;padding:12px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;">' +
+                '        Tài khoản mẫu: <strong>guest1</strong> / Mật khẩu: <strong>guest1123</strong>' +
+                '      </div>' +
+                '    </form>' +
 
-    $('loginForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        var f = e.target;
-        clearErrors(f);
-        var ident = f.elements.identifier.value.trim();
-        var pw = f.elements.password.value;
-        var bad = false;
-        if (!ident) { fieldError(f, 'identifier', 'Vui lòng nhập tên đăng nhập hoặc email.'); bad = true; }
-        if (!pw) { fieldError(f, 'password', 'Vui lòng nhập mật khẩu.'); bad = true; }
-        if (bad) return;
-        var r = CB.auth.login(ident, pw);
-        if (!r.ok) { formAlert(f, r.error); return; }
-        location.href = redirect;
-    });
+                '    <!-- REGISTER FORM -->' +
+                '    <form id="registerForm" style="display:none;">' +
+                '      <div class="form-group">' +
+                '        <label for="regUsername">Tên đăng nhập</label>' +
+                '        <input type="text" id="regUsername" placeholder="Tối thiểu 3 ký tự..." required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="regFullName">Họ và tên</label>' +
+                '        <input type="text" id="regFullName" placeholder="Họ và tên của bạn..." required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="regEmail">Email</label>' +
+                '        <input type="email" id="regEmail" placeholder="email@example.com" required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="regPhone">Số điện thoại</label>' +
+                '        <input type="tel" id="regPhone" placeholder="VD: 0901234567" required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="regPassword">Mật khẩu</label>' +
+                '        <input type="password" id="regPassword" placeholder="Tối thiểu 6 ký tự..." required />' +
+                '      </div>' +
+                '      <div class="form-group">' +
+                '        <label for="regConfirmPassword">Xác nhận mật khẩu</label>' +
+                '        <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu..." required />' +
+                '      </div>' +
+                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;margin-top:10px;">Tạo tài khoản</button>' +
+                '    </form>' +
+                '  </div>' +
+                '</div>';
 
-    $('registerForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        var f = e.target;
-        clearErrors(f);
-        var r = CB.auth.register({
-            fullName: f.elements.fullName.value,
-            username: f.elements.username.value,
-            email: f.elements.email.value,
-            phone: f.elements.phone.value,
-            password: f.elements.password.value,
-            confirm: f.elements.confirm.value
-        });
-        if (!r.ok) {
-            Object.keys(r.errors).forEach(function (k) { fieldError(f, k, r.errors[k]); });
-            return;
-        }
-        f.reset();
-        var lf = $('loginForm');
-        clearErrors(lf);
-        lf.elements.identifier.value = r.user.username;
-        showTab('login');
-        formAlert(lf, 'Đăng ký thành công. Hãy đăng nhập bằng tài khoản vừa tạo.', 'info');
-        lf.elements.password.focus();
-    });
-})();
+            var tabLogin = root.querySelector('#tabBtnLogin');
+            var tabRegister = root.querySelector('#tabBtnRegister');
+            var loginForm = root.querySelector('#loginForm');
+            var registerForm = root.querySelector('#registerForm');
+            var alertBox = root.querySelector('#authAlert');
+
+            function setTab(isLogin) {
+                alertBox.style.display = 'none';
+                if (isLogin) {
+                    tabLogin.style.color = 'var(--coffee)';
+                    tabLogin.style.borderBottomColor = 'var(--coffee)';
+                    tabRegister.style.color = '#888';
+                    tabRegister.style.borderBottomColor = 'transparent';
+                    loginForm.style.display = 'block';
+                    registerForm.style.display = 'none';
+                } else {
+                    tabRegister.style.color = 'var(--coffee)';
+                    tabRegister.style.borderBottomColor = 'var(--coffee)';
+                    tabLogin.style.color = '#888';
+                    tabLogin.style.borderBottomColor = 'transparent';
+                    loginForm.style.display = 'none';
+                    registerForm.style.display = 'block';
+                }
+            }
+
+            tabLogin.addEventListener('click', function () { setTab(true); });
+            tabRegister.addEventListener('click', function () { setTab(false); });
+
+            setTab(initialTab !== 'register');
+
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alertBox.style.display = 'none';
+                var ident = root.querySelector('#loginIdent').value.trim();
+                var pwd = root.querySelector('#loginPassword').value;
+                var res = CB.auth.login(ident, pwd);
+                if (!res.ok) {
+                    alertBox.textContent = res.error || 'Đăng nhập không thành công.';
+                    alertBox.style.display = 'block';
+                } else {
+                    CB.ui.toast('Đăng nhập thành công! Đang chuyển hướng...');
+                    CB.ui.refreshBadge();
+                    g.setTimeout(function () {
+                        g.location.href = redirect;
+                    }, 400);
+                }
+            });
+
+            registerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                alertBox.style.display = 'none';
+                var u = root.querySelector('#regUsername').value.trim();
+                var fn = root.querySelector('#regFullName').value.trim();
+                var em = root.querySelector('#regEmail').value.trim();
+                var ph = root.querySelector('#regPhone').value.trim();
+                var pw = root.querySelector('#regPassword').value;
+                var cpw = root.querySelector('#regConfirmPassword').value;
+
+                if (pw !== cpw) {
+                    alertBox.textContent = 'Mật khẩu xác nhận không khớp.';
+                    alertBox.style.display = 'block';
+                    return;
+                }
+
+                var res = CB.auth.register({
+                    username: u,
+                    fullName: fn,
+                    email: em,
+                    phone: ph,
+                    password: pw
+                });
+
+                if (!res.ok) {
+                    var msg = res.error;
+                    if (res.errors) {
+                        msg = Object.values(res.errors).join(' ');
+                    }
+                    alertBox.textContent = msg || 'Đăng ký không thành công.';
+                    alertBox.style.display = 'block';
+                } else {
+                    CB.ui.toast('Tạo tài khoản thành công!');
+                    CB.auth.login(u, pw);
+                    CB.ui.refreshBadge();
+                    g.setTimeout(function () {
+                        g.location.href = redirect;
+                    }, 400);
+                }
+            });
+        },
+        unmount: function () {}
+    };
+})(typeof window !== 'undefined' ? window : globalThis);

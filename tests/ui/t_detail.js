@@ -2,7 +2,7 @@ const H = require('./harness');
 (async () => {
     await H.start();
     console.log('\n[product-detail.html]');
-    let pg = await H.visit('product-detail.html?id=ethiopia-yirgacheffe');
+    let pg = await H.visit('index.html#/product?id=ethiopia-yirgacheffe');
     H.eq(pg.errors, [], 'không lỗi JS');
     H.eq(pg.d.querySelector('.product-title').textContent, 'Ethiopia Yirgacheffe 300g', 'đúng tên sản phẩm theo id');
     H.eq(pg.d.querySelector('.product-price').textContent, '145.000đ', 'đúng giá (giữ nguyên 145.000đ)');
@@ -13,15 +13,15 @@ const H = require('./harness');
     H.ok(![...pg.d.querySelectorAll('.related-grid .product-card-name')].some(e => /Ethiopia/.test(e.textContent)), 'liên quan không chứa chính nó');
     H.ok([...pg.d.querySelectorAll('.related-grid a')].every(a => /product-detail\.html\?id=/.test(a.getAttribute('href'))), 'liên kết sản phẩm liên quan có id');
     // liên kết cũ ?product=
-    pg = await H.visit('product-detail.html?product=robusta-bold');
+    pg = await H.visit('index.html#/product?product=robusta-bold');
     H.eq(pg.d.querySelector('.product-title').textContent, 'Robusta Bold 500g', '?product= (link cũ) vẫn hoạt động');
     // không tồn tại
-    pg = await H.visit('product-detail.html?id=khong-co');
+    pg = await H.visit('index.html#/product?id=khong-co');
     H.ok(/Không tìm thấy sản phẩm/.test(pg.d.getElementById('productRoot').textContent), 'id sai: hiện trang không tìm thấy');
-    pg = await H.visit('product-detail.html');
+    pg = await H.visit('index.html#/product');
     H.ok(/Không tìm thấy sản phẩm/.test(pg.d.getElementById('productRoot').textContent), 'thiếu id: hiện trang không tìm thấy');
     // sắp hết hàng
-    pg = await H.visit('product-detail.html?id=kenyan-aa-grade');
+    pg = await H.visit('index.html#/product?id=kenyan-aa-grade');
     H.ok(/Sắp hết hàng \(còn 8/.test(pg.d.querySelector('.stock-status').textContent), 'Kenyan: sắp hết hàng còn 8');
     // số lượng + thêm giỏ
     const q = () => pg.d.getElementById('quantity');

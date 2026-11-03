@@ -18,10 +18,10 @@ Triển khai lên Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_P
 
 | Vai trò | Tên đăng nhập | Mật khẩu | Trang đăng nhập |
 |---|---|---|---|
-| Admin | `admin` | `admin123` | `admin-login.html` |
-| Khách hàng | `guest1` | `guest1123` | `register.html` |
-| Khách hàng | `guest2` | `guest2123` | `register.html` |
-| Khách hàng | `guest3` | `guest3123` | `register.html` |
+| Admin | `admin` | `admin123` | `admin.html` |
+| Khách hàng | `guest1` | `guest1123` | `account.html#/auth` |
+| Khách hàng | `guest2` | `guest2123` | `account.html#/auth` |
+| Khách hàng | `guest3` | `guest3123` | `account.html#/auth` |
 
 `guest1` và `guest2` có địa chỉ trong hồ sơ, `guest3` chưa có địa chỉ (để thử nhập địa chỉ giao hàng mới). Admin bấm "Đặt lại mật khẩu" sẽ đưa mật khẩu khách về `123456`; khách có thể đổi lại trong Hồ sơ cá nhân.
 
@@ -36,7 +36,7 @@ Triển khai lên Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_P
 - Thanh toán: chọn địa chỉ trong tài khoản hoặc nhập địa chỉ mới; tiền mặt (mặc định), chuyển khoản, thanh toán trực tuyến (**mô phỏng**, không có giao dịch thật).
 - Xem lại đơn vừa đặt và lịch sử đơn hàng.
 
-### Admin (`admin-login.html` → `admin-dashboard.html`)
+### Admin (`admin.html` → `admin.html`)
 - Đăng nhập riêng, tách phiên khỏi khách hàng; menu 8 chức năng.
 - **Khách hàng:** danh sách, tìm kiếm, đặt lại mật khẩu, khóa/mở khóa.
 - **Loại sản phẩm:** thêm, sửa, ẩn, xóa (loại còn sản phẩm thì không xóa được).
@@ -56,12 +56,12 @@ Triển khai lên Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_P
 ## Cấu trúc thư mục
 
 ```
-index.html, products.html, product-detail.html, cart.html, checkout.html,
-order-confirmation.html, order-history.html, profile.html, register.html   Trang khách hàng
-portal.html, admin-login.html, admin-dashboard.html, admin.html            Cổng và trang admin
+index.html, index.html#/products, index.html#/product, checkout.html#/cart, checkout.html,
+order-confirmation.html, account.html#/orders, account.html#/profile, account.html#/auth   Trang khách hàng
+index.html, admin.html, admin.html, admin.html            Cổng và trang admin
 index2.html, arabica.html          Trang chuyển hướng giữ cho liên kết cũ không hỏng
 404.html, .nojekyll                Dành cho GitHub Pages
-documentation.html                 Hướng dẫn sử dụng dạng trang web
+index.html#/guide                 Hướng dẫn sử dụng dạng trang web
 styles/                            user.css, header.css (dùng chung), admin.css, admin-dashboard.css
 images/                            Ảnh sản phẩm và logo
 js/db.js          Lưu trữ localStorage, tiện ích dùng chung

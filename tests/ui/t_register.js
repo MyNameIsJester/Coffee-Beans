@@ -1,8 +1,8 @@
 const H = require('./harness');
 (async () => {
     await H.start();
-    console.log('\n[register.html]');
-    let pg = await H.visit('register.html?tab=login&redirect=cart.html');
+    console.log('\n[account.html#/auth]');
+    let pg = await H.visit('account.html#/auth?tab=login&redirect=checkout.html#/cart');
     H.eq(pg.errors, [], 'không lỗi JS');
     H.ok(pg.d.getElementById('login').classList.contains('active'), 'mở đúng tab đăng nhập');
     H.eq(pg.d.getElementById('login-password').type, 'password', 'mật khẩu được ẩn (type=password)');
@@ -41,7 +41,7 @@ const H = require('./harness');
     H.ok(pg.w.CB.auth.current() && pg.w.CB.auth.current().username === 'nguoimoi', 'đăng nhập tài khoản mới tạo thành công');
     // đã đăng nhập: hiện lựa chọn
     const st = pg.snap();
-    pg = await H.visit('register.html?redirect=https://evil.com', st);
+    pg = await H.visit('account.html#/auth?redirect=https://evil.com', st);
     H.ok(!pg.d.getElementById('alreadyLoggedIn').hidden && pg.d.getElementById('authForms').hidden, 'đã đăng nhập: ẩn form, hiện lựa chọn');
     H.eq(pg.d.getElementById('continueLink').getAttribute('href'), 'index.html', 'chặn redirect ra ngoài, về trang chủ');
     H.eq(pg.errors, [], 'không lỗi JS');

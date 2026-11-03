@@ -115,7 +115,8 @@ CB.auth.setLocked(g1.id, false);
 ok(CB.auth.resetPassword(g1.id).ok && CB.auth.login('guest1', '123456').ok, 'reset mật khẩu về 123456');
 CB.auth.logout();
 eq(CB.auth.safeRedirect('https://evil.com'), 'index.html', 'chặn chuyển hướng ra ngoài');
-eq(CB.auth.safeRedirect('cart.html?x=1'), 'cart.html?x=1', 'cho phép chuyển hướng nội bộ');
+eq(CB.auth.safeRedirect('checkout.html#/cart'), 'checkout.html#/cart', 'cho phép chuyển hướng nội bộ checkout');
+eq(CB.auth.safeRedirect('account.html#/profile'), 'account.html#/profile', 'cho phép chuyển hướng nội bộ account');
 
 /* ---------- 5. Giỏ hàng và đặt hàng ---------- */
 CB = boot();
