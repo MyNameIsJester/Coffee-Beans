@@ -80,8 +80,7 @@ console.log('\n[4] Tài khoản khách hàng và admin');
 ok(!CB.auth.login('guest1', 'sai').ok, 'sai mật khẩu bị từ chối');
 ok(CB.auth.login('guest1', 'guest1123').ok, 'đăng nhập guest1 / guest1123');
 eq(CB.auth.current().username, 'guest1', 'current() trả đúng user');
-ok(
-    !('password' in CB.auth.current()) &&
+ok( !('password' in CB.auth.current()) &&
     !('passwordHash' in CB.auth.current()) &&
     !('salt' in CB.auth.current()),
     'không trả mật khẩu ra thông tin người dùng'
