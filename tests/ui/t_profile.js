@@ -1,7 +1,7 @@
 const H = require('./harness');
 (async () => {
     await H.start();
-    console.log('\n[profile.html]');
+    console.log('\n[account.html#/profile]');
     let pg = await H.visit('account.html#/auth');
     pg.w.CB.auth.login('guest1', 'guest1123');
     let st = pg.snap();

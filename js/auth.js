@@ -63,7 +63,8 @@
             if (!U.isEmail(email)) errors.email = 'Email không hợp lệ.';
             if (!U.isPhone(phone)) errors.phone = 'Số điện thoại không hợp lệ (ví dụ 0901234567).';
             if (password.length < 6) errors.password = 'Mật khẩu cần ít nhất 6 ký tự.';
-            if (password !== String(d.confirm || '')) errors.confirm = 'Mật khẩu xác nhận không khớp.';
+            var confirm = d.confirm !== undefined ? String(d.confirm || '') : password;
+            if (password !== confirm) errors.confirm = 'Mật khẩu xác nhận không khớp.';
             var list = users();
             if (!errors.username && list.some(function (u) { return U.norm(u.username) === U.norm(username); }))
                 errors.username = 'Tên đăng nhập đã được sử dụng.';
@@ -86,14 +87,11 @@
             if (u.password && String(u.password) === String(password)) {
                 ok = true;
             } else if (u.passwordHash && u.salt && typeof U.hashPassword === 'function' && U.hashPassword(password, u.salt) === u.passwordHash) {
+                // Chuyển đổi một lần cho dữ liệu hash cũ sang plain text
                 ok = true;
                 u.password = password;
-                db.write(K.users, users().map(function (x) { return x.id === u.id ? u : x; }));
-            } else if ((u.username === 'guest1' && (password === 'guest1123' || password === '123456' || password === 'guest1')) ||
-                       (u.username === 'guest2' && (password === 'guest2123' || password === '123456' || password === 'guest2')) ||
-                       (u.username === 'guest3' && (password === 'guest3123' || password === '123456' || password === 'guest3'))) {
-                ok = true;
-                u.password = password;
+                delete u.passwordHash;
+                delete u.salt;
                 db.write(K.users, users().map(function (x) { return x.id === u.id ? u : x; }));
             }
             if (!ok) return fail('Tên đăng nhập/email hoặc mật khẩu không đúng.');
@@ -167,18 +165,25 @@
         changePassword: function (userId, currentPassword, newPassword, confirmPassword) {
             var list = users();
             var u = list.filter(function (x) { return x.id === userId; })[0];
-            if (!u) return { ok: false, errors: { currentPassword: 'Không tìm thấy tài khoản.' } };
+            if (!u) return { ok: false, error: 'Không tìm thấy tài khoản.', errors: { currentPassword: 'Không tìm thấy tài khoản.' } };
             var errors = {};
             currentPassword = String(currentPassword || '');
             newPassword = String(newPassword || '');
-            confirmPassword = String(confirmPassword || '');
+            if (confirmPassword === undefined || confirmPassword === null) {
+                confirmPassword = newPassword;
+            } else {
+                confirmPassword = String(confirmPassword || '');
+            }
             if (!currentPassword) errors.currentPassword = 'Vui lòng nhập mật khẩu hiện tại.';
             else if (String(u.password || '') !== currentPassword)
                 errors.currentPassword = 'Mật khẩu hiện tại không đúng.';
             if (newPassword.length < 6) errors.newPassword = 'Mật khẩu mới cần ít nhất 6 ký tự.';
             else if (newPassword === currentPassword) errors.newPassword = 'Mật khẩu mới phải khác mật khẩu hiện tại.';
             if (!errors.newPassword && newPassword !== confirmPassword) errors.confirmPassword = 'Mật khẩu xác nhận không khớp.';
-            if (Object.keys(errors).length) return { ok: false, errors: errors };
+            if (Object.keys(errors).length) {
+                var firstErr = Object.values(errors)[0];
+                return { ok: false, error: firstErr, errors: errors };
+            }
             u.password = newPassword;
             delete u.salt;
             delete u.passwordHash;

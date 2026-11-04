@@ -38,18 +38,18 @@ const H = require('./harness');
     H.eq(pg.w.CB.cart.items().length, 0, 'giỏ hàng được xóa sau khi đặt');
     // xác nhận
     st = pg.snap();
-    pg = await H.visit('order-confirmation.html?new=1&order=' + o.id, st);
+    pg = await H.visit('checkout.html#/confirmation?new=1&order=' + o.id, st);
     H.eq(pg.errors, [], 'confirmation: không lỗi JS');
     const txt = pg.d.getElementById('confirmRoot').textContent;
     H.ok(/Đặt hàng thành công/.test(txt) && txt.includes(o.code), 'hiển thị thành công và mã đơn');
     H.ok(txt.includes('Đà Nẵng') && txt.includes('429.000đ') && txt.includes('Chuyển khoản ngân hàng') && /Số tài khoản/.test(txt), 'hiển thị địa chỉ, tổng tiền, hướng dẫn chuyển khoản');
     H.ok(/Mới đặt/.test(txt), 'trạng thái Mới đặt');
     // xem chi tiết từ lịch sử (không có new=1)
-    pg = await H.visit('order-confirmation.html?order=' + o.id, st);
+    pg = await H.visit('checkout.html#/confirmation?order=' + o.id, st);
     H.ok(/Chi tiết đơn hàng/.test(pg.d.getElementById('confirmRoot').textContent) && !/Đặt hàng thành công/.test(pg.d.getElementById('confirmRoot').textContent), 'xem lại đơn cũ: không hiện "Đặt hàng thành công"');
     // đơn của người khác
     const other = pg.w.CB.orders.all().filter(x => x.customer.username === 'guest1')[0];
-    pg = await H.visit('order-confirmation.html?order=' + other.id, st);
+    pg = await H.visit('checkout.html#/confirmation?order=' + other.id, st);
     H.ok(/Không tìm thấy đơn hàng/.test(pg.d.getElementById('confirmRoot').textContent), 'không xem được đơn của tài khoản khác');
     // lịch sử guest2
     pg = await H.visit('account.html#/orders', st);

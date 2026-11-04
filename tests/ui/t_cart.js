@@ -3,21 +3,21 @@ const H = require('./harness');
     await H.start();
     console.log('\n[checkout.html#/cart]');
     // chưa đăng nhập -> chuyển tới đăng nhập (jsdom không điều hướng, kiểm tra không có giỏ vẽ ra)
-    let pg = await H.visit('checkout.html#/checkout#/cart');
+    let pg = await H.visit('checkout.html#/cart');
     H.eq(pg.d.getElementById('cartRoot').innerHTML, '', 'chưa đăng nhập: không hiển thị giỏ hàng');
     // đăng nhập, giỏ trống
     let st = pg.snap();
     pg = await H.visit('account.html#/auth', st);
     pg.w.CB.auth.login('guest2', 'guest2123');
     st = pg.snap();
-    pg = await H.visit('checkout.html#/checkout#/cart', st);
+    pg = await H.visit('checkout.html#/cart', st);
     H.eq(pg.errors, [], 'không lỗi JS');
     H.ok(/Giỏ hàng đang trống/.test(pg.d.getElementById('cartRoot').textContent), 'giỏ trống: hiện thông báo');
     // thêm sản phẩm bằng API rồi tải lại
     pg.w.CB.cart.add('arabica-premium', 2);
     pg.w.CB.cart.add('kenyan-aa-grade', 3);
     st = pg.snap();
-    pg = await H.visit('checkout.html#/checkout#/cart', st);
+    pg = await H.visit('checkout.html#/cart', st);
     const rows = () => [...pg.d.querySelectorAll('.cart-table tbody tr')];
     H.eq(rows().length, 2, 'hiển thị 2 dòng sản phẩm');
     const total = () => pg.d.querySelector('aside').textContent;
@@ -55,7 +55,7 @@ const H = require('./harness');
     pg.w.CB.orders.place({ token: 'x1', shipping: { source: 'account' } });
     pg.w.CB.auth.logout(); pg.w.CB.auth.login('guest2', 'guest2123');
     st = pg.snap();
-    pg = await H.visit('checkout.html#/checkout#/cart', st);
+    pg = await H.visit('checkout.html#/cart', st);
     H.ok(/Chỉ còn 4 sản phẩm/.test(pg.d.querySelector('.cart-table').textContent), 'giỏ có 5 nhưng còn 4: cảnh báo trên dòng');
     H.ok(!pg.d.querySelector('aside a[href="checkout.html"]'), 'có cảnh báo: nút Thanh toán bị khóa');
     pg.d.querySelector('[data-fix]').click();

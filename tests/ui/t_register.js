@@ -5,15 +5,15 @@ const H = require('./harness');
     let pg = await H.visit('account.html#/auth?tab=login&redirect=checkout.html#/cart');
     H.eq(pg.errors, [], 'không lỗi JS');
     H.ok(pg.d.getElementById('login').classList.contains('active'), 'mở đúng tab đăng nhập');
-    H.eq(pg.d.getElementById('login-password').type, 'password', 'mật khẩu được ẩn (type=password)');
+    H.eq(pg.d.getElementById('loginPassword').type, 'password', 'mật khẩu được ẩn (type=password)');
     H.ok(!pg.d.getElementById('redirectNote').hidden, 'có nhắc đăng nhập khi bị chuyển từ trang khác');
     const submit = (id) => pg.d.getElementById(id).dispatchEvent(new pg.w.Event('submit', { cancelable: true }));
     // đăng nhập trống
     submit('loginForm');
     H.ok(/Vui lòng nhập tên đăng nhập/.test(pg.d.querySelector('#loginForm [data-error-for=identifier]').textContent), 'đăng nhập trống: báo lỗi trường');
     // sai mật khẩu
-    pg.d.getElementById('login-identifier').value = 'guest1';
-    pg.d.getElementById('login-password').value = 'sai';
+    pg.d.getElementById('loginIdent').value = 'guest1';
+    pg.d.getElementById('loginPassword').value = 'sai';
     submit('loginForm');
     H.ok(/không đúng/.test(pg.d.querySelector('#loginForm .cb-alert').textContent) && !pg.d.querySelector('#loginForm .cb-alert').hidden, 'sai mật khẩu: báo lỗi chung');
     H.eq(pg.w.CB.auth.current(), null, 'sai mật khẩu: không tạo phiên');
@@ -34,9 +34,9 @@ const H = require('./harness');
     fill({ confirm: 'abcdef' });
     submit('registerForm');
     H.eq(pg.w.CB.auth.customers().filter(u => u.username === 'nguoimoi').length, 1, 'đăng ký thành công: tài khoản được lưu');
-    H.ok(pg.d.getElementById('login').classList.contains('active') && pg.d.getElementById('login-identifier').value === 'nguoimoi', 'sau đăng ký: về tab đăng nhập, điền sẵn tên đăng nhập');
+    H.ok(pg.d.getElementById('login').classList.contains('active') && pg.d.getElementById('loginIdent').value === 'nguoimoi', 'sau đăng ký: về tab đăng nhập, điền sẵn tên đăng nhập');
     // đăng nhập thành công -> redirect
-    pg.d.getElementById('login-password').value = 'abcdef';
+    pg.d.getElementById('loginPassword').value = 'abcdef';
     submit('loginForm');
     H.ok(pg.w.CB.auth.current() && pg.w.CB.auth.current().username === 'nguoimoi', 'đăng nhập tài khoản mới tạo thành công');
     // đã đăng nhập: hiện lựa chọn

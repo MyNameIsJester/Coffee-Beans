@@ -138,7 +138,8 @@
                     fullName: fn,
                     email: em,
                     phone: ph,
-                    password: pw
+                    password: pw,
+                    confirm: cpw
                 });
 
                 if (!res.ok) {

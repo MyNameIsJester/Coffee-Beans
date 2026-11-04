@@ -1,7 +1,7 @@
 const H = require('./harness');
 (async () => {
     await H.start();
-    console.log('\n[products.html]');
+    console.log('\n[index.html#/products]');
     let pg = await H.visit('index.html#/products');
     H.eq(pg.errors, [], 'không có lỗi JS khi tải trang');
     const cards = () => [...pg.d.querySelectorAll('#productGrid .card')];

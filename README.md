@@ -55,27 +55,35 @@ Triển khai lên Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_P
 
 ## Cấu trúc thư mục
 
-```
-index.html, index.html#/products, index.html#/product, checkout.html#/cart, checkout.html,
-order-confirmation.html, account.html#/orders, account.html#/profile, account.html#/auth   Trang khách hàng
-index.html, admin.html, admin.html, admin.html            Cổng và trang admin
-index2.html, arabica.html          Trang chuyển hướng giữ cho liên kết cũ không hỏng
-404.html, .nojekyll                Dành cho GitHub Pages
-index.html#/guide                 Hướng dẫn sử dụng dạng trang web
-styles/                            user.css, header.css (dùng chung), admin.css, admin-dashboard.css
-images/                            Ảnh sản phẩm và logo
-js/db.js          Lưu trữ localStorage, tiện ích dùng chung
-js/catalog.js     Loại, sản phẩm, giá vốn, % lợi nhuận, giá bán, tìm kiếm
-js/inventory.js   Phiếu nhập, tồn kho, nhập - xuất - tồn
-js/auth.js        Tài khoản khách hàng, đổi mật khẩu, tài khoản admin
-js/shop.js        Giỏ hàng, đặt hàng, trạng thái đơn
-js/seed.js        Dữ liệu mẫu (tạo qua chính các hàm nghiệp vụ nên luôn nhất quán)
-js/ui.js          Header dùng chung, thông báo, phân trang
-js/page-*.js      Logic riêng của từng trang khách hàng
-js/admin-*.js     Giao diện và logic trang admin
-tests/            Bộ kiểm thử (xem bên dưới)
-docs/             Wireframe (CoffeeBeans_Wireframe.drawio) và tài liệu cũ lưu trữ (docs/archive)
-tools/legacy/     Script cũ không còn dùng
+```text
+├── index.html                  # Trang chủ, danh mục sản phẩm (#/products), chi tiết (#/product), hướng dẫn (#/guide)
+├── checkout.html               # Giỏ hàng (#/cart), thanh toán (#/checkout), xác nhận đơn (#/confirmation)
+├── account.html                # Đăng nhập/Đăng ký (#/auth), hồ sơ cá nhân (#/profile), lịch sử đơn hàng (#/orders)
+├── admin.html                  # Cổng đăng nhập và bảng điều khiển quản trị 8 module
+├── 404.html, .nojekyll         # Dành cho triển khai GitHub Pages
+├── styles/
+│   ├── base.css                # Design tokens, reset, container, nút bấm, modal, toast, status-badge
+│   ├── shop.css                # Header, menu dropdown, slider hero, sản phẩm, giỏ hàng, footer
+│   └── admin.css               # Đăng nhập admin, sidebar, dashboard, bảng quản trị
+├── images/                     # Ảnh sản phẩm và logo
+├── js/
+│   ├── db.js                   # Lớp dữ liệu localStorage và tiện ích
+│   ├── catalog.js              # Danh mục, sản phẩm, giá vốn, giá bán, tìm kiếm
+│   ├── inventory.js            # Phiếu nhập, tồn kho, báo cáo nhập-xuất-tồn
+│   ├── auth.js                 # Xác thực tài khoản khách hàng và admin (plain-text chuẩn đồ án)
+│   ├── shop.js                 # Giỏ hàng, đặt hàng, cập nhật trạng thái đơn
+│   ├── seed.js                 # Khởi tạo dữ liệu demo mẫu nhất quán
+│   ├── ui.js                   # Header, menu tài khoản, toast, footer dùng chung
+│   ├── router.js               # Hash Router định tuyến màn hình mượt mà
+│   ├── page-*.js               # Logic điều khiển từng view khách hàng
+│   └── admin-*.js              # Logic và giao diện 8 module quản trị admin
+├── tests/
+│   ├── test-runner.html        # Trình chạy kiểm thử trực quan trên Chrome (159 bài PASS 100%)
+│   ├── run_tests.py            # Script chạy kiểm thử tự động với Headless Chrome
+│   ├── logic-test.js           # Bộ kiểm thử nghiệp vụ cho Node.js
+│   ├── ui/                     # Kiểm thử giao diện
+│   └── browser/                # Kiểm thử tự động trình duyệt (Playwright)
+└── docs/                       # Wireframe thiết kế (CoffeeBeans_Wireframe.drawio)
 ```
 
 Thứ tự nạp script trong mọi trang: `db → catalog → inventory → auth → shop → seed → ui`. Dữ liệu mẫu chỉ được tạo cho phần chưa có trong `localStorage`.
@@ -89,9 +97,11 @@ Các khóa `localStorage` đều bắt đầu bằng `cb_` (người dùng, sả
 ## Kiểm thử
 
 ```bash
-node tests/logic-test.js                                  # logic nghiệp vụ (không cần trình duyệt)
-cd tests/ui && npm install && npm test                    # giao diện bằng jsdom
-# Trình duyệt thật (Chromium qua Playwright): xem tests/browser/README.md
+# 1. Chạy bộ kiểm thử tự động trên Chrome (159 bài kiểm thử nghiệp vụ - PASS 100%):
+python tests/run_tests.py
+
+# 2. Hoặc mở trực tiếp file HTML kiểm thử trên trình duyệt Chrome:
+# tests/test-runner.html
 ```
 
 Kiểm thử trình duyệt thật (`tests/browser/`) cần cài Playwright; các bài này **chưa** chạy trên Firefox, Safari hay thiết bị di động thật.

@@ -375,13 +375,13 @@ body.admin-page {
     color: #333;
 }
 
-.search-box {
+.admin-page .search-box {
     display: flex;
     gap: 8px;
     align-items: center;
 }
 
-.search-box input {
+.admin-page .search-box input {
     padding: 8px 12px;
     border: 1px solid #E5E5E5;
     border-radius: 6px;
@@ -389,7 +389,7 @@ body.admin-page {
     font-family: 'Inter', sans-serif;
 }
 
-.search-box input:focus {
+.admin-page .search-box input:focus {
     outline: none;
     border-color: #D2691E;
 }
@@ -822,7 +822,7 @@ tbody tr:hover {
     padding: 4px 0;
 }
 
-.search-box label {
+.admin-page .search-box label {
     font-size: 13px;
     color: #555;
     font-weight: 600;

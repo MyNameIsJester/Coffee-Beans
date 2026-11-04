@@ -118,10 +118,11 @@
                     return;
                 }
 
-                var res = CB.auth.changePassword(user.id, oldP, newP);
+                var res = CB.auth.changePassword(user.id, oldP, newP, confP);
                 if (!res.ok) {
                     alertBox.className = 'alert alert-danger';
-                    alertBox.textContent = res.error || 'Đổi mật khẩu thất bại.';
+                    var errMsg = res.error || (res.errors && (res.errors.currentPassword || res.errors.newPassword || res.errors.confirmPassword)) || 'Đổi mật khẩu thất bại.';
+                    alertBox.textContent = errMsg;
                     alertBox.style.display = 'block';
                 } else {
                     alertBox.className = 'alert alert-success';

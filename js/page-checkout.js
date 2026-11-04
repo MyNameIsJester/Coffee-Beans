@@ -170,9 +170,15 @@
                 var payMethod = (root.querySelector('input[name="paymentMethod"]:checked') || {}).value || 'cod';
                 var note = (root.querySelector('#coNote') || {}).value || '';
 
-                var res = CB.orders.create({
-                    userId: user.id,
-                    customer: { fullName: shipping.fullName, phone: shipping.phone, email: user.email },
+                shipping.source = (mode === 'profile') ? 'account' : 'new';
+
+                var submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Đang xử lý đơn hàng...';
+                }
+
+                var res = CB.orders.place({
                     shipping: shipping,
                     paymentMethod: payMethod,
                     note: note,
@@ -180,7 +186,13 @@
                 });
 
                 if (!res.ok) {
-                    alertBox.textContent = res.error || 'Có lỗi xảy ra khi tạo đơn hàng.';
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = 'Đặt hàng';
+                    }
+                    var msg = res.error;
+                    if (res.errors) msg = Object.values(res.errors).join(' ');
+                    alertBox.textContent = msg || 'Có lỗi xảy ra khi tạo đơn hàng.';
                     alertBox.style.display = 'block';
                 } else {
                     try { g.sessionStorage.removeItem(TOKEN_KEY); } catch (err) {}

@@ -119,13 +119,6 @@
     }
 
     function ensure() {
-        try {
-            var rawProds = typeof localStorage !== 'undefined' ? (localStorage.getItem('cb_products') || '') : '';
-            if (rawProds && (rawProds.indexOf('\uFFFD') !== -1 || rawProds.indexOf('?-m') !== -1 || rawProds.indexOf('dY') !== -1 || rawProds.indexOf('Ã') !== -1 || rawProds.indexOf('Â') !== -1)) {
-                reset();
-                return;
-            }
-        } catch (e) {}
         if (!db.has(K.settings)) db.write(K.settings, { lowStockThreshold: 10, shippingFee: 30000 });
         if (!db.has(K.categories))
             db.write(K.categories, CATEGORIES.map(function (c) { return Object.assign({ hidden: false, createdAt: '2026-08-01T00:00:00.000Z' }, c); }));
@@ -139,7 +132,21 @@
             db.write(K.pricing, { categoryMargins: { 'cat-arabica': 25, 'cat-robusta': 25, 'cat-blend': 25 }, productMargins: pm });
         }
         var uList = db.read(K.users, []);
-        if (!uList.length || uList.some(function (u) { return !u.password; })) seedUsers();
+        if (!uList.length) {
+            seedUsers();
+        } else {
+            // Bảo toàn danh sách tài khoản khách hàng, cập nhật password nếu thiếu
+            var uMod = false;
+            uList.forEach(function (u) {
+                if (!u.password) {
+                    u.password = (u.username === 'guest1' ? 'guest1123' : (u.username === 'guest2' ? 'guest2123' : (u.username === 'guest3' ? 'guest3123' : '123456')));
+                    delete u.passwordHash;
+                    delete u.salt;
+                    uMod = true;
+                }
+            });
+            if (uMod) db.write(K.users, uList);
+        }
         if (!db.has(K.admins)) seedAdmins();
         if (!db.has(K.carts)) db.write(K.carts, {});
         if (!db.has(K.stockTx)) db.write(K.stockTx, []);

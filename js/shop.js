@@ -355,6 +355,8 @@
         }
     };
 
+    orders.create = orders.place;
+
     CB.cart = cart;
     CB.orders = orders;
 })(typeof window !== 'undefined' ? window : globalThis);

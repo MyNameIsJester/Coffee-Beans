@@ -6,7 +6,7 @@ Thư mục dự án đã sẵn sàng để chạy như một website tĩnh: `ind
 
 ## 1. Cập nhật repository
 
-Repo hiện có trỏ tới `https://github.com/khanh123bo123/CoffeeBeans.git`, nhánh `main`.
+Repo hiện có trỏ tới `https://github.com/MyNameIsJester/Coffee-Beans.git`, nhánh `main`.
 
 1. Giải nén file zip bàn giao và **chép đè** vào thư mục repo trên máy bạn (giữ nguyên thư mục `.git`). Các tệp cũ đã được thay hoặc chuyển vào `docs/archive/` và `tools/legacy/`.
 2. Kiểm tra thay đổi:
@@ -26,7 +26,7 @@ Repo hiện có trỏ tới `https://github.com/khanh123bo123/CoffeeBeans.git`, 
 1. Trên GitHub, mở repo → **Settings** → **Pages**.
 2. Mục **Build and deployment** → **Source**: chọn **Deploy from a branch**.
 3. **Branch**: chọn `main`, thư mục `/ (root)` → **Save**.
-4. Đợi khoảng 1-2 phút. Địa chỉ website hiện ở đầu trang Pages, dự kiến có dạng `https://khanh123bo123.github.io/CoffeeBeans/` (hãy dùng đúng địa chỉ GitHub hiển thị).
+4. Đợi khoảng 1-2 phút. Địa chỉ website hiện ở đầu trang Pages, dự kiến có dạng `https://MyNameIsJester.github.io/Coffee-Beans/` (hãy dùng đúng địa chỉ GitHub hiển thị).
 
 Lưu ý: repo riêng tư (private) chỉ dùng được Pages với một số gói GitHub trả phí; nếu không thấy mục Pages, hãy đặt repo ở chế độ Public.
 

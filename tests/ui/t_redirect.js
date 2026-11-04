@@ -8,7 +8,7 @@ const fs = require('fs'), path = require('path');
     H.ok(/url=products\.html\?cat=arabica/.test(read('arabica.html')), 'arabica.html chuyển sang index.html#/products?cat=arabica');
     H.ok(/url=index\.html/.test(read('index2.html')), 'index2.html chuyển sang index.html');
     H.ok(!fs.existsSync(path.join(root, 'lucky-spin.html')), 'đã xóa lucky-spin.html');
-    H.ok(!/lucky-spin|floating-spin/.test(read('products.html')), 'products.html không còn nút vòng quay');
+    H.ok(!/lucky-spin|floating-spin/.test(read('index.html#/products')), 'index.html#/products không còn nút vòng quay');
     H.ok(!/COFFEE20|promoPopup/.test(read('index.html')), 'index.html không còn popup COFFEE20');
     let pg = await H.visit('index.html');
     H.eq(pg.errors, [], 'trang chủ không lỗi JS sau khi gỡ popup');
