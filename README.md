@@ -78,7 +78,7 @@ Triển khai lên Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_P
 │   ├── page-*.js               # Logic điều khiển từng view khách hàng
 │   └── admin-*.js              # Logic và giao diện 8 module quản trị admin
 ├── tests/
-│   ├── test-runner.html        # Trình chạy kiểm thử trực quan trên Chrome (159 bài PASS 100%)
+│   ├── test-runner.html        # Trình chạy kiểm thử trực quan trên Chrome (160 bài PASS 100%)
 │   ├── run_tests.py            # Script chạy kiểm thử tự động với Headless Chrome
 │   ├── logic-test.js           # Bộ kiểm thử nghiệp vụ cho Node.js
 │   ├── ui/                     # Kiểm thử giao diện
@@ -97,7 +97,7 @@ Các khóa `localStorage` đều bắt đầu bằng `cb_` (người dùng, sả
 ## Kiểm thử
 
 ```bash
-# 1. Chạy bộ kiểm thử tự động trên Chrome (159 bài kiểm thử nghiệp vụ - PASS 100%):
+# 1. Chạy bộ kiểm thử tự động trên Chrome (160 bài kiểm thử nghiệp vụ - PASS 100%):
 python tests/run_tests.py
 
 # 2. Hoặc mở trực tiếp file HTML kiểm thử trên trình duyệt Chrome:

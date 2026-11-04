@@ -41,5 +41,5 @@ if failed > 0 or status != 'pass':
         print('  FAIL:', match.group(1), match.group(2) or '')
     sys.exit(1)
 else:
-    print('ALL 159 TESTS PASSED 100% WITH 0 ERRORS!')
+    print('ALL 160 TESTS PASSED 100% WITH 0 ERRORS!')
     sys.exit(0)

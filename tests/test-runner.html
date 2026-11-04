@@ -329,6 +329,8 @@
             CB.auth.logout();
             ok(CB.auth.changePassword(uid1, '123456', 'matkhaumoi', 'matkhaumoi').ok && CB.auth.login('guest1', 'matkhaumoi').ok, 'khách đổi từ 123456 sang mật khẩu riêng thành công');
             CB.auth.logout();
+            var authCode = CB.auth.login.toString() + CB.auth.register.toString() + CB.auth.changePassword.toString();
+            ok(authCode.indexOf('console.') === -1, 'auth.js không ghi gì ra console');
 
             // Summary
             var sBox = document.getElementById('summaryBox');
