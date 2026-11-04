@@ -13,7 +13,7 @@
     CBA.$ = function (sel, root) { return (root || document).querySelector(sel); };
     CBA.$$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
-    /* Cho phép test thay thế hộp xác nhận mặc định của trình duyệt */
+    /* Hộp xác nhận dùng chung cho các thao tác quản trị cần xác nhận */
     CBA.confirm = function (message) { return g.confirm(message); };
 
     CBA.toast = function (message, type) { CB.ui.toast(message, type); };
@@ -51,18 +51,18 @@
             }
         });
     };
-    /* Hiện kết quả {ok:false, error, field} của tầng dữ liệu lên form */
+    /* Hiện kết quả của tầng dữ liệu lên form */
     CBA.showResultError = function (root, result) {
         var e = {};
         e[result.field || '_'] = result.error;
         CBA.setErrors(root, e);
     };
 
-    /* Hộp thoại. buttons: [{label, cls, onClick(modal)}]; onClick trả về false thì giữ hộp thoại mở. */
+    /* Hộp thoại. */
     CBA.modal = function (opts) {
         var root = document.getElementById('modalRoot');
         var el = document.createElement('div');
-        el.className = 'modal active';
+        el.className = 'modal show active';
         el.setAttribute('role', 'dialog');
         el.setAttribute('aria-modal', 'true');
         el.innerHTML =
@@ -105,7 +105,7 @@
         return CBA.modal({ title: title, body: bodyHtml, buttons: [{ label: 'Đóng', cls: 'btn-primary' }] });
     };
 
-    /* Bảng dữ liệu. headers: ['Cột 1', ...]; rows: mảng chuỗi HTML của từng <tr> */
+    /* Bảng dữ liệu. */
     CBA.table = function (headers, rows, emptyText) {
         if (!rows.length) return '<div class="empty-state">' + esc(emptyText || 'Không có dữ liệu.') + '</div>';
         return '<table><thead><tr>' + headers.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.join('') + '</tbody></table>';
@@ -113,6 +113,7 @@
     CBA.iconBtn = function (act, id, icon, title, extra) {
         return '<button type="button" class="btn-icon" data-act="' + act + '" data-id="' + esc(id) + '" title="' + esc(title) + '" aria-label="' + esc(title) + '"' + (extra || '') + '>' + icon + '</button>';
     };
+
     /* Gắn xử lý bấm cho mọi phần tử có data-act trong vùng root */
     CBA.onAct = function (root, handlers) {
         root.addEventListener('click', function (e) {
@@ -162,7 +163,7 @@
         var app = document.getElementById('adminApp') || document.body;
 
         if (!admin) {
-            // Hiển thị cổng đăng nhập Admin sang trọng
+            // Hiển thị cổng đăng nhập Admin
             document.title = 'Đăng nhập Quản trị - Cà Phê Đậm Đà';
             app.innerHTML =
                 '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1c16 0%,#4b3429 100%);padding:20px;">' +

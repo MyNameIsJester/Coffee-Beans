@@ -24,7 +24,7 @@ Tài khoản mẫu: `admin / admin123`, `guest1 / guest1123`, `guest2 / guest212
 
 ### 4. Giỏ hàng và đặt hàng
 1. Bấm **Thêm vào giỏ** ở danh sách hoặc trang chi tiết. Chưa đăng nhập thì được chuyển sang trang đăng nhập.
-2. `checkout.html#/checkout#/cart`: đổi số lượng bằng nút +/- hoặc nhập số; nút ✕ để xóa. Số lượng không vượt quá số còn bán được.
+2. `checkout.html#/cart`: đổi số lượng bằng nút +/- hoặc nhập số; nút ✕ để xóa. Số lượng không vượt quá số còn bán được.
 3. **Thanh toán:**
    - Địa chỉ: **dùng địa chỉ trong tài khoản** hoặc **địa chỉ giao hàng khác** (tên người nhận, số điện thoại, tỉnh/thành, quận/huyện, phường/xã, số nhà).
    - Thanh toán: tiền mặt khi nhận hàng (mặc định), chuyển khoản, hoặc trực tuyến (mô phỏng).
@@ -55,3 +55,15 @@ Mở Console của trình duyệt (F12) và gõ `CB.seed.reset()`, rồi tải l
 - Dữ liệu nằm trong trình duyệt đang dùng và chỉ thấy được ở cùng địa chỉ website. Dùng chế độ ẩn danh hoặc xóa dữ liệu trình duyệt sẽ làm mất dữ liệu.
 - Mở website bằng địa chỉ khác (ví dụ `localhost` và trang trên github.io) cho ra hai bộ dữ liệu khác nhau.
 - Thanh toán trực tuyến và thông tin chuyển khoản chỉ để minh họa.
+
+
+## E. Tài khoản từ phiên bản cũ
+
+Khi mở phiên bản mới, website tự chuyển tài khoản cũ còn `passwordHash`/`salt` sang trường `password` mà không xóa hồ sơ, đơn hàng, giỏ hàng hoặc dữ liệu kho:
+
+- `guest1`, `guest2`, `guest3` nếu chưa có mật khẩu dạng chữ sẽ lần lượt dùng `guest1123`, `guest2123`, `guest3123`.
+- Khách hàng cũ khác chỉ còn mật khẩu băm sẽ được đặt mật khẩu tạm `123456`.
+- Admin tên `admin` chỉ còn mật khẩu băm sẽ được đặt lại thành `admin123`; Admin khác được đặt `123456`.
+- Tài khoản đã có mật khẩu dạng chữ được giữ nguyên.
+
+Do mật khẩu băm cũ không thể khôi phục thành mật khẩu ban đầu, người dùng của tài khoản được chuyển đổi cần dùng mật khẩu demo/tạm ở trên. Đây là cơ chế phục vụ dữ liệu trình diễn, không phải xác thực an toàn cho website thực tế.

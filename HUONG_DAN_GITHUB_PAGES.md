@@ -1,62 +1,94 @@
-# Triển khai lên GitHub Pages
+# Triển khai Coffee Beans lên GitHub Pages
 
-Thư mục dự án đã sẵn sàng để chạy như một website tĩnh: `index.html` nằm ở **thư mục gốc**, mọi liên kết, ảnh, CSS và JavaScript dùng đường dẫn **tương đối**, không có đường dẫn tuyệt đối hay tệp phụ thuộc vào Node/máy chủ. Đã kiểm tra tên tệp phân biệt hoa/thường (GitHub Pages chạy trên Linux) và đã chạy thử dưới đường dẫn con `/CoffeeBeans/`, giống dạng địa chỉ `https://<tài-khoản>.github.io/CoffeeBeans/`.
+Dự án là website tĩnh HTML/CSS/JavaScript. Trang vào mặc định `index.html` nằm ở thư mục gốc; các liên kết, ảnh, CSS và JavaScript trong website sử dụng đường dẫn tương đối để hoạt động trong repository GitHub Pages dạng Project site.
 
-> Mình chưa push hay bật Pages thay bạn; các bước dưới đây bạn tự thực hiện từ tài khoản của mình, rồi kiểm tra theo danh sách ở cuối.
+Repository hiện tại:
+
+```text
+https://github.com/MyNameIsJester/Coffee-Beans
+```
+
+Website:
+
+```text
+https://mynameisjester.github.io/Coffee-Beans/
+```
+
+Với Project site này, đường dẫn gốc khi được triển khai là `/Coffee-Beans/` (có dấu gạch nối). Không dùng `/CoffeeBeans/`.
 
 ## 1. Cập nhật repository
 
-Repo hiện có trỏ tới `https://github.com/MyNameIsJester/Coffee-Beans.git`, nhánh `main`.
+1. Mở thư mục dự án `Coffee-Beans` trên máy tính.
+2. Nếu bạn tải ZIP để chép vào repository hiện có, hãy chép các file dự án vào thư mục repository và **giữ nguyên thư mục `.git`** trên máy.
+3. Kiểm tra thay đổi:
 
-1. Giải nén file zip bàn giao và **chép đè** vào thư mục repo trên máy bạn (giữ nguyên thư mục `.git`). Các tệp cũ đã được thay hoặc chuyển vào `docs/archive/` và `tools/legacy/`.
-2. Kiểm tra thay đổi:
    ```bash
    git status
    ```
-   Nên thấy: các tệp `js/*`, `tests/*`, `docs/*`, `tools/*`, `404.html`, `.nojekyll`, `.gitignore`, `README.md`... mới hoặc sửa; các tệp tài liệu cũ ở thư mục gốc bị "xóa" (đã chuyển sang `docs/archive/`).
-3. Đưa lên GitHub:
+
+4. Đưa thay đổi lên GitHub:
+
    ```bash
    git add -A
-   git commit -m "Hoàn thiện website: dữ liệu localStorage, khách hàng, admin, tài liệu"
+   git commit -m "Update Coffee Beans website"
    git push origin main
    ```
 
-## 2. Bật GitHub Pages
+## 2. Cấu hình GitHub Pages
 
-1. Trên GitHub, mở repo → **Settings** → **Pages**.
-2. Mục **Build and deployment** → **Source**: chọn **Deploy from a branch**.
-3. **Branch**: chọn `main`, thư mục `/ (root)` → **Save**.
-4. Đợi khoảng 1-2 phút. Địa chỉ website hiện ở đầu trang Pages, dự kiến có dạng `https://MyNameIsJester.github.io/Coffee-Beans/` (hãy dùng đúng địa chỉ GitHub hiển thị).
+1. Trên GitHub, mở repository `MyNameIsJester/Coffee-Beans`.
+2. Chọn **Settings → Pages**.
+3. Trong **Build and deployment**, chọn **Deploy from a branch**.
+4. Chọn branch `main`, thư mục `/(root)`, sau đó nhấn **Save**.
+5. Đợi GitHub Pages triển khai xong. Mở URL được hiển thị ở phần Pages; URL dự kiến là `https://mynameisjester.github.io/Coffee-Beans/`.
 
-Lưu ý: repo riêng tư (private) chỉ dùng được Pages với một số gói GitHub trả phí; nếu không thấy mục Pages, hãy đặt repo ở chế độ Public.
+## 3. Cấu trúc và điều hướng website
 
-## 3. Kiểm tra sau khi triển khai
+Bốn trang HTML chính:
 
-Mở địa chỉ Pages (nên dùng cửa sổ ẩn danh để có dữ liệu mẫu sạch), rồi kiểm tra:
+- `index.html`: trang chủ, danh sách sản phẩm, chi tiết sản phẩm và hướng dẫn.
+- `checkout.html`: giỏ hàng, thanh toán và xác nhận đơn.
+- `account.html`: đăng nhập/đăng ký, hồ sơ và lịch sử đơn hàng.
+- `admin.html`: đăng nhập Admin và dashboard quản trị.
 
-- [ ] Trang chủ hiện đủ ảnh slider, logo, ảnh 3 danh mục; slider tự chuyển slide.
-- [ ] `index.html#/products`: 9 sản phẩm ở trang 1, 3 ở trang 2; tìm nâng cao hoạt động.
-- [ ] Đăng nhập `guest1 / guest1123`; thêm sản phẩm vào giỏ, thanh toán bằng địa chỉ tài khoản, xem xác nhận và lịch sử đơn.
-- [ ] Hồ sơ cá nhân: sửa thông tin, đổi mật khẩu rồi đăng nhập lại bằng mật khẩu mới.
-- [ ] `admin.html`: đăng nhập `admin / admin123`; đơn vừa đặt xuất hiện ở **Đơn hàng**; chuyển trạng thái thành **Đã giao** và kiểm tra tồn kho giảm.
-- [ ] Mở Console (F12): không có dòng lỗi màu đỏ; tab Network không có tài nguyên 404.
-- [ ] Mở thử trên điện thoại: menu "Menu", giỏ hàng và thanh toán hiển thị gọn.
-- [ ] Gõ một đường dẫn sai (ví dụ `/khong-ton-tai`): hiện trang 404 của website.
+Các màn hình bên trong từng trang dùng URL Hash, ví dụ:
 
-## 4. Lưu ý khi chạy trên Pages
+```text
+/Coffee-Beans/index.html#/home
+/Coffee-Beans/index.html#/products
+/Coffee-Beans/checkout.html#/cart
+/Coffee-Beans/checkout.html#/checkout
+/Coffee-Beans/account.html#/auth
+/Coffee-Beans/account.html#/orders
+/Coffee-Beans/admin.html#orders
+```
 
-- Dữ liệu lưu trong `localStorage` **của từng trình duyệt và từng địa chỉ website**: dữ liệu trên `github.io` tách riêng với dữ liệu trên `localhost`, và người dùng khác không thấy đơn hàng của bạn.
-- Các project Pages cùng tài khoản dùng chung tên miền `<tài-khoản>.github.io`, nhưng khóa dữ liệu của website này đều bắt đầu bằng `cb_` nên không lẫn với dự án khác.
-- Muốn về lại dữ liệu mẫu: Console → `CB.seed.reset()` rồi tải lại trang.
-- Nếu đã mở bản cũ trên cùng địa chỉ trước đây và thấy dữ liệu lạ, hãy xóa dữ liệu trang (Application → Local Storage → Clear) hoặc mở cửa sổ ẩn danh.
-- Sau khi push, nếu trang chưa đổi, đợi vài phút rồi tải cứng (Ctrl+F5); GitHub Pages có bộ nhớ đệm.
-- Font chữ và biểu tượng nạp từ Google Fonts và cdnjs, nên cần có Internet.
+Không xóa dấu gạch nối trong `Coffee-Beans`. GitHub Pages phân biệt chữ hoa/thường và tên đường dẫn.
 
-## 5. Nếu gặp lỗi
+## 4. Kiểm tra sau khi triển khai
 
-| Hiện tượng | Cách xử lý |
-|---|---|
-| Trang 404 ngay cả với `index.html` | Kiểm tra Pages đang trỏ đúng nhánh `main` và `/ (root)`; đợi workflow "pages build and deployment" ở tab Actions chạy xong. |
-| Mất ảnh hoặc CSS | Mở Network xem tệp nào 404; GitHub Pages phân biệt hoa/thường nên tên tệp phải khớp từng ký tự. |
-| Đăng nhập xong không giữ phiên | Trình duyệt đang chặn `localStorage` (chế độ riêng tư nghiêm ngặt); thử cửa sổ thường. |
-| Dữ liệu cũ lạ | Xóa dữ liệu trang hoặc `CB.seed.reset()`. |
+- Mở `https://mynameisjester.github.io/Coffee-Beans/` bằng Chrome.
+- Kiểm tra logo, ảnh banner và ba danh mục sản phẩm.
+- Mở danh sách sản phẩm, tìm kiếm, lọc và xem chi tiết.
+- Đăng nhập bằng `guest1 / guest1123`, thêm sản phẩm vào giỏ và thử đặt hàng.
+- Mở `admin.html`, đăng nhập `admin / admin123`; kiểm tra đơn vừa đặt và các chức năng quản trị.
+- Mở DevTools (F12), kiểm tra Console và Network để phát hiện lỗi JavaScript hoặc tài nguyên 404.
+- Thử mở trực tiếp các URL hash được liệt kê ở trên và tải lại trang để kiểm tra router.
+
+## 5. Dữ liệu trình duyệt
+
+- Dữ liệu `localStorage` trên GitHub Pages tách biệt với `localhost` và các địa chỉ khác.
+- Dữ liệu demo được lưu riêng trong trình duyệt của mỗi người dùng; Admin trên máy này không tự động thấy dữ liệu trong trình duyệt/máy khác.
+- Muốn tạo lại dữ liệu mẫu trên trình duyệt hiện tại, mở Console và chạy `CB.seed.reset()`. Lệnh này xóa dữ liệu demo hiện có của website trên trình duyệt đó trước khi khởi tạo lại; chỉ chạy khi đã chấp nhận mất các thay đổi hiện tại.
+- Sau khi Push, nếu website chưa cập nhật, tải cứng bằng `Ctrl + F5` sau khi GitHub Pages triển khai xong.
+- Google Fonts và Font Awesome lấy từ CDN nên cần Internet để tải font và biểu tượng.
+
+## 6. Lưu ý về chạy local
+
+Để các trang HTML chia sẻ `localStorage` ổn định khi kiểm tra luồng nhiều trang, nên chạy máy chủ tĩnh:
+
+```bash
+python -m http.server 8000
+```
+
+Sau đó mở `http://localhost:8000/`. Khi mở trực tiếp các file bằng `file:///`, hành vi lưu trữ giữa các file phụ thuộc trình duyệt và không được bảo đảm giống HTTP.
