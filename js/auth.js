@@ -14,28 +14,27 @@
         return db.read(K.users, []);
     }
     function publicUser(u) {
-    if (!u) return null;
+        if (!u) return null;
+        var c = Object.assign({}, u);
+        delete c.password;
+        delete c.passwordHash;
+        delete c.salt;
+        return c;
+    }
 
-    var c = Object.assign({}, u);
-    delete c.password;
-    delete c.passwordHash;
-    delete c.salt;
-
-    return c;
-}
     function makeUser(d) {
-    return {
-        id: d.id || U.uid('u'),
-        username: d.username,
-        email: d.email,
-        fullName: d.fullName,
-        phone: d.phone,
-        address: d.address || { province: '', district: '', ward: '', detail: '' },
-        password: String(d.password || ''),
-        status: 'active',
-        createdAt: d.createdAt || U.nowISO()
-    };
-}
+        return {
+            id: d.id || U.uid('u'),
+            username: d.username,
+            email: d.email,
+            fullName: d.fullName,
+            phone: d.phone,
+            address: d.address || { province: '', district: '', ward: '', detail: '' },
+            password: String(d.password || ''),
+            status: 'active',
+            createdAt: d.createdAt || U.nowISO()
+        };
+    }
     function findByIdentifier(list, ident) {
         var key = U.norm(ident);
         for (var i = 0; i < list.length; i++) {
@@ -49,7 +48,6 @@
         makeUser: makeUser,
 
         /* ================= Khách hàng ================= */
-        /* d: {fullName, username, email, phone, password, confirm} -> {ok, user} | {ok:false, errors:{field:msg}} */
         register: function (d) {
             var errors = {};
             var fullName = String(d.fullName || '').trim();
@@ -83,18 +81,9 @@
             if (!ident || !password) return fail('Vui lòng nhập tên đăng nhập/email và mật khẩu.');
             var u = findByIdentifier(users(), ident);
             if (!u) return fail('Tên đăng nhập/email hoặc mật khẩu không đúng.');
-            var ok = false;
-            if (u.password && String(u.password) === String(password)) {
-                ok = true;
-            } else if (u.passwordHash && u.salt && typeof U.hashPassword === 'function' && U.hashPassword(password, u.salt) === u.passwordHash) {
-                // Chuyển đổi một lần cho dữ liệu hash cũ sang plain text
-                ok = true;
-                u.password = password;
-                delete u.passwordHash;
-                delete u.salt;
-                db.write(K.users, users().map(function (x) { return x.id === u.id ? u : x; }));
-            }
-            if (!ok) return fail('Tên đăng nhập/email hoặc mật khẩu không đúng.');
+
+            if (!u.password || String(u.password) !== String(password))
+                return fail('Tên đăng nhập/email hoặc mật khẩu không đúng.');
             if (u.status === 'locked')
                 return fail('Tài khoản của bạn đã bị khóa. Vui lòng liên hệ cửa hàng để được hỗ trợ.');
             db.write(K.customerSession, { userId: u.id, at: U.nowISO() });
@@ -133,7 +122,7 @@
             if (/^(index|checkout|account)\.html(\?[^#\s]*)?(#[^\s]*)?$/.test(target)) return target;
             return 'index.html';
         },
-        /* d: {fullName, email, phone, address:{province,district,ward,detail}} */
+
         updateProfile: function (userId, d) {
             var errors = {};
             var fullName = String(d.fullName || '').trim();

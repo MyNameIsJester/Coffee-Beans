@@ -59,7 +59,7 @@
                 return p.categoryId === categoryId;
             }).length;
         },
-        /* data: {id?, name, description?} */
+        /* data */
         saveCategory: function (data) {
             var name = String(data.name || '').trim();
             if (!name) return fail('Vui lòng nhập tên loại sản phẩm.', 'name');
@@ -82,7 +82,6 @@
                 if (!cat) return fail('Không tìm thấy loại sản phẩm cần sửa.');
                 cat.name = name;
                 cat.description = String(data.description || '').trim();
-                // giữ nguyên slug cũ để đường dẫn không bị đổi khi sửa tên
             } else {
                 cat = {
                     id: U.uid('cat'),
@@ -130,7 +129,6 @@
         },
 
         /* ================= Sản phẩm ================= */
-        /* opts: {includeHidden, categoryId} - mặc định chỉ lấy sản phẩm hiển thị với khách */
         products: function (opts) {
             opts = opts || {};
             var cats = {};
@@ -148,7 +146,7 @@
             for (var i = 0; i < all.length; i++) if (all[i].id === id) return all[i];
             return null;
         },
-        /* data: {id?, code, name, categoryId, image?, description?, origin?, roast?, weight?, notes?} */
+        /* data */
         saveProduct: function (data) {
             var code = String(data.code || '').trim().toUpperCase();
             var name = String(data.name || '').trim();
@@ -289,7 +287,7 @@
             });
             return qty > 0 ? Math.round(amount / qty) : null;
         },
-        /* -> {percent, source: 'product' | 'category'} hoặc null */
+       
         margin: function (productId) {
             var p = catalog.pricing();
             if (p.productMargins[productId] !== undefined && p.productMargins[productId] !== null)
@@ -335,8 +333,7 @@
                 visible: !p.hidden && !!cat && !cat.hidden
             });
         },
-        /* Tìm kiếm cơ bản và nâng cao cho khách hàng.
-           q: tên (không phân biệt dấu), categoryId, min, max (VND), sort. */
+        /* Tìm kiếm cơ bản và nâng cao cho khách hàng. */
         search: function (opts) {
             opts = opts || {};
             var q = U.norm(opts.q || '');

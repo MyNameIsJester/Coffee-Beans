@@ -54,6 +54,69 @@
         db.write(K.admins, [{ id: u.id, username: u.username, fullName: u.fullName, password: u.password }]);
     }
 
+    /*
+     * Chuyển dữ liệu tài khoản từ phiên bản cũ (passwordHash/salt) sang plain text
+     * phục vụ đồ án demo. Không thể khôi phục mật khẩu gốc từ hash, vì vậy chỉ
+     * tài khoản thiếu password mới được gán mật khẩu demo/tạm. Tài khoản đã có
+     * password được giữ nguyên. Không đụng đến đơn hàng, giỏ hàng, hồ sơ hay dữ liệu kho.
+     */
+    function migrateLegacyAccounts() {
+        var usersChanged = false;
+        var userList = db.read(K.users, []);
+        if (Array.isArray(userList)) {
+            userList.forEach(function (u) {
+                if (!u || typeof u !== 'object') return;
+
+                if (u.password === undefined || u.password === null || String(u.password) === '') {
+                    if (u.username === 'guest1') u.password = 'guest1123';
+                    else if (u.username === 'guest2') u.password = 'guest2123';
+                    else if (u.username === 'guest3') u.password = 'guest3123';
+                    else u.password = '123456';
+                    usersChanged = true;
+                } else if (typeof u.password !== 'string') {
+                    u.password = String(u.password);
+                    usersChanged = true;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(u, 'passwordHash')) {
+                    delete u.passwordHash;
+                    usersChanged = true;
+                }
+                if (Object.prototype.hasOwnProperty.call(u, 'salt')) {
+                    delete u.salt;
+                    usersChanged = true;
+                }
+            });
+        }
+        if (usersChanged) db.write(K.users, userList);
+
+        var adminsChanged = false;
+        var adminList = db.read(K.admins, []);
+        if (Array.isArray(adminList)) {
+            adminList.forEach(function (a) {
+                if (!a || typeof a !== 'object') return;
+
+                if (a.password === undefined || a.password === null || String(a.password) === '') {
+                    a.password = String(a.username || '').toLowerCase() === 'admin' ? 'admin123' : '123456';
+                    adminsChanged = true;
+                } else if (typeof a.password !== 'string') {
+                    a.password = String(a.password);
+                    adminsChanged = true;
+                }
+
+                if (Object.prototype.hasOwnProperty.call(a, 'passwordHash')) {
+                    delete a.passwordHash;
+                    adminsChanged = true;
+                }
+                if (Object.prototype.hasOwnProperty.call(a, 'salt')) {
+                    delete a.salt;
+                    adminsChanged = true;
+                }
+            });
+        }
+        if (adminsChanged) db.write(K.admins, adminList);
+    }
+
     function seedReceipts() {
         db.write(K.receipts, []);
         var costOf = {};
@@ -132,22 +195,14 @@
             db.write(K.pricing, { categoryMargins: { 'cat-arabica': 25, 'cat-robusta': 25, 'cat-blend': 25 }, productMargins: pm });
         }
         var uList = db.read(K.users, []);
-        if (!uList.length) {
-            seedUsers();
-        } else {
-            // Bảo toàn danh sách tài khoản khách hàng, cập nhật password nếu thiếu
-            var uMod = false;
-            uList.forEach(function (u) {
-                if (!u.password) {
-                    u.password = (u.username === 'guest1' ? 'guest1123' : (u.username === 'guest2' ? 'guest2123' : (u.username === 'guest3' ? 'guest3123' : '123456')));
-                    delete u.passwordHash;
-                    delete u.salt;
-                    uMod = true;
-                }
-            });
-            if (uMod) db.write(K.users, uList);
-        }
-        if (!db.has(K.admins)) seedAdmins();
+        if (!Array.isArray(uList) || !uList.length) seedUsers();
+
+        var adminList = db.read(K.admins, []);
+        if (!Array.isArray(adminList) || !adminList.length) seedAdmins();
+
+        // Chuyển mật khẩu cũ nếu cần; chỉ cập nhật bản ghi tài khoản, không reset dữ liệu khác.
+        migrateLegacyAccounts();
+
         if (!db.has(K.carts)) db.write(K.carts, {});
         if (!db.has(K.stockTx)) db.write(K.stockTx, []);
         if (!db.has(K.receipts)) seedReceipts();

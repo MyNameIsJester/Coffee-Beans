@@ -20,13 +20,13 @@
         adminSession: 'cb_session_admin'
     };
 
-    /* ---------- Lưu trữ: localStorage, tự chuyển sang bộ nhớ tạm nếu bị chặn ---------- */
+    /* ---------- Kiểm tra khả năng lưu trữ: localStorage, tự chuyển sang bộ nhớ tạm nếu bị chặn ---------- */
     var memory = {};
     var LS = null;
     try {
         LS = g.localStorage;
-        LS.setItem('__cb_test__', '1');
-        LS.removeItem('__cb_test__');
+        LS.setItem('__cb_storage_probe__', '1');
+        LS.removeItem('__cb_storage_probe__');
     } catch (e) {
         LS = null;
     }
@@ -60,7 +60,6 @@
                 rawSet(key, JSON.stringify(value));
                 return true;
             } catch (e) {
-                // thường do vượt dung lượng localStorage
                 return false;
             }
         },
