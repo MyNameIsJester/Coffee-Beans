@@ -62,7 +62,7 @@
     CBA.modal = function (opts) {
         var root = document.getElementById('modalRoot');
         var el = document.createElement('div');
-        el.className = 'modal active';
+        el.className = 'modal active show';
         el.setAttribute('role', 'dialog');
         el.setAttribute('aria-modal', 'true');
         el.innerHTML =

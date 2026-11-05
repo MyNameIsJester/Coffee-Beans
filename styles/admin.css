@@ -462,6 +462,24 @@ tbody tr:hover {
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 1;
+}
+
+.modal.active .modal-content {
+    background-color: #ffffff;
+    margin: 0 auto;
+    padding: 0;
+    border: none;
+    border-radius: 12px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden !important;
+    opacity: 1;
+    transform: translateY(0);
+    animation: modalSlideIn 0.3s ease-out;
 }
 
 .modal-header {
@@ -483,21 +501,35 @@ tbody tr:hover {
     color: #fff;
 }
 
+.modal-header .close-btn,
 .close {
+    position: static;
     color: white;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
     line-height: 1;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
+    opacity: 0.85;
+    background: transparent;
+    border: none;
+    padding: 0;
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
+.modal-header .close-btn:hover,
 .close:hover {
     opacity: 1;
+    color: white;
+    transform: scale(1.1);
 }
 
-.modal- .modal-footer {
+.modal-body {
+    padding: 24px;
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+
+.modal-footer {
     padding: 20px 24px;
     border-top: 1px solid #e5e7eb;
     display: flex;
@@ -557,15 +589,6 @@ tbody tr:hover {
     font-size: 0.85rem;
     font-style: italic;
     line-height: 1.4;
-}
-
-.modal-footer {
-    display: flex;
-    gap: 12px;
-    justify-content: flex-end;
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid #E5E5E5;
 }
 
 .btn-cancel {
@@ -662,10 +685,6 @@ tbody tr:hover {
     margin-top: 12px;
 }
 
-.search-actions 
-
-.search-actions 
-
 #stockQueryType[value="current"] ~ .search-row#currentStockQuery {
     display: grid !important;
 }
@@ -754,8 +773,6 @@ tbody tr:hover {
     text-align: center;
     color: #777;
 }
-
-.modal-header 
 
 .modal-body p {
     margin: 6px 0;
