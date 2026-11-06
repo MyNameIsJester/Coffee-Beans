@@ -16,15 +16,7 @@
     /* ===================== Phiếu nhập ===================== */
     CBA.views.receipts = function (main) {
         var st = { q: '', from: '', to: '', status: '' };
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý nhập hàng</h1><button class="btn-primary" id="addReceipt" type="button">+ Thêm phiếu nhập</button></div>' +
-            '<div class="advanced-search-panel"><div class="search-row">' +
-            '<div class="search-group"><label for="rq">Mã phiếu hoặc tên sản phẩm</label><input type="text" id="rq" placeholder="Ví dụ: PN001 hoặc Arabica" /></div>' +
-            '<div class="search-group"><label for="rfrom">Từ ngày</label><input type="date" id="rfrom" /></div>' +
-            '<div class="search-group"><label for="rto">Đến ngày</label><input type="date" id="rto" /></div>' +
-            '<div class="search-group"><label for="rstatus">Trạng thái</label><select id="rstatus"><option value="">Tất cả</option><option value="draft">Chưa hoàn thành</option><option value="completed">Đã hoàn thành</option></select></div>' +
-            '</div><p class="field-error" id="rerr"></p><div class="search-actions"><button type="button" class="btn-primary" id="rsearch">Tìm kiếm</button><button type="button" class="btn-cancel" id="rclear">Xóa bộ lọc</button></div></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Danh sách phiếu nhập</h3></div><div id="list"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-receipts');
 
         function refresh() {
             var list = CB.inventory.searchReceipts(st);
@@ -160,12 +152,8 @@
 
     CBA.views.pricing = function (main) {
         var st = { q: '', cat: '' };
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý giá bán</h1></div>' +
-            '<p class="form-note" style="margin:-16px 0 20px;">Giá bán = Giá vốn × (1 + % lợi nhuận). Giá vốn là bình quân gia quyền của các phiếu nhập đã hoàn thành. Nếu sản phẩm có % riêng thì dùng %, ngược lại dùng % của loại.</p>' +
-            '<div class="table-container"><div class="table-header"><h3>Tỉ lệ lợi nhuận theo loại</h3></div><div id="catList"></div></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Tra cứu giá và tỉ lệ lợi nhuận theo sản phẩm</h3><div class="search-box">' +
-            '<input type="text" id="pq" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" /><select id="pcat" aria-label="Lọc theo loại">' + CBA.categoryOptions('', true) + '</select></div></div><div id="prodList"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-pricing');
+        CBA.$('#pcat', main).insertAdjacentHTML('beforeend', CBA.categoryOptions('', false));
 
         function refresh() {
             var cm = CB.catalog.pricing().categoryMargins;
@@ -315,16 +303,7 @@
 
     CBA.views.orders = function (main) {
         var st = { q: '', from: '', to: '', status: '' };
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý đơn hàng</h1></div>' +
-            '<div class="advanced-search-panel"><div class="search-row">' +
-            '<div class="search-group"><label for="oq">Mã đơn hoặc khách hàng</label><input type="text" id="oq" placeholder="Ví dụ: DH2026 hoặc guest1" /></div>' +
-            '<div class="search-group"><label for="ofrom">Ngày đặt từ</label><input type="date" id="ofrom" /></div>' +
-            '<div class="search-group"><label for="oto">Ngày đặt đến</label><input type="date" id="oto" /></div>' +
-            '<div class="search-group"><label for="ostatus">Tình trạng</label><select id="ostatus"><option value="">Tất cả</option>' +
-            ['Mới đặt', 'Đã xử lý', 'Đã giao', 'Hủy'].map(function (s) { return '<option value="' + s + '">' + s + '</option>'; }).join('') + '</select></div></div>' +
-            '<p class="field-error" id="oerr"></p><div class="search-actions"><button type="button" class="btn-primary" id="osearch">Tìm kiếm</button><button type="button" class="btn-cancel" id="oclear">Xóa bộ lọc</button></div></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Danh sách đơn hàng</h3><span id="ocount"></span></div><div id="list"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-orders');
 
         function refresh() {
             var list = CB.orders.search(st);
@@ -358,25 +337,10 @@
 
     /* ===================== Tồn kho ===================== */
     CBA.views.stock = function (main) {
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý tồn kho</h1></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Cảnh báo sắp hết hàng</h3><div class="search-box"><label for="threshold">Ngưỡng cảnh báo (tồn ≤)</label>' +
-            '<input type="number" id="threshold" min="0" step="1" style="width:90px;" /><button type="button" class="btn-secondary" id="saveThreshold">Lưu ngưỡng</button></div></div>' +
-            '<p class="field-error" id="thErr" style="padding:0 20px;"></p><div id="lowList"></div></div>' +
-
-            '<div class="advanced-search-panel"><h3 style="margin-bottom:16px;">Tra cứu tồn kho tại một thời điểm</h3><div class="search-row">' +
-            '<div class="search-group"><label for="asOf">Tồn tại cuối ngày</label><input type="date" id="asOf" /></div>' +
-            '<div class="search-group"><label for="scat">Loại sản phẩm</label><select id="scat">' + CBA.categoryOptions('', true) + '</select></div>' +
-            '<div class="search-group"><label for="sprod">Sản phẩm</label><select id="sprod">' + CBA.productOptions('', true) + '</select></div></div>' +
-            '<p class="field-error" id="serr"></p><div class="search-actions"><button type="button" class="btn-primary" id="sgo">Tra cứu</button></div></div>' +
-            '<div class="table-container"><div id="stockList"></div></div>' +
-
-            '<div class="advanced-search-panel"><h3 style="margin-bottom:16px;">Báo cáo nhập - xuất - tồn trong khoảng thời gian</h3><div class="search-row">' +
-            '<div class="search-group"><label for="mprod">Sản phẩm</label><select id="mprod">' + CBA.productOptions('', true) + '</select></div>' +
-            '<div class="search-group"><label for="mfrom">Từ ngày</label><input type="date" id="mfrom" /></div>' +
-            '<div class="search-group"><label for="mto">Đến ngày</label><input type="date" id="mto" /></div></div>' +
-            '<p class="field-error" id="merr"></p><div class="search-actions"><button type="button" class="btn-primary" id="mgo">Xem báo cáo</button></div></div>' +
-            '<div class="table-container"><div id="moveList"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-stock');
+        CBA.$('#scat', main).insertAdjacentHTML('beforeend', CBA.categoryOptions('', false));
+        CBA.$('#sprod', main).insertAdjacentHTML('beforeend', CBA.productOptions('', false));
+        CBA.$('#mprod', main).insertAdjacentHTML('beforeend', CBA.productOptions('', false));
 
         var th = CBA.$('#threshold', main);
         th.value = CB.inventory.threshold();

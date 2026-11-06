@@ -97,27 +97,23 @@
 
         refreshBadge: function () {
             var user = CB.auth.current();
-            var hasMenu = Boolean(doc.getElementById('accountMenu'));
-            // Tự động đồng bộ header khi trạng thái đăng nhập thay đổi
-            if (Boolean(user) !== hasMenu) {
+            var accountArea = doc.getElementById('headerAccountArea');
+            var hasMenu = Boolean(accountArea && accountArea.querySelector('#accountMenu'));
+            if (accountArea && Boolean(user) !== hasMenu) {
                 ui.mountHeader();
                 return;
             }
-
-            var b = doc.getElementById('cart-badge');
-            if (b) {
-                var n = (CB.cart && typeof CB.cart.count === 'function') ? CB.cart.count() : 0;
-                b.textContent = n;
-                b.style.display = n > 0 ? 'flex' : 'none';
+            var badge = doc.getElementById('cart-badge');
+            if (badge) {
+                var count = (CB.cart && typeof CB.cart.count === 'function') ? CB.cart.count() : 0;
+                badge.textContent = String(count);
+                badge.style.display = count > 0 ? 'flex' : 'none';
             }
-
-            var accText = doc.getElementById('accountText');
-            if (accText && user) {
-                accText.textContent = 'Chào ' + user.fullName;
-            }
+            var accountText = doc.getElementById('accountText');
+            if (accountText && user) accountText.textContent = 'Chào ' + user.fullName;
         },
 
-        /* Vẽ header dùng chung vào <div id="siteHeader"></div> */
+        /* Header và footer được khai báo trực tiếp trong HTML; JavaScript chỉ cập nhật dữ liệu thay đổi. */
         mountHeader: function () {
             var host = doc.getElementById('siteHeader');
             if (!host) return;
@@ -127,68 +123,117 @@
                 if (g.history && g.history.replaceState) g.history.replaceState(null, '', clean);
             }
             var user = CB.auth.current();
+            var categoryHost = doc.getElementById('headerCategoryLinks');
+            var mobileCategoryHost = doc.getElementById('mobileCategoryLinks');
+            var accountHost = doc.getElementById('headerAccountArea');
+            var mobileAccountHost = doc.getElementById('mobileAccountLinks');
             var cats = CB.catalog ? CB.catalog.categories() : [];
-            var catLinks = cats
-                .map(function (c) {
-                    return '<a href="index.html#/products?cat=' + encodeURIComponent(c.slug) + '">' + U.esc(c.name) + '</a>';
-                })
-                .join('');
-            var q = ui.param('q') || '';
 
-            var account = user
-                ? '<div class="account-menu" id="accountMenu">' +
-                  '<div class="account-toggle" role="button" tabindex="0" aria-expanded="false">' +
-                  '<i class="fa fa-user"></i><span id="accountText">Chào ' + U.esc(user.fullName) + '</span>' +
-                  '<i class="fa fa-caret-down"></i></div>' +
-                  '<ul class="account-dropdown" id="accountDropdown" aria-hidden="true">' +
-                  '<li><a href="account.html#/profile" class="menu-link"><i class="fa fa-user-circle"></i> Hồ sơ cá nhân</a></li>' +
-                  '<li><a href="account.html#/orders" class="menu-link"><i class="fa fa-shopping-bag"></i> Đơn hàng của tôi</a></li>' +
-                  '<li><a href="#" id="logoutLink" class="menu-link"><i class="fa fa-sign-out"></i> Đăng xuất</a></li>' +
-                  '</ul></div>'
-                : '<a href="' + CB.auth.loginUrl() + '" class="account-link"><i class="fa fa-user"></i><span>Đăng nhập / Đăng ký</span></a>';
+            function addCategoryLinks(target) {
+                if (!target) return;
+                target.replaceChildren();
+                cats.forEach(function (category) {
+                    var link = doc.createElement('a');
+                    link.href = 'index.html#/products?cat=' + encodeURIComponent(category.slug);
+                    link.textContent = category.name;
+                    target.appendChild(link);
+                });
+            }
+            addCategoryLinks(categoryHost);
+            addCategoryLinks(mobileCategoryHost);
 
-            host.innerHTML =
-                '<header class="header"><div class="container nav">' +
-                '<div class="brand"><a href="index.html#/home"><img src="images/logo.svg" alt="Logo Cà Phê Đậm Đà" class="brand-logo" />' +
-                '<span class="brand-name">Cà Phê Đậm Đà</span></a></div>' +
-                '<form class="search-bar" role="search" id="headerSearchForm" action="index.html" method="GET">' +
-                '<button class="search-btn" type="submit" aria-label="Tìm kiếm">🔍</button>' +
-                '<input type="text" name="q" id="searchInput" placeholder="Tìm sản phẩm theo tên..." aria-label="Tìm kiếm" value="' + U.esc(q) + '" />' +
-                '</form>' +
-                '<nav class="menu" aria-label="Chính">' +
-                '<div class="dropdown"><a href="index.html#/products">Sản phẩm</a><div class="dropdown-content">' + catLinks + '</div></div>' +
-                '<a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a>' +
-                '<a href="index.html#/home?to=loi-ich">Lợi ích</a>' +
-                '<a href="index.html#/home?to=lien-he">Liên hệ</a>' +
-                account +
-                '<a href="checkout.html#/cart" class="badge" aria-label="Giỏ hàng">Giỏ hàng<span id="cart-badge" class="badge-count">0</span></a>' +
-                '</nav>' +
-                '<button id="menuBtn" class="mobile-toggle" aria-expanded="false" aria-controls="mobileMenu">Menu</button>' +
-                '</div></header>' +
-                '<nav id="mobileMenu" hidden class="mobile-menu">' +
-                '<a href="index.html#/home">Trang chủ</a><a href="index.html#/products">Tất cả sản phẩm</a>' + catLinks +
-                '<a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a><a href="index.html#/home?to=lien-he">Liên hệ</a>' +
-                (user
-                    ? '<a href="account.html#/profile">Hồ sơ cá nhân</a><a href="account.html#/orders">Đơn hàng của tôi</a><a href="checkout.html#/cart">Giỏ hàng</a><a href="#" id="logoutLinkMobile">Đăng xuất</a>'
-                    : '<a href="' + CB.auth.loginUrl() + '">Đăng nhập / Đăng ký</a>') +
-                '</nav>';
+            if (accountHost) {
+                accountHost.replaceChildren();
+                if (user) {
+                    var menu = doc.createElement('div');
+                    menu.className = 'account-menu';
+                    menu.id = 'accountMenu';
+                    var toggle = doc.createElement('div');
+                    toggle.className = 'account-toggle';
+                    toggle.setAttribute('role', 'button');
+                    toggle.setAttribute('tabindex', '0');
+                    toggle.setAttribute('aria-expanded', 'false');
+                    var userIcon = doc.createElement('i');
+                    userIcon.className = 'fa fa-user';
+                    var label = doc.createElement('span');
+                    label.id = 'accountText';
+                    label.textContent = 'Chào ' + user.fullName;
+                    var caret = doc.createElement('i');
+                    caret.className = 'fa fa-caret-down';
+                    toggle.append(userIcon, label, caret);
+                    var list = doc.createElement('ul');
+                    list.className = 'account-dropdown';
+                    list.id = 'accountDropdown';
+                    list.setAttribute('aria-hidden', 'true');
+                    [
+                        ['account.html#/profile', 'fa fa-user-circle', 'Hồ sơ cá nhân'],
+                        ['account.html#/orders', 'fa fa-shopping-bag', 'Đơn hàng của tôi']
+                    ].forEach(function (item) {
+                        var li = doc.createElement('li');
+                        var a = doc.createElement('a');
+                        a.href = item[0];
+                        a.className = 'menu-link';
+                        var icon = doc.createElement('i');
+                        icon.className = item[1];
+                        a.append(icon, doc.createTextNode(' ' + item[2]));
+                        li.appendChild(a);
+                        list.appendChild(li);
+                    });
+                    var logoutLi = doc.createElement('li');
+                    var logoutLink = doc.createElement('a');
+                    logoutLink.href = '#';
+                    logoutLink.id = 'logoutLink';
+                    logoutLink.className = 'menu-link';
+                    logoutLink.textContent = 'Đăng xuất';
+                    logoutLi.appendChild(logoutLink);
+                    list.appendChild(logoutLi);
+                    menu.append(toggle, list);
+                    accountHost.appendChild(menu);
+                } else {
+                    var login = doc.createElement('a');
+                    login.href = CB.auth.loginUrl();
+                    login.className = 'account-link';
+                    login.textContent = 'Đăng nhập / Đăng ký';
+                    accountHost.appendChild(login);
+                }
+            }
 
-            ui.refreshBadge();
+            if (mobileAccountHost) {
+                mobileAccountHost.replaceChildren();
+                var mobileItems = user
+                    ? [['account.html#/profile', 'Hồ sơ cá nhân'], ['account.html#/orders', 'Đơn hàng của tôi'], ['checkout.html#/cart', 'Giỏ hàng']]
+                    : [[CB.auth.loginUrl(), 'Đăng nhập / Đăng ký']];
+                mobileItems.forEach(function (item) {
+                    var link = doc.createElement('a');
+                    link.href = item[0];
+                    link.textContent = item[1];
+                    mobileAccountHost.appendChild(link);
+                });
+                if (user) {
+                    var logout = doc.createElement('a');
+                    logout.href = '#';
+                    logout.id = 'logoutLinkMobile';
+                    logout.textContent = 'Đăng xuất';
+                    mobileAccountHost.appendChild(logout);
+                }
+            }
 
-            // Search form handler
+            var searchInput = doc.getElementById('searchInput');
+            if (searchInput) searchInput.value = ui.param('q') || '';
             var searchForm = doc.getElementById('headerSearchForm');
-            if (searchForm) {
+            if (searchForm && !searchForm.dataset.bound) {
+                searchForm.dataset.bound = '1';
                 searchForm.addEventListener('submit', function (e) {
                     e.preventDefault();
-                    var searchInput = doc.getElementById('searchInput');
-                    var val = searchInput ? searchInput.value.trim() : '';
-                    g.location.href = 'index.html#/products' + (val ? '?q=' + encodeURIComponent(val) : '');
+                    var value = searchInput ? searchInput.value.trim() : '';
+                    g.location.href = 'index.html#/products' + (value ? '?q=' + encodeURIComponent(value) : '');
                 });
             }
 
             var menuBtn = doc.getElementById('menuBtn');
             var mobileMenu = doc.getElementById('mobileMenu');
-            if (menuBtn && mobileMenu) {
+            if (menuBtn && mobileMenu && !menuBtn.dataset.bound) {
+                menuBtn.dataset.bound = '1';
                 menuBtn.addEventListener('click', function () {
                     var open = mobileMenu.hasAttribute('hidden');
                     if (open) mobileMenu.removeAttribute('hidden');
@@ -197,11 +242,11 @@
                 });
             }
 
-            // Logout listeners
             ['logoutLink', 'logoutLinkMobile'].forEach(function (id) {
-                var el = doc.getElementById(id);
-                if (el) {
-                    el.addEventListener('click', function (e) {
+                var element = doc.getElementById(id);
+                if (element && !element.dataset.bound) {
+                    element.dataset.bound = '1';
+                    element.addEventListener('click', function (e) {
                         e.preventDefault();
                         e.stopPropagation();
                         ui.logout();
@@ -209,21 +254,21 @@
                 }
             });
 
-            // Account dropdown click and keyboard toggle
-            var toggle = doc.querySelector('.account-toggle');
+            var toggleEl = doc.querySelector('.account-toggle');
             var dropdown = doc.getElementById('accountDropdown');
-            if (toggle && dropdown) {
+            if (toggleEl && dropdown && !toggleEl.dataset.bound) {
+                toggleEl.dataset.bound = '1';
                 var setOpen = function (open) {
                     dropdown.classList.toggle('show', open);
-                    toggle.setAttribute('aria-expanded', String(open));
+                    toggleEl.setAttribute('aria-expanded', String(open));
                     dropdown.setAttribute('aria-hidden', String(!open));
                 };
-                toggle.addEventListener('click', function (e) {
+                toggleEl.addEventListener('click', function (e) {
                     e.preventDefault();
                     e.stopPropagation();
                     setOpen(!dropdown.classList.contains('show'));
                 });
-                toggle.addEventListener('keydown', function (e) {
+                toggleEl.addEventListener('keydown', function (e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
                         e.stopPropagation();
@@ -234,37 +279,11 @@
                     if (!e.target.closest('.account-menu')) setOpen(false);
                 });
             }
+            ui.refreshBadge();
         },
 
-        /* Vẽ footer dùng chung vào <footer id="lien-he"></footer> */
         mountFooter: function () {
-            var host = doc.getElementById('lien-he');
-            if (!host) return;
-            host.className = 'footer';
-            host.innerHTML =
-                '<div class="container foot">' +
-                '<div>' +
-                '<h4>Cà Phê Đậm Đà</h4>' +
-                '<p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p>' +
-                '</div>' +
-                '<div>' +
-                '<h4>Liên kết nhanh</h4>' +
-                '<p>' +
-                '<a href="index.html#/home" style="color:#ddd;text-decoration:none;">Trang chủ</a> · ' +
-                '<a href="index.html#/products" style="color:#ddd;text-decoration:none;">Sản phẩm</a> · ' +
-                '<a href="index.html#/guide" style="color:#ddd;text-decoration:none;">Hướng dẫn</a> · ' +
-                '<a href="checkout.html#/cart" style="color:#ddd;text-decoration:none;">Giỏ hàng</a> · ' +
-                '<a href="admin.html" style="color:#d1a06f;text-decoration:none;">Quản trị</a>' +
-                '</p>' +
-                '</div>' +
-                '<div>' +
-                '<h4>Liên hệ</h4>' +
-                '<p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn<br />123 Phin Street, Quận Caffeine, TP.HCM</p>' +
-                '</div>' +
-                '</div>' +
-                '<div class="container copyright">' +
-                '© 2026 Cà Phê Đậm Đà. All rights reserved.' +
-                '</div>';
+            /* Footer là HTML tĩnh, không cần dựng lại bằng JavaScript. */
         }
     };
 

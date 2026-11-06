@@ -29,6 +29,14 @@ Triển khai Internet: xem [`HUONG_DAN_GITHUB_PAGES.md`](HUONG_DAN_GITHUB_PAGES.
 
 Các màn hình trong cùng một file được điều hướng bằng URL hash, ví dụ `index.html#/products`, `checkout.html#/cart`, `account.html#/profile` và `admin.html#orders`.
 
+### Cách tổ chức giao diện bằng HTML Template
+
+Bố cục của từng màn hình được khai báo trong các thẻ `<template>` thuộc file HTML tương ứng. `router.js` sao chép template bằng `template.content.cloneNode(true)` vào vùng `#app`; module JavaScript của màn hình chỉ đọc dữ liệu, cập nhật các vùng hiển thị và gắn sự kiện. Khu vực Admin dùng `CBA.mountTemplate()` để nạp template vào vùng nội dung quản trị.
+
+Header và footer của khu vực khách hàng được đặt trực tiếp trong `index.html`, `checkout.html` và `account.html`. `ui.js` chỉ cập nhật các phần thay đổi như danh mục, trạng thái đăng nhập, số lượng giỏ hàng, menu di động và tìm kiếm; không dựng lại toàn bộ header/footer.
+
+Các dòng sản phẩm, dòng bảng, thống kê và dữ liệu danh sách vẫn được tạo động bằng JavaScript vì chúng phụ thuộc dữ liệu trong `localStorage`. Khung trang và cấu trúc biểu mẫu chính đã được đưa về HTML template. Một số nội dung form bên trong modal quản trị vẫn được tạo động trong module quản trị.
+
 
 ## Tài khoản demo
 
@@ -92,7 +100,7 @@ Coffee-Beans/
 │   ├── auth.js                # Tài khoản khách hàng và Admin
 │   ├── shop.js                # Giỏ hàng và đơn hàng
 │   ├── seed.js                # Khởi tạo và chuyển đổi dữ liệu demo
-│   ├── ui.js                  # Header, footer, thông báo, phân trang
+│   ├── ui.js                  # Cập nhật header/menu, thông báo, phân trang
 │   ├── router.js              # Hash Router
 │   ├── page-*.js              # Logic các màn hình khách hàng
 │   └── admin-*.js             # Logic giao diện quản trị

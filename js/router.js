@@ -8,6 +8,14 @@
     var doc = g.document;
     CB.views = CB.views || {};
 
+    /* Clone a static HTML <template> into a route root. Page modules fill only data slots. */
+    CB.mountTemplate = function (root, templateId) {
+        var template = doc && doc.getElementById(templateId);
+        if (!template || !template.content) throw new Error('Không tìm thấy HTML template: ' + templateId);
+        root.replaceChildren(template.content.cloneNode(true));
+        return root;
+    };
+
     var currentViewName = null;
     var currentViewInstance = null;
     var defaultViewName = 'home';
@@ -70,7 +78,20 @@
                 if (v) {
                     resolve();
                 } else {
-                    app.innerHTML = '<div class="container" style="padding:60px 20px;"><div class="cb-empty"><p>Không tìm thấy nội dung yêu cầu.</p><a href="index.html#/home" class="btn btn-primary">Về trang chủ</a></div></div>';
+                    var container = doc.createElement('div');
+                    container.className = 'container';
+                    container.style.padding = '60px 20px';
+                    var empty = doc.createElement('div');
+                    empty.className = 'cb-empty';
+                    var message = doc.createElement('p');
+                    message.textContent = 'Không tìm thấy nội dung yêu cầu.';
+                    var homeLink = doc.createElement('a');
+                    homeLink.href = 'index.html#/home';
+                    homeLink.className = 'btn btn-primary';
+                    homeLink.textContent = 'Về trang chủ';
+                    empty.append(message, homeLink);
+                    container.appendChild(empty);
+                    app.replaceChildren(container);
                 }
             }, 60);
             return;
@@ -90,7 +111,7 @@
             doc.title = titles[viewName];
         }
 
-        app.innerHTML = '';
+        app.replaceChildren();
         try {
             view.mount(app, parsed.params);
         } catch (err) {

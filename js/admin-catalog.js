@@ -18,32 +18,24 @@
         function stat(icon, label, value) {
             return '<div class="stat-card"><div class="stat-card-icon">' + icon + '</div><div class="stat-card-label">' + label + '</div><div class="stat-card-value">' + esc(String(value)) + '</div></div>';
         }
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Tổng quan</h1></div>' +
-            '<div class="stats-grid">' +
+        CBA.mountTemplate(main, 'tpl-admin-dashboard');
+        main.querySelector('#dashboardStats').innerHTML =
             stat('👥', 'Khách hàng', CB.auth.customers().length) +
             stat('☕', 'Sản phẩm', CB.catalog.products({ includeHidden: true }).length) +
             stat('📦', 'Tổng số đơn hàng', orders.length + (waiting ? ' (' + waiting + ' mới đặt)' : '')) +
             stat('💰', 'Doanh thu (đơn đã giao)', CBA.money(revenue)) +
-            stat('⚠️', 'Sản phẩm sắp hết hàng', low.length) +
-            '</div>' +
-            '<div class="table-container"><div class="table-header"><h3>Đơn hàng gần đây</h3></div>' +
-            CBA.table(['Mã đơn', 'Khách hàng', 'Ngày đặt', 'Tổng tiền', 'Trạng thái', 'Thao tác'], recent.map(function (o) {
-                return '<tr><td>' + esc(o.code) + '</td><td>' + esc(o.customer.fullName) + '</td><td>' + U.fmtDate(o.date) + '</td><td>' + CBA.money(o.total) +
-                    '</td><td>' + CBA.orderBadge(o.status) + '</td><td><div class="action-buttons">' + CBA.iconBtn('view-order', o.id, '👁', 'Xem đơn ' + o.code) + '</div></td></tr>';
-            }), 'Chưa có đơn hàng nào.') + '</div>';
+            stat('⚠️', 'Sản phẩm sắp hết hàng', low.length);
+        main.querySelector('#dashboardOrders').innerHTML = CBA.table(['Mã đơn', 'Khách hàng', 'Ngày đặt', 'Tổng tiền', 'Trạng thái', 'Thao tác'], recent.map(function (o) {
+            return '<tr><td>' + esc(o.code) + '</td><td>' + esc(o.customer.fullName) + '</td><td>' + U.fmtDate(o.date) + '</td><td>' + CBA.money(o.total) +
+                '</td><td>' + CBA.orderBadge(o.status) + '</td><td><div class="action-buttons">' + CBA.iconBtn('view-order', o.id, '👁', 'Xem đơn ' + o.code) + '</div></td></tr>';
+        }), 'Chưa có đơn hàng nào.');
         CBA.onAct(main, { 'view-order': function (id) { CBA.openOrder(id); } });
     };
 
     /* ===================== Khách hàng ===================== */
     CBA.views.users = function (main) {
         var st = { q: '', status: '' };
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý khách hàng</h1></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Danh sách khách hàng</h3><div class="search-box">' +
-            '<input type="text" id="userSearch" placeholder="Tìm theo tên, tài khoản, email, SĐT..." aria-label="Tìm khách hàng" />' +
-            '<select id="userStatus" aria-label="Lọc trạng thái"><option value="">Mọi trạng thái</option><option value="active">Đang hoạt động</option><option value="locked">Đã khóa</option></select></div></div>' +
-            '<div id="list"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-users');
 
         function refresh() {
             var q = U.norm(st.q);
@@ -89,9 +81,7 @@
 
     /* ===================== Loại sản phẩm ===================== */
     CBA.views.categories = function (main) {
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý loại sản phẩm</h1><button class="btn-primary" id="addCategory" type="button">+ Thêm loại</button></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Danh sách loại sản phẩm</h3></div><div id="list"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-categories');
 
         function refresh() {
             var cats = CB.catalog.categories({ includeHidden: true });
@@ -172,13 +162,8 @@
 
     CBA.views.products = function (main) {
         var st = { q: '', cat: '', status: '' };
-        main.innerHTML =
-            '<div class="content-header"><h1 class="content-title">Quản lý sản phẩm</h1><button class="btn-primary" id="addProduct" type="button">+ Thêm sản phẩm</button></div>' +
-            '<div class="table-container"><div class="table-header"><h3>Danh sách sản phẩm</h3><div class="search-box">' +
-            '<input type="text" id="prodSearch" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" />' +
-            '<select id="prodCat" aria-label="Lọc theo loại">' + CBA.categoryOptions('', true) + '</select>' +
-            '<select id="prodStatus" aria-label="Lọc trạng thái"><option value="">Mọi trạng thái</option><option value="shown">Đang hiển thị</option><option value="hidden">Đang ẩn</option></select></div></div>' +
-            '<div id="list"></div></div>';
+        CBA.mountTemplate(main, 'tpl-admin-products');
+        CBA.$('#prodCat', main).insertAdjacentHTML('beforeend', CBA.categoryOptions('', false));
 
         function refresh() {
             var q = U.norm(st.q);

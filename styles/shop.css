@@ -1018,6 +1018,16 @@ footer {
     color: var(--white);
 }
 
+.foot a {
+    color: #ddd;
+    text-decoration: none;
+}
+
+.foot a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+}
+
 .copyright {
     margin-top: 24px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);

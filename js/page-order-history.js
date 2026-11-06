@@ -15,26 +15,14 @@
 
             var all = CB.orders.byUser(user.id);
 
-            root.innerHTML =
-                '<div class="container" style="padding:40px 20px;max-width:900px;">' +
-                '  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;">' +
-                '    <h1 style="font-size:28px;color:var(--coffee-900);margin:0;font-family:\'Playfair Display\', serif;">Đơn hàng của tôi</h1>' +
-                '    <a href="index.html#/products" class="btn btn-outline">Mua thêm sản phẩm</a>' +
-                '  </div>' +
-                '  <div id="ordersList"></div>' +
-                '  <div id="ordersPagination" style="margin-top:30px;"></div>' +
-                '</div>';
+            CB.mountTemplate(root, 'tpl-orders');
 
             var list = root.querySelector('#ordersList');
             var pagerBox = root.querySelector('#ordersPagination');
 
             function renderPage(page) {
                 if (!all.length) {
-                    list.innerHTML =
-                        '<div class="cb-empty">' +
-                        '  <p style="color:var(--muted);margin-bottom:16px;">Bạn chưa có đơn hàng nào.</p>' +
-                        '  <a href="index.html#/products" class="btn btn-primary">Bắt đầu mua sắm ngay</a>' +
-                        '</div>';
+                    list.appendChild(document.getElementById('tpl-orders-empty').content.cloneNode(true));
                     return;
                 }
 

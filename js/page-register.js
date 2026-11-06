@@ -12,62 +12,7 @@
             var redirect = CB.auth.safeRedirect((params && params.redirect) || CB.ui.param('redirect'));
             var initialTab = (params && params.tab) || CB.ui.param('tab') || 'login';
 
-            root.innerHTML =
-                '<div class="auth-wrapper" style="min-height:calc(100vh - 200px);display:flex;align-items:center;justify-content:center;background-image:url(\'images/thiet-ke-quan-cafe-van-phong-13.jpg\');background-size:cover;background-position:center;padding:40px 20px;">' +
-                '  <div class="auth-card" style="background:#fff;padding:36px;border-radius:12px;box-shadow:var(--shadow);max-width:480px;width:100%;">' +
-                '    <div style="display:flex;border-bottom:2px solid #eee;margin-bottom:28px;">' +
-                '      <button type="button" id="tabBtnLogin" style="flex:1;padding:12px;text-align:center;font-weight:700;font-size:16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;">Đăng Nhập</button>' +
-                '      <button type="button" id="tabBtnRegister" style="flex:1;padding:12px;text-align:center;font-weight:700;font-size:16px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;">Đăng Ký</button>' +
-                '    </div>' +
-
-                '    <div id="authAlert" style="display:none;margin-bottom:20px;" class="alert alert-danger"></div>' +
-
-                '    <!-- LOGIN FORM -->' +
-                '    <form id="loginForm">' +
-                '      <div class="form-group">' +
-                '        <label for="loginIdent">Tên đăng nhập hoặc Email</label>' +
-                '        <input type="text" id="loginIdent" placeholder="VD: guest1 hoặc guest1@example.com" required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="loginPassword">Mật khẩu</label>' +
-                '        <input type="password" id="loginPassword" placeholder="Nhập mật khẩu..." required />' +
-                '      </div>' +
-                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;margin-top:10px;">Đăng nhập</button>' +
-                '      <div style="margin-top:20px;padding:12px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;">' +
-                '        Tài khoản mẫu: <strong>guest1</strong> / Mật khẩu: <strong>guest1123</strong>' +
-                '      </div>' +
-                '    </form>' +
-
-                '    <!-- REGISTER FORM -->' +
-                '    <form id="registerForm" style="display:none;">' +
-                '      <div class="form-group">' +
-                '        <label for="regUsername">Tên đăng nhập</label>' +
-                '        <input type="text" id="regUsername" placeholder="Tối thiểu 3 ký tự..." required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="regFullName">Họ và tên</label>' +
-                '        <input type="text" id="regFullName" placeholder="Họ và tên của bạn..." required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="regEmail">Email</label>' +
-                '        <input type="email" id="regEmail" placeholder="email@example.com" required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="regPhone">Số điện thoại</label>' +
-                '        <input type="tel" id="regPhone" placeholder="VD: 0901234567" required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="regPassword">Mật khẩu</label>' +
-                '        <input type="password" id="regPassword" placeholder="Tối thiểu 6 ký tự..." required />' +
-                '      </div>' +
-                '      <div class="form-group">' +
-                '        <label for="regConfirmPassword">Xác nhận mật khẩu</label>' +
-                '        <input type="password" id="regConfirmPassword" placeholder="Nhập lại mật khẩu..." required />' +
-                '      </div>' +
-                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;margin-top:10px;">Tạo tài khoản</button>' +
-                '    </form>' +
-                '  </div>' +
-                '</div>';
+            CB.mountTemplate(root, 'tpl-auth');
 
             var tabLogin = root.querySelector('#tabBtnLogin');
             var tabRegister = root.querySelector('#tabBtnRegister');

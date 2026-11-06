@@ -10,62 +10,7 @@
 
     CB.views.products = {
         mount: function (root, params) {
-            root.innerHTML =
-                '<div class="container" style="padding-top: 40px">' +
-                '  <div style="margin-bottom: 30px;">' +
-                '    <h1 class="section-title" style="margin-bottom: 8px; font-size: 2.2em;">' +
-                '      <i class="fas fa-cube" style="margin-right: 12px; color: var(--coffee);"></i>' +
-                '      <span id="pageTitle">Cà Phê Chất Lượng Cao</span>' +
-                '    </h1>' +
-                '    <p id="pageDesc" style="color: #888; font-size: 1.05em; margin: 0;"></p>' +
-                '  </div>' +
-
-                '  <!-- Tìm kiếm nâng cao: tên + loại + khoảng giá -->' +
-                '  <section class="filter-panel">' +
-                '    <form id="filterForm" novalidate>' +
-                '      <div class="search-box">' +
-                '        <input type="text" id="productSearch" placeholder="🔍 Tìm theo tên sản phẩm" aria-label="Tên sản phẩm" />' +
-                '      </div>' +
-
-                '      <div class="grid grid-3">' +
-                '        <div class="filter-group">' +
-                '          <label for="category">Phân loại</label>' +
-                '          <select id="category" name="category">' +
-                '            <option value="">Tất cả</option>' +
-                '          </select>' +
-                '        </div>' +
-                '        <div class="filter-group">' +
-                '          <label for="priceMin">Khoảng giá (đồng)</label>' +
-                '          <div class="price-range">' +
-                '            <input type="number" id="priceMin" min="0" step="1000" placeholder="Từ" aria-label="Giá tối thiểu" />' +
-                '            <input type="number" id="priceMax" min="0" step="1000" placeholder="Đến" aria-label="Giá tối đa" />' +
-                '          </div>' +
-                '        </div>' +
-                '        <div class="filter-group">' +
-                '          <label for="sort">Sắp xếp</label>' +
-                '          <select id="sort" name="sort">' +
-                '            <option value="default">Mặc định</option>' +
-                '            <option value="price-asc">Giá tăng dần</option>' +
-                '            <option value="price-desc">Giá giảm dần</option>' +
-                '            <option value="name-asc">Tên A-Z</option>' +
-                '            <option value="name-desc">Tên Z-A</option>' +
-                '          </select>' +
-                '        </div>' +
-                '      </div>' +
-                '      <p id="filterError" class="cb-field-error" role="alert" style="color:#d32f2f;margin-top:10px;" hidden></p>' +
-                '      <div class="filter-buttons">' +
-                '        <button type="submit" class="apply-filter">✓ Tìm kiếm</button>' +
-                '        <button type="button" class="reset-filter" id="resetFilter">Xóa bộ lọc</button>' +
-                '      </div>' +
-                '    </form>' +
-                '  </section>' +
-
-                '  <p id="resultInfo" style="color:#666;margin:0 0 16px;"></p>' +
-
-                '  <!-- Danh sách sản phẩm -->' +
-                '  <section class="product-grid" id="productGrid"></section>' +
-                '  <div id="pagination" style="margin-top: 30px;"></div>' +
-                '</div>';
+            CB.mountTemplate(root, 'tpl-products');
 
             var grid = root.querySelector('#productGrid'),
                 pagerBox = root.querySelector('#pagination'),

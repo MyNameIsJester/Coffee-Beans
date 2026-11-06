@@ -47,13 +47,7 @@
                 CB.ui.refreshBadge();
                 var lines = CB.cart.detailed();
                 if (!lines.length) {
-                    root.innerHTML =
-                        '<div class="container" style="padding:60px 20px;">' +
-                        '<div class="cb-empty">' +
-                        '  <h1 style="font-size:24px;color:var(--coffee-900);margin-bottom:12px;">Giỏ hàng của bạn</h1>' +
-                        '  <p style="color:var(--muted);margin-bottom:24px;">Giỏ hàng đang trống.</p>' +
-                        '  <a href="index.html#/products" class="btn btn-primary">← Tiếp tục mua sắm</a>' +
-                        '</div></div>';
+                    CB.mountTemplate(root, 'tpl-cart-empty');
                     return;
                 }
 
@@ -61,43 +55,26 @@
                 var fee = CB.orders.shippingFee();
                 var blocked = lines.some(function (l) { return l.problem; });
 
-                root.innerHTML =
-                    '<div class="container" style="padding:40px 20px;">' +
-                    '  <h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:24px;font-family:\'Playfair Display\', serif;">Giỏ hàng của bạn</h1>' +
-                    (message ? '<div class="alert alert-danger" style="margin-bottom:20px;">' + U.esc(message) + '</div>' : '') +
-                    '  <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));gap:30px;align-items:flex-start;">' +
-                    '    <section style="background:#fff;padding:24px;border-radius:12px;box-shadow:var(--shadow);overflow-x:auto;">' +
-                    '      <table style="width:100%;border-collapse:collapse;min-width:500px;">' +
-                    '        <thead><tr style="border-bottom:2px solid #eee;text-align:left;color:#666;font-size:13px;">' +
-                    '          <th style="padding:10px;">Sản phẩm</th><th style="text-align:center;padding:10px;">Số lượng</th><th style="text-align:right;padding:10px;">Đơn giá</th><th style="text-align:right;padding:10px;">Thành tiền</th><th></th>' +
-                    '        </tr></thead>' +
-                    '        <tbody>' + lines.map(lineHtml).join('') + '</tbody>' +
-                    '      </table>' +
-                    '      <div style="margin-top:20px;text-align:right;">' +
-                    '        <button type="button" id="clearCartBtn" style="color:#888;font-size:13px;text-decoration:underline;cursor:pointer;">Xóa toàn bộ giỏ hàng</button>' +
-                    '      </div>' +
-                    '    </section>' +
-
-                    '    <aside style="background:#fff;padding:24px;border-radius:12px;box-shadow:var(--shadow);">' +
-                    '      <h3 style="font-size:20px;color:var(--coffee-900);margin-bottom:16px;">Tổng đơn hàng</h3>' +
-                    '      <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;color:#555;">' +
-                    '        <span>Tạm tính:</span><span>' + U.fmtVND(subtotal) + '</span>' +
-                    '      </div>' +
-                    '      <div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;color:#555;">' +
-                    '        <span>Phí vận chuyển:</span><span>' + U.fmtVND(fee) + '</span>' +
-                    '      </div>' +
-                    '      <div style="display:flex;justify-content:space-between;margin-bottom:24px;padding-top:16px;border-top:1px solid #eee;font-size:18px;font-weight:700;color:var(--coffee);">' +
-                    '        <span>Tổng thanh toán:</span><span>' + U.fmtVND(subtotal + fee) + '</span>' +
-                    '      </div>' +
-                    '      <div style="display:flex;flex-direction:column;gap:10px;">' +
-                    (blocked
-                        ? '<button type="button" class="btn btn-primary" disabled style="width:100%;">Cần sửa lỗi để thanh toán</button>'
-                        : '<a href="checkout.html#/checkout" class="btn btn-primary" style="width:100%;">Tiến hành thanh toán →</a>') +
-                    '        <a href="index.html#/products" class="btn btn-outline" style="width:100%;text-align:center;">← Tiếp tục mua sắm</a>' +
-                    '      </div>' +
-                    '    </aside>' +
-                    '  </div>' +
-                    '</div>';
+                CB.mountTemplate(root, 'tpl-cart');
+                var alertBox = root.querySelector('#cartAlert');
+                if (message) {
+                    alertBox.textContent = message;
+                    alertBox.hidden = false;
+                }
+                root.querySelector('#cartItems').innerHTML = lines.map(lineHtml).join('');
+                root.querySelector('#cartSubtotal').textContent = U.fmtVND(subtotal);
+                root.querySelector('#cartShipping').textContent = U.fmtVND(fee);
+                root.querySelector('#cartTotal').textContent = U.fmtVND(subtotal + fee);
+                if (blocked) {
+                    var checkoutLink = root.querySelector('#cartCheckoutLink');
+                    var disabled = document.createElement('button');
+                    disabled.type = 'button';
+                    disabled.className = 'btn btn-primary';
+                    disabled.disabled = true;
+                    disabled.style.width = '100%';
+                    disabled.textContent = 'Cần sửa lỗi để thanh toán';
+                    checkoutLink.replaceWith(disabled);
+                }
 
                 var clearBtn = root.querySelector('#clearCartBtn');
                 if (clearBtn) {
@@ -110,6 +87,8 @@
                 }
             }
 
+            if (!root.dataset.cartHandlersBound) {
+            root.dataset.cartHandlersBound = '1';
             root.addEventListener('click', function (e) {
                 var fix = e.target.closest('[data-fix]');
                 if (fix) {
@@ -152,6 +131,7 @@
                     else render();
                 }
             });
+            }
 
             render();
         },

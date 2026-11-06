@@ -12,6 +12,12 @@
     CBA.main = function () { return document.getElementById('adminMain'); };
     CBA.$ = function (sel, root) { return (root || document).querySelector(sel); };
     CBA.$$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
+    CBA.mountTemplate = function (root, id) {
+        var template = document.getElementById(id);
+        if (!template || !template.content) throw new Error('Không tìm thấy admin template: ' + id);
+        root.replaceChildren(template.content.cloneNode(true));
+        return root;
+    };
 
     /* Hộp xác nhận dùng chung cho các thao tác quản trị cần xác nhận */
     CBA.confirm = function (message) { return g.confirm(message); };
@@ -61,15 +67,16 @@
     /* Hộp thoại. */
     CBA.modal = function (opts) {
         var root = document.getElementById('modalRoot');
-        var el = document.createElement('div');
-        el.className = 'modal active show';
-        el.setAttribute('role', 'dialog');
-        el.setAttribute('aria-modal', 'true');
-        el.innerHTML =
-            '<div class="modal-content" style="max-width:' + (opts.wide ? '920px' : '560px') + ';max-height:92vh;">' +
-            '<div class="modal-header"><h2>' + esc(opts.title) + '</h2><button class="close-btn" type="button" data-close aria-label="Đóng">×</button></div>' +
-            '<div class="modal-body">' + opts.body + '</div><div class="modal-footer"></div></div>';
-        root.appendChild(el);
+        var template = document.getElementById('tpl-admin-modal');
+        if (!root || !template) throw new Error('Thiếu vùng modal hoặc template modal quản trị.');
+        var fragment = template.content.cloneNode(true);
+        var el = fragment.querySelector('.modal');
+        var content = fragment.querySelector('[data-modal-size]');
+        content.style.maxWidth = opts.wide ? '920px' : '560px';
+        content.style.maxHeight = '92vh';
+        fragment.querySelector('[data-modal-title]').textContent = opts.title || '';
+        fragment.querySelector('[data-modal-body]').innerHTML = opts.body || '';
+        root.appendChild(fragment);
         var m = {
             el: el,
             $: function (sel) { return CBA.$(sel, el); },
@@ -165,34 +172,7 @@
         if (!admin) {
             // Hiển thị cổng đăng nhập Admin
             document.title = 'Đăng nhập Quản trị - Cà Phê Đậm Đà';
-            app.innerHTML =
-                '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1c16 0%,#4b3429 100%);padding:20px;">' +
-                '  <div class="login-container" style="background:#fff;padding:40px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,0.3);max-width:400px;width:100%;">' +
-                '    <div class="login-header" style="text-align:center;margin-bottom:28px;">' +
-                '      <div style="font-size:36px;margin-bottom:8px;">☕</div>' +
-                '      <h1 style="font-size:24px;color:var(--coffee-900);margin:0 0 6px;font-family:\'Playfair Display\', serif;">Cà Phê Đậm Đà</h1>' +
-                '      <p style="color:#777;font-size:14px;margin:0;">Cổng Quản trị viên</p>' +
-                '    </div>' +
-                '    <div id="adminLoginError" style="display:none;background:#fdecea;color:#b71c1c;padding:12px;border-radius:8px;font-size:13px;margin-bottom:16px;border:1px solid #f5c2c0;"></div>' +
-                '    <form id="adminLoginForm">' +
-                '      <div class="form-group" style="margin-bottom:18px;">' +
-                '        <label for="adminUsername" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333;">Tên đăng nhập</label>' +
-                '        <input type="text" id="adminUsername" name="username" placeholder="admin" autocomplete="username" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;" />' +
-                '      </div>' +
-                '      <div class="form-group" style="margin-bottom:24px;">' +
-                '        <label for="adminPassword" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333;">Mật khẩu</label>' +
-                '        <input type="password" id="adminPassword" name="password" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;" />' +
-                '      </div>' +
-                '      <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;background:var(--coffee);color:#fff;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer;">Đăng nhập Quản trị</button>' +
-                '      <div style="margin-top:20px;text-align:center;">' +
-                '        <a href="index.html#/home" style="color:var(--coffee);font-size:13px;text-decoration:none;">← Quay về trang chủ</a>' +
-                '      </div>' +
-                '      <div style="margin-top:16px;padding:10px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;text-align:center;">' +
-                '        Tài khoản mẫu: <strong>admin</strong> / Mật khẩu: <strong>admin123</strong>' +
-                '      </div>' +
-                '    </form>' +
-                '  </div>' +
-                '</div>';
+            CBA.mountTemplate(app, 'tpl-admin-login');
 
             var loginForm = document.getElementById('adminLoginForm');
             if (loginForm) {
@@ -226,38 +206,9 @@
 
         // Đã đăng nhập: Hiển thị đầy đủ bảng điều khiển Admin Dashboard
         document.title = 'Quản trị hệ thống - Cà Phê Đậm Đà';
-        app.innerHTML =
-            '<header class="admin-header">' +
-            '  <div class="header-content">' +
-            '    <div class="header-left">' +
-            '      <span style="font-size: 24px;">☕</span>' +
-            '      <span class="logo-text">Cà Phê Đậm Đà - Admin</span>' +
-            '    </div>' +
-            '    <div class="header-right">' +
-            '      <div class="user-info">' +
-            '        <div class="user-avatar" id="userAvatar">' + (admin.fullName || admin.username).charAt(0).toUpperCase() + '</div>' +
-            '        <div id="adminName">' + esc(admin.fullName || admin.username) + '</div>' +
-            '      </div>' +
-            '      <a class="logout-btn" href="index.html#/home">← Quay về</a>' +
-            '      <button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button>' +
-            '    </div>' +
-            '  </div>' +
-            '</header>' +
-            '<div class="admin-layout">' +
-            '  <aside class="sidebar">' +
-            '    <div class="sidebar-title">Quản trị</div>' +
-            '    <button data-view="dashboard" class="nav-btn active" type="button">📊 Tổng quan</button>' +
-            '    <button data-view="users" class="nav-btn" type="button">👥 Khách hàng</button>' +
-            '    <button data-view="categories" class="nav-btn" type="button">📂 Loại sản phẩm</button>' +
-            '    <button data-view="products" class="nav-btn" type="button">☕ Sản phẩm</button>' +
-            '    <button data-view="receipts" class="nav-btn" type="button">📥 Nhập hàng</button>' +
-            '    <button data-view="pricing" class="nav-btn" type="button">💰 Giá bán</button>' +
-            '    <button data-view="orders" class="nav-btn" type="button">📦 Đơn hàng</button>' +
-            '    <button data-view="stock" class="nav-btn" type="button">📈 Tồn kho</button>' +
-            '  </aside>' +
-            '  <main class="main-content" id="adminMain"></main>' +
-            '</div>' +
-            '<div id="modalRoot"></div>';
+        CBA.mountTemplate(app, 'tpl-admin-shell');
+        document.getElementById('userAvatar').textContent = (admin.fullName || admin.username).charAt(0).toUpperCase();
+        document.getElementById('adminName').textContent = admin.fullName || admin.username;
 
         var logoutBtn = document.getElementById('logoutBtn');
         if (logoutBtn) {

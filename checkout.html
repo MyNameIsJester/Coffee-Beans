@@ -14,9 +14,71 @@
     <link rel="stylesheet" href="styles/shop.css" />
 </head>
 <body>
-    <div id="siteHeader"></div>
+    <div id="siteHeader">
+    <header class="header">
+        <div class="container nav">
+            <div class="brand"><a href="index.html#/home"><img src="images/logo.svg" alt="Logo Cà Phê Đậm Đà" class="brand-logo" /><span class="brand-name">Cà Phê Đậm Đà</span></a></div>
+            <form class="search-bar" role="search" id="headerSearchForm">
+                <button class="search-btn" type="submit" aria-label="Tìm kiếm">🔍</button>
+                <input type="search" id="searchInput" placeholder="Tìm sản phẩm theo tên..." aria-label="Tìm kiếm" />
+            </form>
+            <nav class="menu" aria-label="Chính">
+                <div class="dropdown"><a href="index.html#/products">Sản phẩm</a><div class="dropdown-content" id="headerCategoryLinks"></div></div>
+                <a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a>
+                <a href="index.html#/home?to=loi-ich">Lợi ích</a>
+                <a href="index.html#/home?to=lien-he">Liên hệ</a>
+                <div id="headerAccountArea"></div>
+                <a href="checkout.html#/cart" class="badge" aria-label="Giỏ hàng">Giỏ hàng<span id="cart-badge" class="badge-count">0</span></a>
+            </nav>
+            <button id="menuBtn" class="mobile-toggle" aria-expanded="false" aria-controls="mobileMenu" type="button">Menu</button>
+        </div>
+    </header>
+    <nav id="mobileMenu" hidden class="mobile-menu" aria-label="Điều hướng di động">
+        <a href="index.html#/home">Trang chủ</a><a href="index.html#/products">Tất cả sản phẩm</a>
+        <div id="mobileCategoryLinks"></div>
+        <a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a><a href="index.html#/home?to=lien-he">Liên hệ</a>
+        <div id="mobileAccountLinks"></div>
+    </nav>
+</div>
     <main id="app" data-default-view="cart"></main>
-    <footer id="lien-he" class="footer"></footer>
+    <footer id="lien-he" class="footer">
+    <div class="container foot">
+        <div><h4>Cà Phê Đậm Đà</h4><p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p></div>
+        <div><h4>Liên kết nhanh</h4><p>
+            <a href="index.html#/home">Trang chủ</a> · <a href="index.html#/products">Sản phẩm</a> ·
+            <a href="index.html#/guide">Hướng dẫn</a> · <a href="checkout.html#/cart">Giỏ hàng</a> · <a href="admin.html">Quản trị</a>
+        </p></div>
+        <div><h4>Liên hệ</h4><p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn<br />123 Phin Street, Quận Caffeine, TP.HCM</p></div>
+    </div>
+    <div class="container copyright">© 2026 Cà Phê Đậm Đà. All rights reserved.</div>
+</footer>
+
+<template id="tpl-cart-empty"><div class="container" style="padding:60px 20px"><div class="cb-empty"><h1 style="font-size:24px;color:var(--coffee-900);margin-bottom:12px">Giỏ hàng của bạn</h1><p style="color:var(--muted);margin-bottom:24px">Giỏ hàng đang trống.</p><a href="index.html#/products" class="btn btn-primary">← Tiếp tục mua sắm</a></div></div></template>
+<template id="tpl-cart">
+    <div class="container" style="padding:40px 20px"><h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:24px;font-family:'Playfair Display',serif">Giỏ hàng của bạn</h1><div id="cartAlert" class="alert alert-danger" style="margin-bottom:20px" hidden></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;align-items:flex-start"><section style="background:#fff;padding:24px;border-radius:12px;box-shadow:var(--shadow);overflow-x:auto"><table style="width:100%;border-collapse:collapse;min-width:500px"><thead><tr style="border-bottom:2px solid #eee;text-align:left;color:#666;font-size:13px"><th style="padding:10px">Sản phẩm</th><th style="text-align:center;padding:10px">Số lượng</th><th style="text-align:right;padding:10px">Đơn giá</th><th style="text-align:right;padding:10px">Thành tiền</th><th></th></tr></thead><tbody id="cartItems"></tbody></table><div style="margin-top:20px;text-align:right"><button type="button" id="clearCartBtn" style="color:#888;font-size:13px;text-decoration:underline;cursor:pointer">Xóa toàn bộ giỏ hàng</button></div></section>
+            <aside style="background:#fff;padding:24px;border-radius:12px;box-shadow:var(--shadow)"><h3 style="font-size:20px;color:var(--coffee-900);margin-bottom:16px">Tổng đơn hàng</h3><div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:14px;color:#555"><span>Tạm tính:</span><span id="cartSubtotal"></span></div><div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;color:#555"><span>Phí vận chuyển:</span><span id="cartShipping"></span></div><div style="display:flex;justify-content:space-between;margin-bottom:24px;padding-top:16px;border-top:1px solid #eee;font-size:18px;font-weight:700;color:var(--coffee)"><span>Tổng thanh toán:</span><span id="cartTotal"></span></div><div style="display:flex;flex-direction:column;gap:10px"><a id="cartCheckoutLink" href="checkout.html#/checkout" class="btn btn-primary" style="width:100%">Tiến hành thanh toán →</a><a href="index.html#/products" class="btn btn-outline" style="width:100%;text-align:center">← Tiếp tục mua sắm</a></div></aside>
+        </div>
+    </div>
+</template>
+<template id="tpl-checkout-empty"><div class="container" style="padding:60px 20px"><div class="cb-empty"><h1 style="font-size:24px;color:var(--coffee-900);margin-bottom:12px">Thanh toán đơn hàng</h1><p style="color:var(--muted);margin-bottom:20px">Giỏ hàng của bạn đang trống.</p><a href="index.html#/products" class="btn btn-primary">← Mua sắm ngay</a></div></div></template>
+<template id="tpl-checkout">
+    <div class="container" style="padding:40px 20px"><h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:24px;font-family:'Playfair Display',serif">Thanh toán đơn hàng</h1><div id="checkoutAlert" style="display:none;margin-bottom:20px" class="alert alert-danger"></div>
+        <form id="checkoutForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:30px;align-items:flex-start"><section style="background:#fff;padding:28px;border-radius:12px;box-shadow:var(--shadow)"><h3 style="font-size:18px;color:var(--coffee-900);margin-bottom:16px">1. Địa chỉ nhận hàng</h3>
+            <div style="margin-bottom:16px"><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin-bottom:8px"><input type="radio" name="addrMode" value="profile" /> Sử dụng địa chỉ từ hồ sơ cá nhân</label><label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer"><input type="radio" name="addrMode" value="custom" /> Nhập địa chỉ nhận hàng mới</label></div>
+            <div id="profileAddressBox" style="background:#fdfbf9;padding:16px;border-radius:8px;border:1px solid #eee;margin-bottom:20px"><div id="profileAddressText" style="font-size:14px;line-height:1.6"></div><div style="margin-top:10px"><a href="account.html#/profile" style="font-size:13px;color:var(--coffee);text-decoration:underline">Chỉnh sửa hồ sơ</a></div></div>
+            <div id="customAddressBox" style="margin-bottom:20px"><div class="form-group"><label for="coFullName">Họ và tên người nhận</label><input type="text" id="coFullName" /></div><div class="form-group"><label for="coPhone">Số điện thoại</label><input type="tel" id="coPhone" /></div><div class="form-group"><label for="coProvince">Tỉnh / Thành phố</label><input type="text" id="coProvince" placeholder="VD: TP. Hồ Chí Minh" /></div><div class="form-group"><label for="coDistrict">Quận / Huyện</label><input type="text" id="coDistrict" placeholder="VD: Quận 1" /></div><div class="form-group"><label for="coWard">Phường / Xã</label><input type="text" id="coWard" placeholder="VD: Phường Bến Nghé" /></div><div class="form-group"><label for="coDetail">Số nhà, tên đường</label><input type="text" id="coDetail" placeholder="VD: 123 Lê Lợi" /></div></div>
+            <div class="form-group"><label for="coNote">Ghi chú đơn hàng (tùy chọn)</label><textarea id="coNote" placeholder="Ví dụ: Giao giờ hành chính, gọi trước khi giao..."></textarea></div><h3 style="font-size:18px;color:var(--coffee-900);margin:24px 0 16px">2. Phương thức thanh toán</h3>
+            <div style="display:flex;flex-direction:column;gap:12px"><label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer"><input type="radio" name="paymentMethod" value="cod" checked /><span><strong>Thanh toán khi nhận hàng (COD)</strong><br /><small style="color:#777">Thanh toán tiền mặt cho nhân viên giao hàng</small></span></label><label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer"><input type="radio" name="paymentMethod" value="bank" /><span><strong>Chuyển khoản ngân hàng</strong><br /><small style="color:#777">Chuyển khoản qua số tài khoản sau khi tạo đơn</small></span></label><label style="display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #ddd;border-radius:8px;cursor:pointer"><input type="radio" name="paymentMethod" value="online" /><span><strong>Thanh toán trực tuyến (Mô phỏng)</strong><br /><small style="color:#777">Cổng thanh toán thẻ ATM / Visa / MoMo</small></span></label></div>
+        </section><aside style="background:#fff;padding:28px;border-radius:12px;box-shadow:var(--shadow)"><h3 style="font-size:18px;color:var(--coffee-900);margin-bottom:16px">Tóm tắt đơn hàng</h3><div id="checkoutItems" style="border-bottom:1px solid #eee;padding-bottom:16px;margin-bottom:16px"></div><div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:14px;color:#666"><span>Tạm tính:</span><span id="checkoutSubtotal"></span></div><div style="display:flex;justify-content:space-between;margin-bottom:16px;font-size:14px;color:#666"><span>Phí vận chuyển:</span><span id="checkoutShipping"></span></div><div style="display:flex;justify-content:space-between;margin-bottom:24px;padding-top:16px;border-top:1px solid #eee;font-size:20px;font-weight:700;color:var(--coffee)"><span>Tổng cộng:</span><span id="checkoutTotal"></span></div><button type="submit" id="placeOrderBtn" class="btn btn-primary" style="width:100%;padding:14px;font-size:16px">Đặt hàng ngay</button><p style="text-align:center;margin-top:14px;font-size:13px"><a href="checkout.html#/cart" style="color:var(--coffee)">← Quay lại giỏ hàng</a></p></aside></form>
+    </div>
+</template>
+<template id="tpl-confirmation-notfound"><div class="container" style="padding:60px 20px"><div class="cb-empty"><h2 style="font-size:24px;color:var(--coffee-900);margin-bottom:12px">Không tìm thấy đơn hàng</h2><p style="color:var(--muted);margin-bottom:20px">Đơn hàng không tồn tại hoặc không thuộc tài khoản của bạn.</p><a href="account.html#/orders" class="btn btn-primary">Xem lịch sử đơn hàng</a></div></div></template>
+<template id="tpl-confirmation"><div class="container" style="padding:40px 20px;max-width:800px"><div style="background:#fff;padding:36px;border-radius:12px;box-shadow:var(--shadow)"><div id="confirmationHeading" style="margin-bottom:30px"></div><div style="background:var(--cream);padding:16px 20px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;margin-bottom:28px"><div><span style="font-size:13px;color:#777">Mã đơn hàng:</span><br /><strong id="confirmationCode" style="font-size:18px;color:var(--coffee-900)"></strong></div><div><span style="font-size:13px;color:#777">Trạng thái:</span><br /><span id="confirmationStatus"></span></div></div>
+    <section style="margin-bottom:28px"><h3 style="font-size:16px;color:var(--coffee-900);margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:8px">Thông tin nhận hàng</h3><div id="confirmationShipping" style="font-size:14px;line-height:1.8;color:#444"></div><div id="confirmationPaymentNote"></div></section>
+    <section style="margin-bottom:28px"><h3 style="font-size:16px;color:var(--coffee-900);margin-bottom:12px;border-bottom:1px solid #eee;padding-bottom:8px">Danh sách sản phẩm</h3><table style="width:100%;border-collapse:collapse;font-size:14px"><thead><tr style="text-align:left;color:#777;border-bottom:1px solid #ddd"><th style="padding:8px 10px">Sản phẩm</th><th style="text-align:center;padding:8px 10px">SL</th><th style="text-align:right;padding:8px 10px">Đơn giá</th><th style="text-align:right;padding:8px 10px">Thành tiền</th></tr></thead><tbody id="confirmationItems"></tbody></table><div style="margin-top:16px;text-align:right;font-size:14px;color:#555"><div>Tạm tính: <strong id="confirmationSubtotal"></strong></div><div style="margin:4px 0">Phí vận chuyển: <strong id="confirmationShippingFee"></strong></div><div style="font-size:18px;color:var(--coffee);font-weight:700;margin-top:8px">Tổng cộng: <span id="confirmationTotal"></span></div></div></section>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:30px"><a href="index.html#/home" class="btn btn-primary" style="padding:12px 24px">← Quay về trang chủ</a><a href="account.html#/orders" class="btn btn-secondary" style="padding:12px 24px">Xem lịch sử đơn hàng</a></div></div></div></template>
+
     <button id="backToTop" class="back-to-top" aria-label="Lên đầu trang">↑</button>
     <div id="toastContainer" class="cb-toast-container"></div>
 
