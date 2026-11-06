@@ -19,10 +19,21 @@
 <template id="tpl-admin-login">
     <section class="admin-login-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#2a1c16 0%,#4b3429 100%);padding:20px">
         <div class="login-container" style="background:#fff;padding:40px;border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.3);max-width:400px;width:100%">
-            <div class="login-header" style="text-align:center;margin-bottom:28px"><div style="font-size:36px;margin-bottom:8px">☕</div><h1 style="font-size:24px;color:var(--coffee-900);margin:0 0 6px;font-family:'Playfair Display',serif">Cà Phê Đậm Đà</h1><p style="color:#777;font-size:14px;margin:0">Cổng Quản trị viên</p></div>
+            <div class="login-header" style="text-align:center;margin-bottom:28px">
+                <div style="font-size:36px;margin-bottom:8px">☕</div>
+                <h1 style="font-size:24px;color:var(--coffee-900);margin:0 0 6px;font-family:'Playfair Display',serif">Cà Phê Đậm Đà</h1>
+                <p style="color:#777;font-size:14px;margin:0">Cổng Quản trị viên</p>
+            </div>
             <div id="adminLoginError" style="display:none;background:#fdecea;color:#b71c1c;padding:12px;border-radius:8px;font-size:13px;margin-bottom:16px;border:1px solid #f5c2c0"></div>
-            <form id="adminLoginForm"><div class="form-group" style="margin-bottom:18px"><label for="adminUsername" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333">Tên đăng nhập</label><input type="text" id="adminUsername" name="username" placeholder="admin" autocomplete="username" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px" /></div>
-                <div class="form-group" style="margin-bottom:24px"><label for="adminPassword" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333">Mật khẩu</label><input type="password" id="adminPassword" name="password" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px" /></div>
+            <form id="adminLoginForm">
+                <div class="form-group" style="margin-bottom:18px">
+                    <label for="adminUsername" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333">Tên đăng nhập</label>
+                    <input type="text" id="adminUsername" name="username" placeholder="admin" autocomplete="username" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px" />
+                </div>
+                <div class="form-group" style="margin-bottom:24px">
+                    <label for="adminPassword" style="display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333">Mật khẩu</label>
+                    <input type="password" id="adminPassword" name="password" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px" />
+                </div>
                 <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;background:var(--coffee);color:#fff;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer">Đăng nhập Quản trị</button>
                 <div style="margin-top:20px;text-align:center"><a href="index.html#/home" style="color:var(--coffee);font-size:13px;text-decoration:none">← Quay về trang chủ</a></div>
                 <div style="margin-top:16px;padding:10px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;text-align:center">Tài khoản mẫu: <strong>admin</strong> / Mật khẩu: <strong>admin123</strong></div>
@@ -30,23 +41,275 @@
         </div>
     </section>
 </template>
+
 <template id="tpl-admin-shell">
     <header class="admin-header"><div class="header-content"><div class="header-left"><span style="font-size:24px">☕</span><span class="logo-text">Cà Phê Đậm Đà - Admin</span></div><div class="header-right"><div class="user-info"><div class="user-avatar" id="userAvatar"></div><div id="adminName"></div></div><a class="logout-btn" href="index.html#/home">← Quay về</a><button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button></div></div></header>
     <div class="admin-layout"><aside class="sidebar"><div class="sidebar-title">Quản trị</div>
         <button data-view="dashboard" class="nav-btn active" type="button">📊 Tổng quan</button><button data-view="users" class="nav-btn" type="button">👥 Khách hàng</button><button data-view="categories" class="nav-btn" type="button">📂 Loại sản phẩm</button><button data-view="products" class="nav-btn" type="button">☕ Sản phẩm</button><button data-view="receipts" class="nav-btn" type="button">📥 Nhập hàng</button><button data-view="pricing" class="nav-btn" type="button">💰 Giá bán</button><button data-view="orders" class="nav-btn" type="button">📦 Đơn hàng</button><button data-view="stock" class="nav-btn" type="button">📈 Tồn kho</button>
     </aside><main class="main-content" id="adminMain"></main></div><div id="modalRoot"></div>
 </template>
-<template id="tpl-admin-modal"><div class="modal active show" role="dialog" aria-modal="true"><div class="modal-content" data-modal-size><div class="modal-header"><h2 data-modal-title></h2><button class="close-btn" type="button" data-close aria-label="Đóng">×</button></div><div class="modal-body" data-modal-body></div><div class="modal-footer" data-modal-footer></div></div></div></template>
-<template id="tpl-admin-dashboard"><div class="content-header"><h1 class="content-title">Tổng quan</h1></div><div class="stats-grid" id="dashboardStats"></div><div class="table-container"><div class="table-header"><h3>Đơn hàng gần đây</h3></div><div id="dashboardOrders"></div></div></template>
-<template id="tpl-admin-users"><div class="content-header"><h1 class="content-title">Quản lý khách hàng</h1></div><div class="table-container"><div class="table-header"><h3>Danh sách khách hàng</h3><div class="search-box"><input type="text" id="userSearch" placeholder="Tìm theo tên, tài khoản, email, SĐT..." aria-label="Tìm khách hàng" /><select id="userStatus" aria-label="Lọc trạng thái"><option value="">Mọi trạng thái</option><option value="active">Đang hoạt động</option><option value="locked">Đã khóa</option></select></div></div><div id="list"></div></div></template>
-<template id="tpl-admin-categories"><div class="content-header"><h1 class="content-title">Quản lý loại sản phẩm</h1><button class="btn-primary" id="addCategory" type="button">+ Thêm loại</button></div><div class="table-container"><div class="table-header"><h3>Danh sách loại sản phẩm</h3></div><div id="list"></div></div></template>
-<template id="tpl-admin-products"><div class="content-header"><h1 class="content-title">Quản lý sản phẩm</h1><button class="btn-primary" id="addProduct" type="button">+ Thêm sản phẩm</button></div><div class="table-container"><div class="table-header"><h3>Danh sách sản phẩm</h3><div class="search-box"><input type="text" id="prodSearch" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" /><select id="prodCat" aria-label="Lọc theo loại"><option value="">Tất cả loại</option></select><select id="prodStatus" aria-label="Lọc trạng thái"><option value="">Mọi trạng thái</option><option value="shown">Đang hiển thị</option><option value="hidden">Đang ẩn</option></select></div></div><div id="list"></div></div></template>
-<template id="tpl-admin-receipts"><div class="content-header"><h1 class="content-title">Quản lý nhập hàng</h1><button class="btn-primary" id="addReceipt" type="button">+ Thêm phiếu nhập</button></div><div class="advanced-search-panel"><div class="search-row"><div class="search-group"><label for="rq">Mã phiếu hoặc tên sản phẩm</label><input type="text" id="rq" placeholder="Ví dụ: PN001 hoặc Arabica" /></div><div class="search-group"><label for="rfrom">Từ ngày</label><input type="date" id="rfrom" /></div><div class="search-group"><label for="rto">Đến ngày</label><input type="date" id="rto" /></div><div class="search-group"><label for="rstatus">Trạng thái</label><select id="rstatus"><option value="">Tất cả</option><option value="draft">Chưa hoàn thành</option><option value="completed">Đã hoàn thành</option></select></div></div><p class="field-error" id="rerr"></p><div class="search-actions"><button type="button" class="btn-primary" id="rsearch">Tìm kiếm</button><button type="button" class="btn-cancel" id="rclear">Xóa bộ lọc</button></div></div><div class="table-container"><div class="table-header"><h3>Danh sách phiếu nhập</h3></div><div id="list"></div></div></template>
-<template id="tpl-admin-pricing"><div class="content-header"><h1 class="content-title">Quản lý giá bán</h1></div><p class="form-note" style="margin:-16px 0 20px">Giá bán = Giá vốn × (1 + % lợi nhuận). Giá vốn là bình quân gia quyền của các phiếu nhập đã hoàn thành. Nếu sản phẩm có % riêng thì dùng %, ngược lại dùng % của loại.</p><div class="table-container"><div class="table-header"><h3>Tỉ lệ lợi nhuận theo loại</h3></div><div id="catList"></div></div><div class="table-container"><div class="table-header"><h3>Tra cứu giá và tỉ lệ lợi nhuận theo sản phẩm</h3><div class="search-box"><input type="text" id="pq" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" /><select id="pcat" aria-label="Lọc theo loại"><option value="">Tất cả loại</option></select></div></div><div id="prodList"></div></div></template>
-<template id="tpl-admin-orders"><div class="content-header"><h1 class="content-title">Quản lý đơn hàng</h1></div><div class="advanced-search-panel"><div class="search-row"><div class="search-group"><label for="oq">Mã đơn hoặc khách hàng</label><input type="text" id="oq" placeholder="Ví dụ: DH2026 hoặc guest1" /></div><div class="search-group"><label for="ofrom">Ngày đặt từ</label><input type="date" id="ofrom" /></div><div class="search-group"><label for="oto">Ngày đặt đến</label><input type="date" id="oto" /></div><div class="search-group"><label for="ostatus">Tình trạng</label><select id="ostatus"><option value="">Tất cả</option><option value="Mới đặt">Mới đặt</option><option value="Đã xử lý">Đã xử lý</option><option value="Đã giao">Đã giao</option><option value="Hủy">Hủy</option></select></div></div><p class="field-error" id="oerr"></p><div class="search-actions"><button type="button" class="btn-primary" id="osearch">Tìm kiếm</button><button type="button" class="btn-cancel" id="oclear">Xóa bộ lọc</button></div></div><div class="table-container"><div class="table-header"><h3>Danh sách đơn hàng</h3><span id="ocount"></span></div><div id="list"></div></div></template>
-<template id="tpl-admin-stock"><div class="content-header"><h1 class="content-title">Quản lý tồn kho</h1></div><div class="table-container"><div class="table-header"><h3>Cảnh báo sắp hết hàng</h3><div class="search-box"><label for="threshold">Ngưỡng cảnh báo (tồn ≤)</label><input type="number" id="threshold" min="0" step="1" style="width:90px" /><button type="button" class="btn-secondary" id="saveThreshold">Lưu ngưỡng</button></div></div><p class="field-error" id="thErr" style="padding:0 20px"></p><div id="lowList"></div></div>
-    <div class="advanced-search-panel"><h3 style="margin-bottom:16px">Tra cứu tồn kho tại một thời điểm</h3><div class="search-row"><div class="search-group"><label for="asOf">Tồn tại cuối ngày</label><input type="date" id="asOf" /></div><div class="search-group"><label for="scat">Loại sản phẩm</label><select id="scat"><option value="">Tất cả loại</option></select></div><div class="search-group"><label for="sprod">Sản phẩm</label><select id="sprod"><option value="">Tất cả sản phẩm</option></select></div></div><p class="field-error" id="serr"></p><div class="search-actions"><button type="button" class="btn-primary" id="sgo">Tra cứu</button></div></div><div class="table-container"><div id="stockList"></div></div>
-    <div class="advanced-search-panel"><h3 style="margin-bottom:16px">Báo cáo nhập - xuất - tồn trong khoảng thời gian</h3><div class="search-row"><div class="search-group"><label for="mprod">Sản phẩm</label><select id="mprod"><option value="">Tất cả sản phẩm</option></select></div><div class="search-group"><label for="mfrom">Từ ngày</label><input type="date" id="mfrom" /></div><div class="search-group"><label for="mto">Đến ngày</label><input type="date" id="mto" /></div></div><p class="field-error" id="merr"></p><div class="search-actions"><button type="button" class="btn-primary" id="mgo">Xem báo cáo</button></div></div><div class="table-container"><div id="moveList"></div></div>
+<template id="tpl-admin-modal">
+    <div class="modal active show" role="dialog" aria-modal="true">
+        <div class="modal-content" data-modal-size>
+            <div class="modal-header">
+                <h2 data-modal-title></h2>
+                <button class="close-btn" type="button" data-close aria-label="Đóng">×</button>
+            </div>
+            <div class="modal-body" data-modal-body></div>
+            <div class="modal-footer" data-modal-footer></div>
+        </div>
+    </div>
+    </template>
+
+<template id="tpl-admin-dashboard">
+    <div class="content-header">
+        <h1 class="content-title">Tổng quan</h1>
+    </div>
+    <div class="stats-grid" id="dashboardStats"></div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Đơn hàng gần đây</h3>
+        </div>
+        <div id="dashboardOrders"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-users">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý khách hàng</h1>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Danh sách khách hàng</h3>
+            <div class="search-box">
+                <input type="text" id="userSearch" placeholder="Tìm theo tên, tài khoản, email, SĐT..." aria-label="Tìm khách hàng" />
+                <select id="userStatus" aria-label="Lọc trạng thái">
+                    <option value="">Mọi trạng thái</option>
+                    <option value="active">Đang hoạt động</option>
+                    <option value="locked">Đã khóa</option>
+                </select>
+            </div>
+        </div>
+        <div id="list"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-categories">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý loại sản phẩm</h1>
+        <button class="btn-primary" id="addCategory" type="button">+ Thêm loại</button>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Danh sách loại sản phẩm</h3>
+        </div>
+        <div id="list"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-products">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý sản phẩm</h1>
+        <button class="btn-primary" id="addProduct" type="button">+ Thêm sản phẩm</button>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Danh sách sản phẩm</h3>
+            <div class="search-box">
+                <input type="text" id="prodSearch" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" />
+                <select id="prodCat" aria-label="Lọc theo loại">
+                    <option value="">Tất cả loại</option>
+                </select>
+                <select id="prodStatus" aria-label="Lọc trạng thái">
+                    <option value="">Mọi trạng thái</option>
+                    <option value="shown">Đang hiển thị</option>
+                    <option value="hidden">Đang ẩn</option>
+                </select>
+            </div>
+        </div>
+        <div id="list"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-receipts">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý nhập hàng</h1>
+        <button class="btn-primary" id="addReceipt" type="button">+ Thêm phiếu nhập</button>
+    </div>
+    <div class="advanced-search-panel">
+        <div class="search-row">
+            <div class="search-group">
+                <label for="rq">Mã phiếu hoặc tên sản phẩm</label>
+                <input type="text" id="rq" placeholder="Ví dụ: PN001 hoặc Arabica" />
+            </div>
+            <div class="search-group">
+                <label for="rfrom">Từ ngày</label>
+                <input type="date" id="rfrom" />
+            </div>
+            <div class="search-group">
+                <label for="rto">Đến ngày</label>
+                <input type="date" id="rto" />
+            </div>
+            <div class="search-group">
+                <label for="rstatus">Trạng thái</label>
+                <select id="rstatus">
+                    <option value="">Tất cả</option>
+                    <option value="draft">Chưa hoàn thành</option>
+                    <option value="completed">Đã hoàn thành</option>
+                </select>
+            </div>
+        </div>
+        <p class="field-error" id="rerr"></p>
+        <div class="search-actions">
+            <button type="button" class="btn-primary" id="rsearch">Tìm kiếm</button>
+            <button type="button" class="btn-cancel" id="rclear">Xóa bộ lọc</button>
+        </div>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Danh sách phiếu nhập</h3>
+        </div>
+        <div id="list"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-pricing">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý giá bán</h1>
+    </div>
+    <p class="form-note" style="margin:-16px 0 20px">Giá bán = Giá vốn × (1 + % lợi nhuận). Giá vốn là bình quân gia quyền của các phiếu nhập đã hoàn thành. Nếu sản phẩm có % riêng thì dùng %, ngược lại dùng % của loại.</p>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Tỉ lệ lợi nhuận theo loại</h3>
+        </div>
+        <div id="catList"></div>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Tra cứu giá và tỉ lệ lợi nhuận theo sản phẩm</h3>
+            <div class="search-box">
+                <input type="text" id="pq" placeholder="Tìm theo mã hoặc tên..." aria-label="Tìm sản phẩm" />
+                <select id="pcat" aria-label="Lọc theo loại">
+                    <option value="">Tất cả loại</option>
+                </select>
+            </div>
+        </div>
+        <div id="prodList"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-orders">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý đơn hàng</h1>
+    </div>
+    <div class="advanced-search-panel">
+        <div class="search-row">
+            <div class="search-group">
+                <label for="oq">Mã đơn hoặc khách hàng</label>
+                <input type="text" id="oq" placeholder="Ví dụ: DH2026 hoặc guest1" />
+            </div>
+            <div class="search-group">
+                <label for="ofrom">Ngày đặt từ</label>
+                <input type="date" id="ofrom" />
+            </div>
+            <div class="search-group">
+                <label for="oto">Ngày đặt đến</label>
+                <input type="date" id="oto" />
+            </div>
+            <div class="search-group">
+                <label for="ostatus">Tình trạng</label>
+                <select id="ostatus">
+                    <option value="">Tất cả</option>
+                    <option value="Mới đặt">Mới đặt</option>
+                    <option value="Đã xử lý">Đã xử lý</option>
+                    <option value="Đã giao">Đã giao</option>
+                    <option value="Hủy">Hủy</option>
+                </select>
+            </div>
+        </div>
+        <p class="field-error" id="oerr"></p>
+        <div class="search-actions">
+            <button type="button" class="btn-primary" id="osearch">Tìm kiếm</button>
+            <button type="button" class="btn-cancel" id="oclear">Xóa bộ lọc</button>
+        </div>
+    </div>
+    <div class="table-container">
+        <div class="table-header">
+            <h3>Danh sách đơn hàng</h3>
+            <span id="ocount"></span>
+        </div>
+        <div id="list"></div>
+    </div>
+</template>
+
+<template id="tpl-admin-stock">
+    <div class="content-header">
+        <h1 class="content-title">Quản lý tồn kho</h1>
+    </div><div class="table-container">
+        <div class="table-header">
+            <h3>Cảnh báo sắp hết hàng</h3>
+            <div class="search-box"><label for="threshold">Ngưỡng cảnh báo (tồn ≤)</label>
+                <input type="number" id="threshold" min="0" step="1" style="width:90px" />
+                <button type="button" class="btn-secondary" id="saveThreshold">Lưu ngưỡng</button>
+            </div>
+        </div>
+        <p class="field-error" id="thErr" style="padding:0 20px"></p>
+        <div id="lowList"></div>
+    </div>
+    <div class="advanced-search-panel">
+        <h3 style="margin-bottom:16px">Tra cứu tồn kho tại một thời điểm</h3>
+        <div class="search-row">
+            <div class="search-group">
+                <label for="asOf">Tồn tại cuối ngày</label>
+                <input type="date" id="asOf" />
+            </div>
+            <div class="search-group">
+                <label for="scat">Loại sản phẩm</label>
+                <select id="scat">
+                    <option value="">Tất cả loại</option>
+                </select>
+            </div>
+            <div class="search-group">
+                    <label for="sprod">Sản phẩm</label>
+                    <select id="sprod">
+                        <option value="">Tất cả sản phẩm</option>
+                    </select>
+            </div>
+        </div>
+            <p class="field-error" id="serr"></p>
+                <div class="search-actions">
+                    <button type="button" class="btn-primary" id="sgo">Tra cứu</button>
+                </div>
+    </div>
+        <div class="table-container">
+            <div id="stockList"></div>
+        </div>
+    <div class="advanced-search-panel">
+        <h3 style="margin-bottom:16px">Báo cáo nhập - xuất - tồn trong khoảng thời gian</h3>
+        <div class="search-row">
+            <div class="search-group">
+                <label for="mprod">Sản phẩm</label>
+                <select id="mprod">
+                    <option value="">Tất cả sản phẩm</option>
+                </select>
+            </div>
+            <div class="search-group">
+                <label for="mfrom">Từ ngày</label>
+                <input type="date" id="mfrom" />
+            </div>
+            <div class="search-group">
+                <label for="mto">Đến ngày</label>
+                <input type="date" id="mto" />
+            </div>
+        </div>
+            <p class="field-error" id="merr"></p>
+            <div class="search-actions">
+                <button type="button" class="btn-primary" id="mgo">Xem báo cáo</button>
+            </div>
+    </div>
+    <div class="table-container">
+        <div id="moveList"></div>
+    </div>
 </template>
 
     <div id="toastContainer" class="cb-toast-container"></div>
