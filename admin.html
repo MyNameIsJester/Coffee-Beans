@@ -35,7 +35,9 @@
                     <input type="password" id="adminPassword" name="password" placeholder="••••••••" autocomplete="current-password" required style="width:100%;padding:10px 14px;border:1.5px solid #ddd;border-radius:8px;font-size:14px" />
                 </div>
                 <button type="submit" class="btn btn-primary" style="width:100%;padding:12px;background:var(--coffee);color:#fff;border-radius:8px;font-weight:600;font-size:15px;cursor:pointer">Đăng nhập Quản trị</button>
-                <div style="margin-top:20px;text-align:center"><a href="index.html#/home" style="color:var(--coffee);font-size:13px;text-decoration:none">← Quay về trang chủ</a></div>
+                <div style="margin-top:20px;text-align:center">
+                    <a href="index.html#/home" style="color:var(--coffee);font-size:13px;text-decoration:none">← Quay về trang chủ</a>
+                </div>
                 <div style="margin-top:16px;padding:10px;background:#fdfbf9;border-radius:6px;font-size:12px;color:#777;border:1px solid #eee;text-align:center">Tài khoản mẫu: <strong>admin</strong> / Mật khẩu: <strong>admin123</strong></div>
             </form>
         </div>
@@ -43,11 +45,38 @@
 </template>
 
 <template id="tpl-admin-shell">
-    <header class="admin-header"><div class="header-content"><div class="header-left"><span style="font-size:24px">☕</span><span class="logo-text">Cà Phê Đậm Đà - Admin</span></div><div class="header-right"><div class="user-info"><div class="user-avatar" id="userAvatar"></div><div id="adminName"></div></div><a class="logout-btn" href="index.html#/home">← Quay về</a><button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button></div></div></header>
-    <div class="admin-layout"><aside class="sidebar"><div class="sidebar-title">Quản trị</div>
-        <button data-view="dashboard" class="nav-btn active" type="button">📊 Tổng quan</button><button data-view="users" class="nav-btn" type="button">👥 Khách hàng</button><button data-view="categories" class="nav-btn" type="button">📂 Loại sản phẩm</button><button data-view="products" class="nav-btn" type="button">☕ Sản phẩm</button><button data-view="receipts" class="nav-btn" type="button">📥 Nhập hàng</button><button data-view="pricing" class="nav-btn" type="button">💰 Giá bán</button><button data-view="orders" class="nav-btn" type="button">📦 Đơn hàng</button><button data-view="stock" class="nav-btn" type="button">📈 Tồn kho</button>
-    </aside><main class="main-content" id="adminMain"></main></div><div id="modalRoot"></div>
+    <header class="admin-header">
+        <div class="header-content"><div class="header-left">
+            <span style="font-size:24px">☕</span>
+            <span class="logo-text">Cà Phê Đậm Đà - Admin</span>
+        </div>
+        <div class="header-right">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar"></div>
+                <div id="adminName"></div>
+            </div>
+            <a class="logout-btn" href="index.html#/home">← Quay về</a>
+            <button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button>
+        </div>
+    </div>
+</header>
+    <div class="admin-layout">
+        <aside class="sidebar">
+            <div class="sidebar-title">Quản trị</div>
+        <button data-view="dashboard" class="nav-btn active" type="button">📊 Tổng quan</button>
+        <button data-view="users" class="nav-btn" type="button">👥 Khách hàng</button>
+        <button data-view="categories" class="nav-btn" type="button">📂 Loại sản phẩm</button>
+        <button data-view="products" class="nav-btn" type="button">☕ Sản phẩm</button>
+        <button data-view="receipts" class="nav-btn" type="button">📥 Nhập hàng</button>
+        <button data-view="pricing" class="nav-btn" type="button">💰 Giá bán</button>
+        <button data-view="orders" class="nav-btn" type="button">📦 Đơn hàng</button>
+        <button data-view="stock" class="nav-btn" type="button">📈 Tồn kho</button>
+    </aside>
+    <main class="main-content" id="adminMain"></main>
+</div>
+<div id="modalRoot"></div>
 </template>
+
 <template id="tpl-admin-modal">
     <div class="modal active show" role="dialog" aria-modal="true">
         <div class="modal-content" data-modal-size>

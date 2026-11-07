@@ -17,80 +17,287 @@
     <div id="siteHeader">
     <header class="header">
         <div class="container nav">
-            <div class="brand"><a href="index.html#/home"><img src="images/logo.svg" alt="Logo Cà Phê Đậm Đà" class="brand-logo" /><span class="brand-name">Cà Phê Đậm Đà</span></a></div>
+            <div class="brand">
+                <a href="index.html#/home">
+                    <img src="images/logo.svg" alt="Logo Cà Phê Đậm Đà" class="brand-logo" />
+                    <span class="brand-name">Cà Phê Đậm Đà</span>
+                </a>
+            </div>
             <form class="search-bar" role="search" id="headerSearchForm">
                 <button class="search-btn" type="submit" aria-label="Tìm kiếm">🔍</button>
                 <input type="search" id="searchInput" placeholder="Tìm sản phẩm theo tên..." aria-label="Tìm kiếm" />
             </form>
             <nav class="menu" aria-label="Chính">
-                <div class="dropdown"><a href="index.html#/products">Sản phẩm</a><div class="dropdown-content" id="headerCategoryLinks"></div></div>
+                <div class="dropdown">
+                    <a href="index.html#/products">Sản phẩm</a>
+                    <div class="dropdown-content" id="headerCategoryLinks"></div>
+                </div>
                 <a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a>
                 <a href="index.html#/home?to=loi-ich">Lợi ích</a>
                 <a href="index.html#/home?to=lien-he">Liên hệ</a>
                 <div id="headerAccountArea"></div>
-                <a href="checkout.html#/cart" class="badge" aria-label="Giỏ hàng">Giỏ hàng<span id="cart-badge" class="badge-count">0</span></a>
+                    <a href="checkout.html#/cart" class="badge" aria-label="Giỏ hàng">Giỏ hàng<span id="cart-badge" class="badge-count">0</span></a>
             </nav>
             <button id="menuBtn" class="mobile-toggle" aria-expanded="false" aria-controls="mobileMenu" type="button">Menu</button>
         </div>
     </header>
     <nav id="mobileMenu" hidden class="mobile-menu" aria-label="Điều hướng di động">
-        <a href="index.html#/home">Trang chủ</a><a href="index.html#/products">Tất cả sản phẩm</a>
+        <a href="index.html#/home">Trang chủ</a>
+        <a href="index.html#/products">Tất cả sản phẩm</a>
         <div id="mobileCategoryLinks"></div>
-        <a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a><a href="index.html#/home?to=lien-he">Liên hệ</a>
+        <a href="index.html#/home?to=ve-chung-toi">Giới thiệu</a>
+        <a href="index.html#/home?to=lien-he">Liên hệ</a>
         <div id="mobileAccountLinks"></div>
     </nav>
 </div>
     <main id="app" data-default-view="home"></main>
     <footer id="lien-he" class="footer">
     <div class="container foot">
-        <div><h4>Cà Phê Đậm Đà</h4><p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p></div>
-        <div><h4>Liên kết nhanh</h4><p>
-            <a href="index.html#/home">Trang chủ</a> · <a href="index.html#/products">Sản phẩm</a> ·
-            <a href="index.html#/guide">Hướng dẫn</a> · <a href="checkout.html#/cart">Giỏ hàng</a> · <a href="admin.html">Quản trị</a>
-        </p></div>
-        <div><h4>Liên hệ</h4><p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn<br />123 Phin Street, Quận Caffeine, TP.HCM</p></div>
+        <div>
+            <h4>Cà Phê Đậm Đà</h4>
+            <p>Hạt cà phê rang xay chất lượng cao. Đồng hành cùng ly cà phê ngon mỗi ngày.</p>
+        </div>
+        <div>
+            <h4>Liên kết nhanh</h4>
+            <p>
+                <a href="index.html#/home">Trang chủ</a> · <a href="index.html#/products">Sản phẩm</a> ·
+                <a href="index.html#/guide">Hướng dẫn</a> · <a href="checkout.html#/cart">Giỏ hàng</a> · <a href="admin.html">Quản trị</a>
+            </p>
+        </div>
+        <div>
+            <h4>Liên hệ</h4>
+            <p>Hotline: 0901 234 567<br />Email: hello@caphedamda.vn<br />123 Phin Street, Quận Caffeine, TP.HCM</p>
+        </div>
     </div>
     <div class="container copyright">© 2026 Cà Phê Đậm Đà. All rights reserved.</div>
 </footer>
 
 <template id="tpl-home">
     <div class="container" style="padding-top:20px">
-        <section class="hero"><div class="hero-media"><div class="hero-slider">
-            <div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div><div class="hero-slide"></div>
-        </div><div class="hero-indicators"><span class="hero-dot active" data-index="0"></span><span class="hero-dot" data-index="1"></span><span class="hero-dot" data-index="2"></span><span class="hero-dot" data-index="3"></span><span class="hero-dot" data-index="4"></span></div></div>
-        <div class="hero-overlay"></div><div class="hero-inner"><div><h1 class="hero-title">Cà Phê Đậm Đà</h1><p class="hero-sub">Hương vị đặc trưng từ những hạt cà phê thượng hạng</p><a href="index.html#/products" class="btn">Khám phá sản phẩm</a></div></div></section>
+        <section class="hero">
+            <div class="hero-media">
+                <div class="hero-slider">
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+            </div>
+            <div class="hero-indicators">
+                <span class="hero-dot active" data-index="0"></span>
+                <span class="hero-dot" data-index="1"></span>
+                <span class="hero-dot" data-index="2"></span>
+                <span class="hero-dot" data-index="3"></span>
+                <span class="hero-dot" data-index="4"></span>
+            </div>
+            <div class="hero-overlay"></div>
+            <div class="hero-inner"><div>
+                <h1 class="hero-title">Cà Phê Đậm Đà</h1>
+                <p class="hero-sub">Hương vị đặc trưng từ những hạt cà phê thượng hạng</p>
+                <a href="index.html#/products" class="btn">Khám phá sản phẩm</a>
+            </div>
+        </section>
     </div>
-    <section id="san-pham" class="fade-in"><div class="container"><h2 class="section-title">Danh mục sản phẩm</h2><p class="section-sub">Chọn loại hạt phù hợp khẩu vị của bạn</p><div class="grid grid-3" id="featuredGrid"></div></div></section>
-    <section id="ve-chung-toi" class="fade-in"><div class="container about"><img src="images/dark-roast.jpg" alt="Rang xay thủ công" class="fade-in-left" /><div class="fade-in-right"><h2 class="section-title">Nguồn gốc rõ ràng – Rang xay thủ công</h2><p class="section-sub">Chúng tôi chọn lọc hạt từ nông trại cao nguyên, rang mẻ nhỏ để giữ trọn hương vị.</p><ul class="list"><li class="fade-in stagger-1"><span class="chip">100% nguyên chất</span><span>Không hương liệu, không phụ gia.</span></li><li class="fade-in stagger-2"><span class="chip">Rang mới mỗi tuần</span><span>Đảm bảo độ tươi – thơm hơn khi pha.</span></li><li class="fade-in stagger-3"><span class="chip">Tư vấn hương vị</span><span>Chọn loại hạt phù hợp cách pha của bạn.</span></li></ul></div></div></section>
-    <section id="loi-ich" class="fade-in"><div class="container"><h2 class="section-title">Vì sao chọn Cà Phê Đậm Đà?</h2><p class="section-sub">Chất lượng tốt, dịch vụ tận tâm, giá luôn hợp lý</p><div class="grid grid-3"><div class="quote fade-in-scale stagger-1"><strong>Giao nhanh</strong><br />Giao trong 24-48h tại nội thành.</div><div class="quote fade-in-scale stagger-2"><strong>Đổi trả 7 ngày</strong><br />Không hài lòng, hoàn tiền ngay.</div><div class="quote fade-in-scale stagger-3"><strong>Ưu đãi thành viên</strong><br />Tích điểm, giảm đến 15%.</div></div></div></section>
+    
+    <section id="san-pham" class="fade-in">
+        <div class="container">
+            <h2 class="section-title">Danh mục sản phẩm</h2>
+            <p class="section-sub">Chọn loại hạt phù hợp khẩu vị của bạn</p>
+            <div class="grid grid-3" id="featuredGrid"></div>
+        </div>
+    </section>
+
+    <section id="ve-chung-toi" class="fade-in">
+        <div class="container about">
+            <img src="images/dark-roast.jpg" alt="Rang xay thủ công" class="fade-in-left" />
+            <div class="fade-in-right">
+                <h2 class="section-title">Nguồn gốc rõ ràng – Rang xay thủ công</h2>
+                <p class="section-sub">Chúng tôi chọn lọc hạt từ nông trại cao nguyên, rang mẻ nhỏ để giữ trọn hương vị.</p>
+                <ul class="list">
+                    <li class="fade-in stagger-1">
+                        <span class="chip">100% nguyên chất</span>
+                        <span>Không hương liệu, không phụ gia.</span>
+                    </li>
+                    <li class="fade-in stagger-2">
+                        <span class="chip">Rang mới mỗi tuần</span>
+                        <span>Đảm bảo độ tươi – thơm hơn khi pha.</span>
+                    </li>
+                    <li class="fade-in stagger-3">
+                        <span class="chip">Tư vấn hương vị</span>
+                        <span>Chọn loại hạt phù hợp cách pha của bạn.</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="loi-ich" class="fade-in">
+        <div class="container">
+            <h2 class="section-title">Vì sao chọn Cà Phê Đậm Đà?</h2>
+            <p class="section-sub">Chất lượng tốt, dịch vụ tận tâm, giá luôn hợp lý</p>
+            <div class="grid grid-3">
+                <div class="quote fade-in-scale stagger-1">
+                    <strong>Giao nhanh</strong><br />
+                    Giao trong 24-48h tại nội thành.
+                </div>
+                <div class="quote fade-in-scale stagger-2">
+                    <strong>Đổi trả 7 ngày</strong><br />
+                    Không hài lòng, hoàn tiền ngay.
+                </div>
+                <div class="quote fade-in-scale stagger-3">
+                    <strong>Ưu đãi thành viên</strong><br />
+                    Tích điểm, giảm đến 15%.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="filter-panel">
+        <form id="filterForm" novalidate>
+            <div class="search-box">
+                <input type="text" id="productSearch" placeholder="🔍 Tìm theo tên sản phẩm" aria-label="Tên sản phẩm" />
+            </div>
+            <div class="grid grid-3">
+                <div class="filter-group">
+                    <label for="category">Phân loại</label>
+                    <select id="category" name="category">
+                        <option value="">Tất cả</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-group">
+                <label for="priceMin">Khoảng giá (đồng)</label>
+                <div class="price-range">
+                    <input type="number" id="priceMin" min="0" step="1000" placeholder="Từ" aria-label="Giá tối thiểu" />
+                    <input type="number" id="priceMax" min="0" step="1000" placeholder="Đến" aria-label="Giá tối đa" />
+                </div>
+            </div>
+            <div class="filter-group">
+                <label for="sort">Sắp xếp</label>
+                <select id="sort" name="sort">
+                    <option value="default">Mặc định</option>
+                    <option value="price-asc">Giá tăng dần</option>
+                    <option value="price-desc">Giá giảm dần</option>
+                    <option value="name-asc">Tên A-Z</option>
+                    <option value="name-desc">Tên Z-A</option>
+                </select>
+            </div>
+            <p id="filterError" class="cb-field-error" role="alert" style="color:#d32f2f;margin-top:10px" hidden></p>
+            <div class="filter-buttons">
+                <button type="submit" class="apply-filter">✓ Tìm kiếm</button>
+                <button type="button" class="reset-filter" id="resetFilter">Xóa bộ lọc</button>
+            </div>
+        </form>
+    </section>
+    <p id="resultInfo" style="color:#666;margin:0 0 16px"></p>
+    <section class="product-grid" id="productGrid"></section>
+    <div id="pagination" style="margin-top:30px"></div>
 </template>
-<template id="tpl-products">
-    <div class="container" style="padding-top:40px">
-        <div style="margin-bottom:30px"><h1 class="section-title" style="margin-bottom:8px;font-size:2.2em"><i class="fas fa-cube" style="margin-right:12px;color:var(--coffee)"></i><span id="pageTitle">Cà Phê Chất Lượng Cao</span></h1><p id="pageDesc" style="color:#888;font-size:1.05em;margin:0"></p></div>
-        <section class="filter-panel"><form id="filterForm" novalidate><div class="search-box"><input type="text" id="productSearch" placeholder="🔍 Tìm theo tên sản phẩm" aria-label="Tên sản phẩm" /></div>
-            <div class="grid grid-3"><div class="filter-group"><label for="category">Phân loại</label><select id="category" name="category"><option value="">Tất cả</option></select></div>
-            <div class="filter-group"><label for="priceMin">Khoảng giá (đồng)</label><div class="price-range"><input type="number" id="priceMin" min="0" step="1000" placeholder="Từ" aria-label="Giá tối thiểu" /><input type="number" id="priceMax" min="0" step="1000" placeholder="Đến" aria-label="Giá tối đa" /></div></div>
-            <div class="filter-group"><label for="sort">Sắp xếp</label><select id="sort" name="sort"><option value="default">Mặc định</option><option value="price-asc">Giá tăng dần</option><option value="price-desc">Giá giảm dần</option><option value="name-asc">Tên A-Z</option><option value="name-desc">Tên Z-A</option></select></div></div>
-            <p id="filterError" class="cb-field-error" role="alert" style="color:#d32f2f;margin-top:10px" hidden></p><div class="filter-buttons"><button type="submit" class="apply-filter">✓ Tìm kiếm</button><button type="button" class="reset-filter" id="resetFilter">Xóa bộ lọc</button></div>
-        </form></section><p id="resultInfo" style="color:#666;margin:0 0 16px"></p><section class="product-grid" id="productGrid"></section><div id="pagination" style="margin-top:30px"></div>
-    </div>
-</template>
+
 <template id="tpl-product-detail">
-    <div class="container" style="padding:40px 20px"><nav style="margin-bottom:24px;font-size:14px;color:var(--muted)"><a href="index.html#/home">Trang chủ</a> <span style="margin:0 6px">›</span> <a href="index.html#/products">Sản phẩm</a> <span style="margin:0 6px">›</span> <a id="detailCategoryLink" href="index.html#/products"><span id="detailCategoryName">Cà phê</span></a> <span style="margin:0 6px">›</span> <span id="detailBreadcrumbName" style="color:var(--text)"></span></nav>
-        <div class="product-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;background:#fff;padding:32px;border-radius:12px;box-shadow:var(--shadow)"><div class="product-gallery"><div style="margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #eee"><img id="mainDetailImg" alt="" style="width:100%;height:380px;object-fit:cover" /></div></div>
-            <div class="product-info"><span class="chip" id="detailCategoryChip" style="margin-bottom:12px;display:inline-block"></span><h1 id="detailName" style="font-size:28px;color:var(--coffee-900);margin-bottom:12px;font-family:'Playfair Display',serif"></h1><div id="detailPrice" style="font-size:26px;color:var(--coffee);font-weight:700;margin-bottom:20px"></div><div id="detailStock" style="margin-bottom:20px;padding:12px 16px;border-radius:8px;font-size:14px"></div><p id="detailDescription" style="color:#555;margin-bottom:24px;line-height:1.7"></p>
-                <div style="margin-bottom:28px;background:#fdfbf9;padding:16px;border-radius:8px;border:1px solid #eed"><div style="display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:13px"><span style="color:#777">Xuất xứ:</span><strong id="detailOrigin">Việt Nam (Tây Nguyên)</strong><span style="color:#777">Mức rang:</span><strong id="detailRoast">Rang vừa (Medium Roast)</strong><span style="color:#777">Đóng gói:</span><strong id="detailWeight">Túi 500g (Van 1 chiều)</strong><span style="color:#777">Hạn dùng:</span><strong>12 tháng kể từ ngày rang</strong></div></div>
-                <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:20px"><div style="display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden"><button id="decQtyBtn" type="button" style="width:36px;height:36px;background:#f5f5f5;font-weight:bold;cursor:pointer">-</button><input id="detailQty" type="number" value="1" min="1" style="width:50px;height:36px;text-align:center;border:none;outline:none" /><button id="incQtyBtn" type="button" style="width:36px;height:36px;background:#f5f5f5;font-weight:bold;cursor:pointer">+</button></div><button id="addDetailCartBtn" class="btn btn-secondary" style="flex:1;min-width:160px;padding:12px">Thêm vào giỏ hàng</button><button id="buyNowDetailBtn" class="btn btn-primary" style="flex:1;min-width:140px;padding:12px">Mua ngay</button></div>
-            </div></div><section id="relatedSection" style="margin-top:50px" hidden><h3 style="font-size:22px;color:var(--coffee-900);margin-bottom:20px">Sản phẩm cùng loại</h3><div id="relatedProducts" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px"></div></section>
+    <div class="container" style="padding:40px 20px">
+        <nav style="margin-bottom:24px;font-size:14px;color:var(--muted)">
+            <a href="index.html#/home">Trang chủ</a> <span style="margin:0 6px">›</span> 
+            <a href="index.html#/products">Sản phẩm</a> <span style="margin:0 6px">›</span> 
+            <a id="detailCategoryLink" href="index.html#/products">
+                <span id="detailCategoryName">Cà phê</span>
+            </a> <span style="margin:0 6px">›</span> <span id="detailBreadcrumbName" style="color:var(--text)"></span>
+        </nav>
+        <div class="product-container" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;background:#fff;padding:32px;border-radius:12px;box-shadow:var(--shadow)">
+            <div class="product-gallery">
+                <div style="margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid #eee">
+                    <img id="mainDetailImg" alt="" style="width:100%;height:380px;object-fit:cover" />
+                </div>
+            </div>
+            <div class="product-info">
+                <span class="chip" id="detailCategoryChip" style="margin-bottom:12px;display:inline-block"></span>
+                <h1 id="detailName" style="font-size:28px;color:var(--coffee-900);margin-bottom:12px;font-family:'Playfair Display',serif"></h1>
+                <div id="detailPrice" style="font-size:26px;color:var(--coffee);font-weight:700;margin-bottom:20px"></div>
+                <div id="detailStock" style="margin-bottom:20px;padding:12px 16px;border-radius:8px;font-size:14px"></div>
+                <p id="detailDescription" style="color:#555;margin-bottom:24px;line-height:1.7"></p>
+                <div style="margin-bottom:28px;background:#fdfbf9;padding:16px;border-radius:8px;border:1px solid #eed">
+                    <div style="display:grid;grid-template-columns:120px 1fr;gap:8px;font-size:13px">
+                        <span style="color:#777">Xuất xứ:</span><strong id="detailOrigin">Việt Nam (Tây Nguyên)</strong>
+                        <span style="color:#777">Mức rang:</span><strong id="detailRoast">Rang vừa (Medium Roast)</strong>
+                        <span style="color:#777">Đóng gói:</span><strong id="detailWeight">Túi 500g (Van 1 chiều)</strong>
+                        <span style="color:#777">Hạn dùng:</span><strong>12 tháng kể từ ngày rang</strong>
+                    </div>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-bottom:20px">
+                    <div style="display:inline-flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden">
+                        <button id="decQtyBtn" type="button" style="width:36px;height:36px;background:#f5f5f5;font-weight:bold;cursor:pointer">-</button>
+                        <input id="detailQty" type="number" value="1" min="1" style="width:50px;height:36px;text-align:center;border:none;outline:none" />
+                        <button id="incQtyBtn" type="button" style="width:36px;height:36px;background:#f5f5f5;font-weight:bold;cursor:pointer">+</button>
+                    </div>
+                    <button id="addDetailCartBtn" class="btn btn-secondary" style="flex:1;min-width:160px;padding:12px">Thêm vào giỏ hàng</button>
+                    <button id="buyNowDetailBtn" class="btn btn-primary" style="flex:1;min-width:140px;padding:12px">Mua ngay</button>
+                </div>
+            </div>
+        </div>
+        <section id="relatedSection" style="margin-top:50px" hidden>
+            <h3 style="font-size:22px;color:var(--coffee-900);margin-bottom:20px">Sản phẩm cùng loại</h3><div id="relatedProducts" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px"></div></section>
     </div>
 </template>
-<template id="tpl-product-notfound"><div class="container" style="padding:60px 20px"><div class="cb-empty"><h2 style="margin-bottom:12px;color:var(--coffee-900)">Không tìm thấy sản phẩm</h2><p style="color:var(--muted);margin-bottom:20px">Sản phẩm không tồn tại hoặc đã ngừng kinh doanh.</p><a href="index.html#/products" class="btn btn-primary">← Quay lại danh sách sản phẩm</a></div></div></template>
+
+<template id="tpl-product-notfound">
+    <div class="container" style="padding:60px 20px">
+        <div class="cb-empty">
+            <h2 style="margin-bottom:12px;color:var(--coffee-900)">Không tìm thấy sản phẩm</h2>
+            <p style="color:var(--muted);margin-bottom:20px">Sản phẩm không tồn tại hoặc đã ngừng kinh doanh.</p>
+            <a href="index.html#/products" class="btn btn-primary">← Quay lại danh sách sản phẩm</a>
+        </div>
+    </div>
+</template>
+
 <template id="tpl-guide">
-    <div class="container" style="padding:40px 20px;max-width:900px"><div style="background:#fff;padding:36px;border-radius:12px;box-shadow:var(--shadow)"><h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:16px;font-family:'Playfair Display',serif">Hướng Dẫn Sử Dụng & Tài Liệu Đồ Án</h1><p style="color:#666;margin-bottom:28px;line-height:1.7">Hệ thống website thương mại điện tử thuần Vanilla HTML/CSS/JavaScript lưu trữ dữ liệu tại trình duyệt (localStorage). Dưới đây là thông tin hướng dẫn và tài khoản thử nghiệm.</p>
-        <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">1. Tài khoản thử nghiệm</h3><table style="width:100%;border-collapse:collapse;margin-bottom:28px;font-size:14px"><thead><tr style="background:#f8f9fa;text-align:left"><th style="padding:10px;border:1px solid #ddd">Phân hệ</th><th style="padding:10px;border:1px solid #ddd">Tên đăng nhập</th><th style="padding:10px;border:1px solid #ddd">Mật khẩu</th><th style="padding:10px;border:1px solid #ddd">Ghi chú</th></tr></thead><tbody><tr><td style="padding:10px;border:1px solid #ddd"><strong>Khách hàng 1</strong></td><td style="padding:10px;border:1px solid #ddd"><code>guest1</code></td><td style="padding:10px;border:1px solid #ddd"><code>guest1123</code></td><td style="padding:10px;border:1px solid #ddd">Có sẵn đơn hàng mẫu</td></tr><tr><td style="padding:10px;border:1px solid #ddd"><strong>Khách hàng 2</strong></td><td style="padding:10px;border:1px solid #ddd"><code>guest2</code></td><td style="padding:10px;border:1px solid #ddd"><code>guest2123</code></td><td style="padding:10px;border:1px solid #ddd">Tài khoản khách thường</td></tr><tr><td style="padding:10px;border:1px solid #ddd"><strong>Quản trị viên</strong></td><td style="padding:10px;border:1px solid #ddd"><code>admin</code></td><td style="padding:10px;border:1px solid #ddd"><code>admin123</code></td><td style="padding:10px;border:1px solid #ddd">Toàn quyền hệ thống</td></tr></tbody></table>
-        <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">2. Các luồng trải nghiệm chính</h3><ul style="padding-left:20px;line-height:1.8;color:#444;margin-bottom:28px"><li><strong>Luồng Mua Hàng:</strong> Trang chủ → Danh sách sản phẩm (tìm kiếm / lọc theo giá / sắp xếp) → Chi tiết sản phẩm → Thêm vào giỏ → Đăng nhập nếu chưa đăng nhập → Thanh toán (nhập địa chỉ, chọn phương thức) → Xác nhận đơn.</li><li><strong>Luồng Khách Hàng:</strong> Đăng ký tài khoản mới hoặc đăng nhập → Quản lý thông tin hồ sơ và địa chỉ mặc định → Xem danh sách lịch sử đơn hàng và trạng thái đơn.</li><li><strong>Luồng Quản Trị (Admin):</strong> Đăng nhập quản trị tại <code>admin.html</code> → Dashboard xem thống kê doanh thu, đơn hàng, khách hàng → Quản lý danh mục & sản phẩm → Nhập hàng thêm tồn kho → Đổi trạng thái đơn hàng thành "Đã giao" (hệ thống tự động trừ tồn kho xuất).</li></ul>
-        <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">3. Phím tắt</h3><ul style="padding-left:20px;line-height:1.8;color:#444"><li><code>← Phím Mũi Tên Trái / Phải →</code>: Chuyển slide banner trên trang chủ (khi không gõ trong ô nhập).</li><li><code>Phím Escape</code>: Đóng nhanh các cửa sổ Modal thông báo hoặc hộp thoại.</li></ul>
-    </div></div>
+    <div class="container" style="padding:40px 20px;max-width:900px">
+        <div style="background:#fff;padding:36px;border-radius:12px;box-shadow:var(--shadow)">
+            <h1 style="font-size:28px;color:var(--coffee-900);margin-bottom:16px;font-family:'Playfair Display',serif">Hướng Dẫn Sử Dụng & Tài Liệu Đồ Án</h1>
+            <p style="color:#666;margin-bottom:28px;line-height:1.7">Hệ thống website thương mại điện tử thuần Vanilla HTML/CSS/JavaScript lưu trữ dữ liệu tại trình duyệt (localStorage). Dưới đây là thông tin hướng dẫn và tài khoản thử nghiệm.</p>
+            <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">1. Tài khoản thử nghiệm</h3>
+            <table style="width:100%;border-collapse:collapse;margin-bottom:28px;font-size:14px">
+                <thead>
+                    <tr style="background:#f8f9fa;text-align:left">
+                        <th style="padding:10px;border:1px solid #ddd">Phân hệ</th>
+                        <th style="padding:10px;border:1px solid #ddd">Tên đăng nhập</th>
+                        <th style="padding:10px;border:1px solid #ddd">Mật khẩu</th>
+                        <th style="padding:10px;border:1px solid #ddd">Ghi chú</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding:10px;border:1px solid #ddd"><strong>Khách hàng 1</strong></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>guest1</code></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>guest1123</code></td>
+                        <td style="padding:10px;border:1px solid #ddd">Có sẵn đơn hàng mẫu</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;border:1px solid #ddd"><strong>Khách hàng 2</strong></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>guest2</code></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>guest2123</code></td>
+                        <td style="padding:10px;border:1px solid #ddd">Tài khoản khách thường</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:10px;border:1px solid #ddd"><strong>Quản trị viên</strong></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>admin</code></td>
+                        <td style="padding:10px;border:1px solid #ddd"><code>admin123</code></td>
+                        <td style="padding:10px;border:1px solid #ddd">Toàn quyền hệ thống</td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">2. Các luồng trải nghiệm chính</h3>
+            <ul style="padding-left:20px;line-height:1.8;color:#444;margin-bottom:28px">
+                <li><strong>Luồng Mua Hàng:</strong> Trang chủ → Danh sách sản phẩm (tìm kiếm / lọc theo giá / sắp xếp) → Chi tiết sản phẩm → Thêm vào giỏ → Đăng nhập nếu chưa đăng nhập → Thanh toán (nhập địa chỉ, chọn phương thức) → Xác nhận đơn.</li>
+                <li><strong>Luồng Khách Hàng:</strong> Đăng ký tài khoản mới hoặc đăng nhập → Quản lý thông tin hồ sơ và địa chỉ mặc định → Xem danh sách lịch sử đơn hàng và trạng thái đơn.</li>
+                <li><strong>Luồng Quản Trị (Admin):</strong> Đăng nhập quản trị tại <code>admin.html</code> → Dashboard xem thống kê doanh thu, đơn hàng, khách hàng → Quản lý danh mục & sản phẩm → Nhập hàng thêm tồn kho → Đổi trạng thái đơn hàng thành "Đã giao" (hệ thống tự động trừ tồn kho xuất).</li>
+            </ul>
+            <h3 style="font-size:20px;color:var(--coffee);margin-bottom:12px;border-bottom:2px solid var(--cream);padding-bottom:8px">3. Phím tắt</h3>
+            <ul style="padding-left:20px;line-height:1.8;color:#444">
+                <li><code>← Phím Mũi Tên Trái / Phải →</code>: Chuyển slide banner trên trang chủ (khi không gõ trong ô nhập).</li>
+                <li><code>Phím Escape</code>: Đóng nhanh các cửa sổ Modal thông báo hoặc hộp thoại.</li>
+            </ul>
+        </div>
+    </div>
 </template>
 
     <button id="backToTop" class="back-to-top" aria-label="Lên đầu trang">↑</button>
